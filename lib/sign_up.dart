@@ -130,22 +130,10 @@ class SignUpPage extends StatelessWidget
               ),
               GestureDetector(
                 onTap: () async {
-                  try{
                   AuthController.instance.register(
                     emailController.text.trim(),
                     passwordController.text.trim(),
                   );
-                  } on FirebaseAuthException catch (e) {
-                    if (e.code == 'email-already-in-use') {
-                      if (kDebugMode) {
-                        print('The email is already in use');
-                      }
-                    }
-                  } catch (e) {
-                    if (kDebugMode) {
-                      print(e.toString());
-                    }
-                  }
                 },
                 child: Container(
                   width: 150,
