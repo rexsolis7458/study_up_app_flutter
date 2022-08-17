@@ -15,11 +15,7 @@ class SignUpPage extends StatelessWidget
   Widget build(BuildContext context)
   {
     FirebaseAuth _auth = FirebaseAuth.instance;
-
-    var fnameController = TextEditingController();
-    var lnameController = TextEditingController();
-    var emailController = TextEditingController();
-    var passwordController = TextEditingController();
+    AuthController authController = AuthController.instance;
 
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -55,7 +51,7 @@ class SignUpPage extends StatelessWidget
               Padding(
                 padding: const EdgeInsets.only(left: 30, top: 5, right: 30),
                 child: TextField(
-                  controller: fnameController,
+                  controller: authController.firstName,
                   decoration: InputDecoration(
                     fillColor: Colors.white,
                     filled: true,
@@ -74,7 +70,7 @@ class SignUpPage extends StatelessWidget
               Padding(
                 padding: const EdgeInsets.only(left: 30, top: 5, right: 30),
                 child: TextField(
-                  controller: lnameController,
+                  controller: authController.lastName,
                   decoration: InputDecoration(
                     fillColor: Colors.white,
                     filled: true,
@@ -93,7 +89,7 @@ class SignUpPage extends StatelessWidget
               Padding(
                 padding: const EdgeInsets.only(left: 30, top: 5, right: 30),
                 child: TextField(
-                  controller: emailController,
+                  controller: authController.email,
                   decoration: InputDecoration(
                     fillColor: Colors.white,
                     filled: true,
@@ -112,7 +108,7 @@ class SignUpPage extends StatelessWidget
               Padding(
                 padding: const EdgeInsets.only(left: 30, top: 5, right: 30),
                 child: TextField(
-                  controller: passwordController,
+                  controller: authController.password,
                   decoration: InputDecoration(
                     fillColor: Colors.white,
                     filled: true,
@@ -130,10 +126,7 @@ class SignUpPage extends StatelessWidget
               ),
               GestureDetector(
                 onTap: () async {
-                  AuthController.instance.register(
-                    emailController.text.trim(),
-                    passwordController.text.trim(),
-                  );
+                  authController.register();
                 },
                 child: Container(
                   width: 150,
