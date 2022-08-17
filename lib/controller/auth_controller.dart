@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:study_up_app/login_page.dart';
 import 'package:study_up_app/main_screens/home/home_screen.dart';
+import 'package:study_up_app/models/users.dart';
 
 class AuthController extends GetxController {
   // AuthController.instance..
@@ -10,7 +12,16 @@ class AuthController extends GetxController {
   // email, password, name...
   late Rx<User?> _user;
   FirebaseAuth auth = FirebaseAuth.instance;
+  FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
+  TextEditingController firstName = TextEditingController();
+  TextEditingController lastName = TextEditingController();
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
+
+  String userCollection = "users";
+  Rx<UserModel> userModel = UserModel().obs;
+  
   @override
   void onReady() {
     super.onReady();
@@ -29,9 +40,13 @@ class AuthController extends GetxController {
     }
   }
 
-  void register(String email, password) {
+  void register() {
     try {
-      auth.createUserWithEmailAndPassword(email: email, password: password);
+      auth.createUserWithEmailAndPassword(email: email.text.trim(), password: password.text.trim())
+      .then((result){
+        String _userId = result.user!.uid;
+        addUserToFirestore(_userId);
+      });
     } catch (e) {
       debugPrint(e.toString());
       Get.snackbar("About user", "User message",
@@ -59,5 +74,23 @@ class AuthController extends GetxController {
 
   void logOut() async {
     auth.signOut();
+  }
+
+  addUserToFirestore(String userId)
+  {
+    firebaseFirestore.collection(userCollection).doc(userId).set({
+      "first name": firstName.text.trim(),
+      "last name": lastName.text.trim(),
+      "email": email.text.trim(),
+      "id": userId
+    });
+  }
+
+  initilizeUserModel(String userId) async {
+    userModel.value = await firebaseFirestore
+    .collection(userCollection)
+    .doc(userId)
+    .get()
+    .then((doc) => UserModel.fromSnapshot(doc));
   }
 }
