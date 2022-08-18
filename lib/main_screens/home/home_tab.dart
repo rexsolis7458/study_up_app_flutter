@@ -1,15 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/state_manager.dart';
+import 'package:study_up_app/controller/auth_controller.dart';
 
-class HomeTab extends StatefulWidget {
-  final String? currentUserId;
-
-  HomeTab({Key? key, this.currentUserId}) : super(key: key);
-
-  @override
-  State<HomeTab> createState() => _HomeTabState();
-}
-
-class _HomeTabState extends State<HomeTab> {
+class HomeTab extends GetWidget<AuthController>
+{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
