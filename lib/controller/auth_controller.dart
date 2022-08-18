@@ -2,51 +2,65 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:study_up_app/controller/userController.dart';
 import 'package:study_up_app/login_page.dart';
 import 'package:study_up_app/main_screens/home/home_screen.dart';
 import 'package:study_up_app/models/users.dart';
+import 'package:study_up_app/services/database.dart';
 
 class AuthController extends GetxController {
   // AuthController.instance..
   static AuthController instance = Get.find();
   // email, password, name...
-  late Rx<User?> _user;
+  late Rx<User?> firebaseUser;
   FirebaseAuth auth = FirebaseAuth.instance;
-  FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
-  TextEditingController firstName = TextEditingController();
-  TextEditingController lastName = TextEditingController();
-  TextEditingController email = TextEditingController();
-  TextEditingController password = TextEditingController();
+  // User? get user => firebaseUser.value;
 
-  String userCollection = "users";
+  late DocumentReference reference;
+
+
+  // String userCollection = "users";
   Rx<UserModel> userModel = UserModel().obs;
+
+  get user => null;
   
   @override
+  // onInit() {
+  //   _user.bindStream(auth.onAuthStateChanged);
+  // }
   void onReady() {
     super.onReady();
-    _user = Rx<User?>(auth.currentUser);
+    firebaseUser = Rx<User?>(auth.currentUser);
     // user would be notified
-    _user.bindStream(auth.userChanges());
-    ever(_user, _initialScreen);
+    firebaseUser.bindStream(auth.userChanges());
+    ever(firebaseUser, _initialScreen);
   }
 
   _initialScreen(User? user) {
     if (user == null) {
       print("login page");
-      Get.offAll(() => const LoginPage());
+      Get.offAll(() => LoginPage());
     } else {
+      reference = FirebaseFirestore.instance.collection('users').doc(auth.currentUser!.uid);
       Get.offAll(() => HomeScreen());
     }
   }
 
-  void register() {
+  void register(String firstname, String lastname, String email, String password,) async {
     try {
-      auth.createUserWithEmailAndPassword(email: email.text.trim(), password: password.text.trim())
-      .then((result){
-        String _userId = result.user!.uid;
-        addUserToFirestore(_userId);
-      });
+      UserCredential authResult = await auth.createUserWithEmailAndPassword(email: email.trim(), password: password);
+      UserModel users = UserModel(
+        email: authResult.user!.email,
+        id: authResult.user!.uid,
+        fname: firstname,
+        lname: lastname,
+        password: password,
+      );
+      if (await Database().createNewUser(users)) {
+        Get.find<UserController>().user = users;
+        Get.back();
+      }
     } catch (e) {
       debugPrint(e.toString());
       Get.snackbar("About user", "User message",
@@ -73,24 +87,24 @@ class AuthController extends GetxController {
   }
 
   void logOut() async {
+    try{
     auth.signOut();
+    Get.find<UserController>().clear();
+    } catch (e) {
+      Get.snackbar(
+        "Error signing out",
+         "error",
+         snackPosition: SnackPosition.BOTTOM);
+    }
   }
 
-  addUserToFirestore(String userId)
-  {
-    firebaseFirestore.collection(userCollection).doc(userId).set({
-      "first name": firstName.text.trim(),
-      "last name": lastName.text.trim(),
-      "email": email.text.trim(),
-      "id": userId
-    });
-  }
-
-  initilizeUserModel(String userId) async {
-    userModel.value = await firebaseFirestore
-    .collection(userCollection)
-    .doc(userId)
-    .get()
-    .then((doc) => UserModel.fromSnapshot(doc));
-  }
+  // addUserToFirestore(String userId)
+  // {
+  //   firebaseFirestore.collection(userCollection).doc(userId).set({
+  //     "first name": firstName.text.trim(),
+  //     "last name": lastName.text.trim(),
+  //     "email": email.text.trim(),
+  //     "id": userId
+  //   });
+  // }
 }

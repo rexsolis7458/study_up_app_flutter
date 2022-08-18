@@ -6,16 +6,13 @@ import 'package:study_up_app/helper/const.dart';
 import 'package:study_up_app/sign_up.dart';
 
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+// ignore: must_be_immutable
+class LoginPage extends GetWidget<AuthController> {
 
-  @override
-  State<LoginPage> createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
+
+  LoginPage({super.key});
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;

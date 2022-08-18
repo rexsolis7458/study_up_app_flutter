@@ -1,24 +1,29 @@
+
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:study_up_app/controller/auth_controller.dart';
+import 'package:study_up_app/controller/userController.dart';
+import 'package:study_up_app/models/users.dart';
+import 'package:study_up_app/services/database.dart';
 
-class ProfileTab extends StatefulWidget
+class ProfileTab extends StatelessWidget
 {
-  final String? currentUserId;
-  String email;
-  
-  ProfileTab({Key? key, this.currentUserId, required this.email}) : super(key: key);
 
-  @override
-  State<ProfileTab> createState() => _ProfileTabState();
-}
+  const ProfileTab({Key? key}) : super(key: key);
 
-class _ProfileTabState extends State<ProfileTab>
-{
-  final FirebaseAuth auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context)
-  {
+  =>
+    GetX<UserController>(
+          initState: (_) async {
+            Get.find<UserController>().user =
+                await Database().getUser(Get.find<AuthController>().reference.id);
+          },
+          builder: (_) {
+            if (_.user.id != null) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       drawer: Drawer(
@@ -43,18 +48,18 @@ class _ProfileTabState extends State<ProfileTab>
               height: 30,
             ),
             ListTile(
-              title: Text('About Us'),
-              leading: Icon(Icons.info_rounded),
+              title: const Text('About Us'),
+              leading: const Icon(Icons.info_rounded),
               onTap: () {},
             ),
             ListTile(
-              title: Text('Help'),
+              title: const Text('Help'),
               leading: Icon(Icons.help),
               onTap: () {},
             ),
             ListTile(
-              title: Text('Sign out'),
-              leading: Icon(Icons.logout),
+              title: const Text('Sign out'),
+              leading: const Icon(Icons.logout),
               onTap: () {
                 AuthController.instance.logOut();
               },
@@ -63,27 +68,11 @@ class _ProfileTabState extends State<ProfileTab>
         )
       ),
       appBar: AppBar(
-        title: Container(
-          margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-          decoration: BoxDecoration(
-            color: Colors.blue[550],
-            borderRadius: BorderRadius.all(Radius.circular(10.0))
-          ),
-          child: Row(
-            children: [
-              SizedBox(
-                width: 110,
-              ),
-              Center(
-                child: Text('Profile'),
-              ),
-            ],
-          ),
-        )
+        title: const Text('Profile'),
       ),
       body: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 50,
           ),
           Stack(
@@ -128,14 +117,14 @@ class _ProfileTabState extends State<ProfileTab>
               )
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
-          Text('NAME'),
+          Text('Name: ${_.user.fname} ${_.user.lname}'),
           SizedBox(
             height: 5,
           ),
-          Text(widget.email),
+          Text('Email: ${_.user.email}'),
           SizedBox(
             height: 30,
           ),
@@ -265,5 +254,9 @@ class _ProfileTabState extends State<ProfileTab>
         ],
       ),
     );
+  } else {
+    return Text('loading.....');
   }
-}
+  } 
+  );
+  }

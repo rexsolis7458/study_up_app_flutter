@@ -27,7 +27,6 @@ class _HomeScreenState extends State<HomeScreen>{
       resizeToAvoidBottomInset: false,
       body: [
         HomeTab(
-        currentUserId: widget.currentUserId,
         ),
         SearchTab(
           currentUserId: widget.currentUserId,
@@ -36,8 +35,7 @@ class _HomeScreenState extends State<HomeScreen>{
           currentUserId: widget.currentUserId,
         ),
         ProfileTab(
-          currentUserId: widget.currentUserId, email: '',
-        )
+        ),
       ].elementAt(_selectedTab),
       bottomNavigationBar: CupertinoTabBar(
         onTap: (index) {
