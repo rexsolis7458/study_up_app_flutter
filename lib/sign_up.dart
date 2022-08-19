@@ -114,6 +114,7 @@ class SignUpPage extends GetWidget<AuthController>
                 padding: const EdgeInsets.only(left: 30, top: 5, right: 30),
                 child: TextField(
                   controller: passwordController,
+                  obscureText: true,
                   decoration: InputDecoration(
                     fillColor: Colors.white,
                     filled: true,
