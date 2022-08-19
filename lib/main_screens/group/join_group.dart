@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:study_up_app/main_screens/group/group.dart';
 
 class JoinGroup extends StatefulWidget {

@@ -255,7 +255,8 @@ class ProfileTab extends StatelessWidget
       ),
     );
   } else {
-    return Text('loading.....');
+    return const Text('loading.....',
+           textAlign: TextAlign.center,);
   }
   } 
   );

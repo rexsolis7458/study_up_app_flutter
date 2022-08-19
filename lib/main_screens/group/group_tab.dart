@@ -41,6 +41,7 @@ class _GroupTabState extends State<GroupTab> {
             child: CreateGroup(),
           ),
           Center(
+
             child: JoinGroup(),
           ),
         ],
