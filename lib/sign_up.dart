@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:study_up_app/controller/auth_controller.dart';
 import 'package:study_up_app/helper/const.dart';
 
-class SignUpPage extends StatelessWidget 
+class SignUpPage extends GetWidget<AuthController>
 {
   const SignUpPage({Key? key}) : super(key: key);
 
@@ -15,11 +15,12 @@ class SignUpPage extends StatelessWidget
   Widget build(BuildContext context)
   {
     FirebaseAuth _auth = FirebaseAuth.instance;
+    AuthController authController = AuthController.instance;
 
-    var fnameController = TextEditingController();
-    var lnameController = TextEditingController();
-    var emailController = TextEditingController();
-    var passwordController = TextEditingController();
+  TextEditingController firstNameController = TextEditingController();
+  TextEditingController lastNameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -55,7 +56,7 @@ class SignUpPage extends StatelessWidget
               Padding(
                 padding: const EdgeInsets.only(left: 30, top: 5, right: 30),
                 child: TextField(
-                  controller: fnameController,
+                  controller: firstNameController,
                   decoration: InputDecoration(
                     fillColor: Colors.white,
                     filled: true,
@@ -74,7 +75,7 @@ class SignUpPage extends StatelessWidget
               Padding(
                 padding: const EdgeInsets.only(left: 30, top: 5, right: 30),
                 child: TextField(
-                  controller: lnameController,
+                  controller: lastNameController,
                   decoration: InputDecoration(
                     fillColor: Colors.white,
                     filled: true,
@@ -113,6 +114,7 @@ class SignUpPage extends StatelessWidget
                 padding: const EdgeInsets.only(left: 30, top: 5, right: 30),
                 child: TextField(
                   controller: passwordController,
+                  obscureText: true,
                   decoration: InputDecoration(
                     fillColor: Colors.white,
                     filled: true,
@@ -130,7 +132,9 @@ class SignUpPage extends StatelessWidget
               ),
               GestureDetector(
                 onTap: () async {
-                  AuthController.instance.register(
+                  authController.register(
+                    firstNameController.text.trim(),
+                    lastNameController.text.trim(),
                     emailController.text.trim(),
                     passwordController.text.trim(),
                   );
