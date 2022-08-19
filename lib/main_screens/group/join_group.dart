@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:study_up_app/main_screens/group/group.dart';
+
 class JoinGroup extends StatefulWidget {
   const JoinGroup({Key? key}) : super(key: key);
 
@@ -29,7 +31,7 @@ class _JoinGroupState extends State<JoinGroup> {
         ),
       ),
       body: Column(
-        // crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Padding(
@@ -77,10 +79,25 @@ class _JoinGroupState extends State<JoinGroup> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => HomeScreen(),
+                  builder: (context) => Group(),
                 ),
               );
             },
+            child: Container(
+              width: 150,
+              height: 40,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30), color: Colors.blue),
+              child: Center(
+                child: Text(
+                  "Sign Up",
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ),
+            ),
           ),
         ],
       ),

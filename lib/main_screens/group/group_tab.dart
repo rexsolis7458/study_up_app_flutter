@@ -41,36 +41,37 @@ class _GroupTabState extends State<GroupTab> {
             child: CreateGroup(),
           ),
           Center(
-            JoinGroup(),
+
+            child: JoinGroup(),
           ),
         ],
       ),
-      child: InkWell(
-          child: Card(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Column(
-                  children: [
-                    SizedBox(
-                      width: 150,
-                    ),
-                    Text('Programming 1'),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text('1234567'),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Group()),
-            );
-          }),
+      // child: InkWell(
+      //     child: Card(
+      //       child: Row(
+      //         crossAxisAlignment: CrossAxisAlignment.start,
+      //         children: [
+      //           Column(
+      //             children: [
+      //               SizedBox(
+      //                 width: 150,
+      //               ),
+      //               Text('Programming 1'),
+      //               SizedBox(
+      //                 height: 10,
+      //               ),
+      //               Text('1234567'),
+      //             ],
+      //           ),
+      //         ],
+      //       ),
+      //     ),
+      //     onTap: () {
+      //       Navigator.push(
+      //         context,
+      //         MaterialPageRoute(builder: (context) => Group()),
+      //       );
+      //     }),
     );
   }
 }
