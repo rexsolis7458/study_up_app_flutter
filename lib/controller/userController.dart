@@ -8,8 +8,8 @@ class UserController extends GetxController {
   static UserController instance = Get.find();
   final Rx<UserModel> _userModel = UserModel().obs;
 
-  UserController userController = Get.put(UserController());
-  
+  late UserController userController;
+
   UserModel get user => _userModel.value;
   
   set user(UserModel value) => _userModel.value = value;
@@ -17,6 +17,7 @@ class UserController extends GetxController {
   void clear() {
     _userModel.value = UserModel();
   }
+  
   Future<void>saveProfileData(UserModel user) async
   {
     User currentUser = FirebaseAuth.instance.currentUser!;
