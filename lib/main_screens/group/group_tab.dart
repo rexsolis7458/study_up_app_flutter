@@ -1,6 +1,7 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:study_up_app/main_screens/group/createGroup.dart';
 import 'package:study_up_app/main_screens/group/group.dart';
 
 class GroupTab extends StatefulWidget
@@ -29,6 +30,15 @@ class _GroupTabState extends State<GroupTab>
             fontWeight: FontWeight.bold,
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          print('Pressed');
+          Navigator.pushAndRemoveUntil(context,
+           MaterialPageRoute(builder: (context) => CreateGroup(),
+           ), (route) => false
+           );
+        },
       ),
       body: Container(
         padding: EdgeInsets.symmetric(vertical: 300.0, horizontal: 0.0),
@@ -63,5 +73,6 @@ class _GroupTabState extends State<GroupTab>
         ),
       ),
     );
-  }
+
+}
 }
