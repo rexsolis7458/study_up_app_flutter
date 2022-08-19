@@ -1,3 +1,4 @@
+// ignore: file_names
 import 'package:flutter/material.dart';
 import 'package:study_up_app/helper/shadowContainer.dart';
 import 'package:study_up_app/main_screens/group/group_tab.dart';
@@ -20,7 +21,7 @@ class _CreateGroupState extends State<CreateGroup>
   TextEditingController groupNameController = TextEditingController();
   
   final UserModel _currentUser = UserModel();
-  void _createGroup(BuildContext context, String groupName) async
+  void creatingGroup(BuildContext context, String groupName) async
   {
     String? returnString = await Database().createGroup(groupName, _currentUser.id!);
     
@@ -42,7 +43,7 @@ class _CreateGroupState extends State<CreateGroup>
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(10.0),
             child: Row(
               children: const <Widget>[BackButton()],
             ),
@@ -50,9 +51,10 @@ class _CreateGroupState extends State<CreateGroup>
           // const SizedBox(
           //   height: 20,
           // ),
+          const Spacer(),
           Padding(
             padding: const EdgeInsets.all(20.0),
-            child: ShadowContainer(
+            // child: ShadowContainer(
               child: Column(
                 children: <Widget>[
                   TextFormField(
@@ -77,12 +79,13 @@ class _CreateGroupState extends State<CreateGroup>
                      ),
                     ),
                     onTap: () =>
-                     _createGroup(context, groupNameController.text),
+                     creatingGroup(context, groupNameController.text),
                   ),
                 ],
               ),
-            )
-          )
+            // )
+          ),
+          const Spacer(),
         ],
       )
     );

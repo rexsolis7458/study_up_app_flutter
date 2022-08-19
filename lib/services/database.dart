@@ -12,6 +12,7 @@ class Database {
         "fname": user.fname.toString(),
         "lname": user.lname.toString(),
         "email": user.email,
+        "profPic": user.profPic.toString(),
         // "password": user.password,
       });
       return true;

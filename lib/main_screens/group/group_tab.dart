@@ -15,6 +15,17 @@ class GroupTab extends StatefulWidget
 
 class _GroupTabState extends State<GroupTab>
 {
+
+  void _goToCreate(BuildContext context)
+  {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const CreateGroup(),
+      )
+    );
+  }
+
   @override
   Widget build(BuildContext context)
   {
@@ -31,14 +42,9 @@ class _GroupTabState extends State<GroupTab>
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          print('Pressed');
-          Navigator.pushAndRemoveUntil(context,
-           MaterialPageRoute(builder: (context) => CreateGroup(),
-           ), (route) => false
-           );
-        },
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => _goToCreate(context),
+        label: const Text("Create Group"),
       ),
       body: Container(
         padding: EdgeInsets.symmetric(vertical: 300.0, horizontal: 0.0),

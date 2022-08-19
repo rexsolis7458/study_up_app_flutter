@@ -1,9 +1,13 @@
 
 
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:study_up_app/controller/auth_controller.dart';
 import 'package:study_up_app/controller/userController.dart';
 import 'package:study_up_app/models/users.dart';
@@ -11,8 +15,52 @@ import 'package:study_up_app/services/database.dart';
 
 class ProfileTab extends StatelessWidget
 {
+  late File pickedFile;
+  ImagePicker imagePicker = ImagePicker();
+  String imgUrl = '';
 
-  const ProfileTab({Key? key}) : super(key: key);
+  UserController userController = Get.put(UserController());
+
+  ProfileTab({Key? key}) : super(key: key);
+
+  Future<bool> getPhoto(ImageSource source) async
+  {
+    try {
+      final pickedImage =
+           await imagePicker.pickImage(source: source, imageQuality: 100);
+      if (pickedImage != null) {
+        pickedFile = File(pickedImage.path);
+        return true; 
+      } else 
+      {
+        return false;
+      }
+    } on Exception catch (e) {
+      print(e.toString());
+      return false;
+    }
+  }
+
+  Future<String?> sendProfilePicData() async {
+    try {
+      String fileName = 
+             '${DateTime.now().millisecondsSinceEpoch}${FirebaseAuth.instance.currentUser!.uid}.jpg';
+        Reference reference = FirebaseStorage.instance
+              .ref()
+              .child('Profile Image')
+              .child(fileName);
+      UploadTask uploadTask = reference.putFile(pickedFile);
+      await uploadTask.whenComplete(() async {
+        imgUrl = await uploadTask.snapshot.ref.getDownloadURL();
+      });
+      return imgUrl;
+    } on Exception catch (e) 
+    {
+      print(e.toString());
+    }
+    return null;
+  }
+
 
   @override
   Widget build(BuildContext context)
@@ -90,18 +138,23 @@ class ProfileTab extends StatelessWidget
                 top: 0.1,
                 right: 150,
                 child: Container(
-                  child: Padding(
+                  child: InkWell(
+                    onTap: () async {
+                      getPhoto(ImageSource.gallery);
+                    },
+                  child: const Padding(
                     padding: EdgeInsets.all(2.0),
                     child: Icon(
                       Icons.add_a_photo,
                     ),
+                  ),
                   ),
                   decoration: BoxDecoration(
                     border: Border.all(
                       width: 3,
                       color: Colors.white,
                     ),
-                    borderRadius: BorderRadius.all(
+                    borderRadius: const BorderRadius.all(
                       Radius.circular(50),
                     ),
                     color: Colors.white,
@@ -121,21 +174,21 @@ class ProfileTab extends StatelessWidget
             height: 20,
           ),
           Text('Name: ${_.user.fname} ${_.user.lname}'),
-          SizedBox(
+          const SizedBox(
             height: 5,
           ),
           Text('Email: ${_.user.email}'),
-          SizedBox(
+          const SizedBox(
             height: 30,
           ),
           Row(
             children: [
-              SizedBox(
+              const SizedBox(
                 width: 20,
               ),
               Expanded(
                 child: Column(
-                  children: [
+                  children: const [
                     Icon(
                       Icons.lock_open,
                     size: 40,
@@ -149,7 +202,7 @@ class ProfileTab extends StatelessWidget
               ),
               Expanded(
                 child: Column(
-                  children: [
+                  children: const [
                     Icon(Icons.person,
                     size: 40,),
                     SizedBox(
@@ -161,7 +214,7 @@ class ProfileTab extends StatelessWidget
               )
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Card(
@@ -170,7 +223,7 @@ class ProfileTab extends StatelessWidget
             (
               height: 50,
               child: Row(
-                children: [
+                children: const [
                   SizedBox(
                     width: 15,
                   ),
@@ -195,7 +248,7 @@ class ProfileTab extends StatelessWidget
             child: Container
             (
               child: Row(
-                children: [
+                children: const [
                   SizedBox(
                     width: 15,
                   ),
@@ -226,7 +279,7 @@ class ProfileTab extends StatelessWidget
           child: Container(
             height: 50,
             child: Row(
-              children: [
+              children: const [
                 SizedBox(
                   width: 15,
                 ),
@@ -251,6 +304,14 @@ class ProfileTab extends StatelessWidget
             ),
           ),
           ),
+          const Spacer(),
+          GestureDetector(
+            child: Text("Save!"),
+            onTap: () async {
+              _.user.profPic = await Get.put(sendProfilePicData());
+              userController.saveProfileData(_.user);
+            },
+          )
         ],
       ),
     );
