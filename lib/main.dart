@@ -8,7 +8,6 @@ import 'package:study_up_app/main_screens/home/home_screen.dart';
 import 'package:study_up_app/sign_up.dart';
 import 'package:study_up_app/utils/root.dart';
 
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Get.lazyPut(() => AuthController(), tag: "Auth Controller");
@@ -17,18 +16,17 @@ Future<void> main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget
-{
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context)
-  {
+  Widget build(BuildContext context) {
     // Get.lazyPut(() => UserController(), tag: "User Controller");
     return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
       initialBinding: AuthBinding(),
       title: 'Study Up',
-      theme:  ThemeData(
+      theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       home: const SignUpPage(),

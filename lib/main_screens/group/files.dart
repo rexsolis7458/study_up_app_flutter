@@ -4,6 +4,9 @@ import 'package:flutter_document_picker/flutter_document_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+
+import 'upload.dart';
 
 class Files extends StatefulWidget {
   const Files({super.key});
@@ -14,6 +17,9 @@ class Files extends StatefulWidget {
 }
 
 class _FilesState extends State<Files> {
+  //Upload upload = Get.put(Upload());
+  String uploaded = "Waiting For Images To Be Uploaded";
+
   firebase_storage.FirebaseStorage storage =
       firebase_storage.FirebaseStorage.instance;
 
@@ -28,16 +34,17 @@ class _FilesState extends State<Files> {
       return null;
     }
 
+    String fileName = await generateFileName();
+
     firebase_storage.UploadTask uploadTask;
     // Create a Reference to the file
     firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
-        .ref()
+        .ref('pdf')
         .child('files')
-        .child('/some-file.pdf');
+        .child(fileName);
 
     final metadata = firebase_storage.SettableMetadata(
-        contentType: 'file/pdf',
-        customMetadata: {'picked-file-path': file.path});
+        contentType: 'pdf', customMetadata: {'picked-file-path': file.path});
     print("Uploading..!");
 
     uploadTask = ref.putData(await file.readAsBytes(), metadata);
@@ -47,6 +54,20 @@ class _FilesState extends State<Files> {
       textColor: Colors.white,
     );
     return Future.value(uploadTask);
+  }
+
+  Future<String> generateFileName() async {
+    var randomNumber = new Random();
+    String randomName = " ";
+    String fileName = " ";
+
+    for (var i = 0; i < 10; i++) {
+      print(randomNumber.nextInt(100));
+      randomName += randomNumber.nextInt(100).toString();
+    }
+
+    fileName = '$randomName.pdf';
+    return fileName;
   }
 
 //Viewing of files
@@ -146,7 +167,10 @@ class _FilesState extends State<Files> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
+        onPressed:
+            // () {
+            // upload.startUploading();
+            () async {
           final path = await FlutterDocumentPicker.openDocument();
           print(path);
           File file = File(path!);
@@ -162,13 +186,3 @@ class _FilesState extends State<Files> {
     );
   }
 }
-
-// class ViewPDF extends StatelessWidget {
-//   PDFDocument document;
-//   ViewPDF(this.document);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return PdfViewer(document: document);
-//   }
-// }

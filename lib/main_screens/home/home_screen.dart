@@ -43,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen>{
             _selectedTab = index;
           });
         },
-        activeColor: KTweeterColor,
+        activeColor: MainColor,
         currentIndex: _selectedTab,
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home)),
