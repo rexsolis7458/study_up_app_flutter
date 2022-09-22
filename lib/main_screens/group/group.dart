@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'files.dart';
 
 class Group extends StatefulWidget {
@@ -38,18 +39,18 @@ class _GroupState extends State<Group> {
         ),
         body: TabBarView(
           children: [
-            const Center(
+            Center(
               child: Files(),
             ),
             Center(
-                //child: QandA(),
-                ),
+              child: Text('Q & A'),
+            ),
             Center(
-                //child: Quizzes(),
-                ),
+              child: Text('QUIZZES'),
+            ),
             Center(
-                //child: Schedules(),
-                ),
+              child: Text('SCHEDULE'),
+            ),
           ],
         ),
       ));

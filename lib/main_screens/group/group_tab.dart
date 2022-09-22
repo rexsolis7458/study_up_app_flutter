@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:study_up_app/main_screens/group/createGroup.dart';
 import 'package:study_up_app/main_screens/group/group.dart';
 
-import 'create_group.dart';
-import 'join_group.dart';
+import '../../helper/const.dart';
+import 'joinGroup.dart';
 
 class GroupTab extends StatefulWidget {
   final String? currentUserId;
@@ -13,65 +14,92 @@ class GroupTab extends StatefulWidget {
 }
 
 class _GroupTabState extends State<GroupTab> {
+  void _goToCreate(BuildContext context) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const CreateGroup(),
+        ));
+  }
+
+  void _goToJoin(BuildContext context) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const JoinGroup(),
+        ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        shape: Border(
-          bottom: BorderSide(color: Colors.black),
-        ),
-        title: Text('My Groups'),
+        backgroundColor: MainColor,
         centerTitle: true,
-        bottom: TabBar(
-          unselectedLabelColor: Colors.black,
-          labelColor: Colors.white,
-          tabs: [
-            Tab(
-              text: 'Create a Group',
-            ),
-            Tab(
-              text: 'Join a Group',
-            ),
-          ],
+        elevation: 0,
+        title: Text(
+          'My Groups',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
-      body: TabBarView(
-        children: [
-          const Center(
-            child: CreateGroup(),
+      floatingActionButton: Wrap(
+        direction: Axis.horizontal,
+        children: <Widget>[
+          Container(
+            margin: EdgeInsets.all(10),
+            child: FloatingActionButton.extended(
+              onPressed: () => _goToCreate(context),
+              label: const Text("Create Group"),
+            ),
           ),
-          Center(
-
-            child: JoinGroup(),
-          ),
+          Container(
+              margin: EdgeInsets.all(10),
+              child: FloatingActionButton.extended(
+                onPressed: () => _goToJoin(context),
+                label: const Text("Join Group"),
+              )), // but
         ],
       ),
-      // child: InkWell(
-      //     child: Card(
-      //       child: Row(
-      //         crossAxisAlignment: CrossAxisAlignment.start,
-      //         children: [
-      //           Column(
-      //             children: [
-      //               SizedBox(
-      //                 width: 150,
-      //               ),
-      //               Text('Programming 1'),
-      //               SizedBox(
-      //                 height: 10,
-      //               ),
-      //               Text('1234567'),
-      //             ],
-      //           ),
-      //         ],
-      //       ),
-      //     ),
-      //     onTap: () {
-      //       Navigator.push(
-      //         context,
-      //         MaterialPageRoute(builder: (context) => Group()),
-      //       );
-      //     }),
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
+          child: InkWell(
+            child: Card(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Column(
+                    children: [
+                      SizedBox(
+                        width: 150,
+                        height: 20,
+                      ),
+                      Text('Programming 1'),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text('1234567'),
+                      SizedBox(
+                        width: 150,
+                        height: 20,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            // onTap: () {
+            //   Navigator.push(
+            //     context,
+            //     MaterialPageRoute(builder: (context) => Group()),
+            //   );
+            // },
+          ),
+        ),
+      ),
     );
   }
 }

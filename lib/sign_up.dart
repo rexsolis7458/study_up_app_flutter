@@ -26,9 +26,9 @@ class SignUpPage extends GetWidget<AuthController>
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: KTweeterColor,
+        backgroundColor: MainColor,
         appBar: AppBar(
-          backgroundColor: KTweeterColor,
+          backgroundColor: MainColor,
           centerTitle: true,
           elevation: 0,
           title: const Text(
