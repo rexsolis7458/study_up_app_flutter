@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:study_up_app/helper/const.dart';
 
 import 'package:study_up_app/main_screens/group/group.dart';
 
@@ -87,7 +88,7 @@ class _JoinGroupState extends State<JoinGroup> {
               width: 150,
               height: 40,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30), color: Colors.blue),
+                  borderRadius: BorderRadius.circular(30), color: ButtonColor),
               child: Center(
                 child: Text(
                   "Sign Up",

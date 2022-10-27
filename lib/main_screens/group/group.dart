@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-
+import 'package:study_up_app/main_screens/group/quiz/quiz_form.dart';
 import 'files.dart';
+import 'quiz/create_quiz.dart';
 
 class Group extends StatefulWidget {
   @override
@@ -13,9 +14,6 @@ class _GroupState extends State<Group> {
       length: 4,
       child: Scaffold(
         appBar: AppBar(
-          shape: Border(
-            bottom: BorderSide(color: Colors.black),
-          ),
           title: Text('Programming 1'),
           centerTitle: true,
           bottom: TabBar(
@@ -46,7 +44,7 @@ class _GroupState extends State<Group> {
               child: Text('Q & A'),
             ),
             Center(
-              child: Text('QUIZZES'),
+              child: QuizForm(),
             ),
             Center(
               child: Text('SCHEDULE'),

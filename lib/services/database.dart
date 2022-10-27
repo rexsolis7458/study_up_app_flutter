@@ -1,3 +1,4 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:study_up_app/models/group.dart';
 import 'package:study_up_app/models/users.dart';
@@ -21,12 +22,10 @@ class Database {
       return false;
     }
   }
-  
-  Future<UserModel> getUser(String id) async 
-  {
+
+  Future<UserModel> getUser(String id) async {
     try {
-      DocumentSnapshot doc = 
-          await _firestore.collection("users").doc(id).get();
+      DocumentSnapshot doc = await _firestore.collection("users").doc(id).get();
 
       return UserModel.fromDocumentSnapshot(doc: doc);
     } catch (e) {
@@ -35,20 +34,18 @@ class Database {
     }
   }
 
-  Future<String?> createGroup(String groupName, String userUid) async
-  {
+  Future<String?> createGroup(String groupName, String userUid) async {
     String retVal = "error";
     List<String> members = [];
 
     try {
       members.add(userUid);
-      DocumentReference _docRef = 
-          await _firestore.collection("groups").add({
-            'groupName' : groupName,
-            'groupLeader' : userUid,
-            'members' : members,
-            'groupCreated' : Timestamp.now(),
-          });
+      DocumentReference _docRef = await _firestore.collection("groups").add({
+        'groupName': groupName,
+        'groupLeader': userUid,
+        'members': members,
+        'groupCreated': Timestamp.now(),
+      });
 
       await _firestore.collection("users").doc(userUid).update({
         'groupId': _docRef.id,
@@ -73,7 +70,7 @@ class Database {
       });
 
       await _firestore.collection("users").doc(userUid).update({
-        'groupId' : groupId,
+        'groupId': groupId,
       });
 
       retVal = "success";
@@ -82,17 +79,55 @@ class Database {
     }
     return retVal;
   }
-  Future<GroupModel> getGroup(String groupId) async
-  {
+
+  Future<GroupModel> getGroup(String groupId) async {
     try {
-      DocumentSnapshot doc = 
-           await _firestore.collection('groups').doc(groupId).get();
+      DocumentSnapshot doc =
+          await _firestore.collection('groups').doc(groupId).get();
 
       return GroupModel.fromDocumentSnapshot(doc: doc);
-    } catch (e)
-    {
+    } catch (e) {
       print(e);
       rethrow;
     }
+  }
+}
+
+class DatabaseService {
+  Future<void> addQuizData(
+      //  Map quizData, String quizId) async {
+      String quizId,
+      Map<String, dynamic> quizData) async {
+    await FirebaseFirestore.instance
+        .collection("Quiz")
+        .doc(quizId)
+        .set(quizData)
+        .catchError((e) {
+      print(e.toString());
+    });
+  }
+
+  Future<void> addQuestionData(
+      String quizId, Map<String, dynamic> questionData) async {
+    await FirebaseFirestore.instance
+        .collection("Quiz")
+        .doc(quizId)
+        .collection('QNA')
+        .add(questionData)
+        .catchError((e) {
+      print(e.toString());
+    });
+  }
+
+  getQuizesData() async {
+    return await FirebaseFirestore.instance.collection("Quiz").snapshots();
+  }
+
+  getQuizData(String quizId) async {
+    return await FirebaseFirestore.instance
+        .collection("Quiz")
+        .doc(quizId)
+        .collection('QNA')
+        .get();
   }
 }

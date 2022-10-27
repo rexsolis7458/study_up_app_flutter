@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen>{
           currentUserId: widget.currentUserId,
         ),
         GroupTab(
-          currentUserId: widget.currentUserId,
+          // currentUserId: widget.currentUserId,
         ),
         ProfileTab(
         ),

@@ -13,11 +13,7 @@ class _CreateGroupState extends State<CreateGroup> {
   @override
   Widget build(BuildContext context) =>
       DefaultTabController(length: 4, child: Scaffold(appBar: AppBar()));
-=======
-  Widget build(BuildContext context) {
-    return Scaffold(
-      
-    );
-  }
+
+  
 
 }

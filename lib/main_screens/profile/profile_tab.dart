@@ -9,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:study_up_app/controller/auth_controller.dart';
 import 'package:study_up_app/controller/userController.dart';
 import 'package:study_up_app/helper/const.dart';
+import 'package:study_up_app/main_screens/profile/edit_profile.dart';
 import 'package:study_up_app/models/users.dart';
 import 'package:study_up_app/services/database.dart';
 
@@ -123,51 +124,63 @@ class ProfileTab extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Positioned(
-                      top: 0.1,
-                      right: 150,
-                      child: Container(
-                        child: InkWell(
-                          onTap: () async {
-                            getPhoto(ImageSource.gallery);
-                          },
-                          child: const Padding(
-                            padding: EdgeInsets.all(2.0),
-                            child: Icon(
-                              Icons.add_a_photo,
-                            ),
-                          ),
-                        ),
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                              width: 3,
-                              color: Colors.white,
-                            ),
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(50),
-                            ),
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                offset: Offset(2, 4),
-                                color: Colors.black.withOpacity(0.3),
-                                blurRadius: 3,
-                              ),
-                            ]),
-                      ),
-                    )
+                    // Positioned(
+                    //   top: 0.1,
+                    //   right: 150,
+                    //   child: Container(
+                    //     child: InkWell(
+                    //       onTap: () async {
+                    //         getPhoto(ImageSource.gallery);
+                    //       },
+                    //       child: const Padding(
+                    //         padding: EdgeInsets.all(2.0),
+                    //         child: Icon(
+                    //           Icons.add_a_photo,
+                    //         ),
+                    //       ),
+                    //     ),
+                    //     decoration: BoxDecoration(
+                    //         border: Border.all(
+                    //           width: 3,
+                    //           color: Colors.white,
+                    //         ),
+                    //         borderRadius: const BorderRadius.all(
+                    //           Radius.circular(50),
+                    //         ),
+                    //         color: Colors.white,
+                    //         boxShadow: [
+                    //           BoxShadow(
+                    //             offset: Offset(2, 4),
+                    //             color: Colors.black.withOpacity(0.3),
+                    //             blurRadius: 3,
+                    //           ),
+                    //         ]),
+                    //   ),
+                    // )
                   ],
                 ),
                 const SizedBox(
                   height: 20,
                 ),
-                Text('Name: ${_.user.fname} ${_.user.lname}'),
+                Text('${_.user.fname} ${_.user.lname}'),
                 const SizedBox(
                   height: 5,
                 ),
-                Text('Email: ${_.user.email}'),
+                Text('${_.user.email}'),
                 const SizedBox(
-                  height: 30,
+                  height: 25,
+                ),
+                TextButton(
+                  style: TextButton.styleFrom(
+                    primary: ButtonColor,
+                  ),
+                  onPressed: () {
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => EditProfileTab()));
+                  },
+                  child: Text('Edit Profile'),
                 ),
                 Row(
                   children: [

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
+import '../../helper/const.dart';
 import 'upload.dart';
 
 class Files extends StatefulWidget {
@@ -102,7 +103,7 @@ class _FilesState extends State<Files> {
   // }
 
   // void initState() {
-  //   // TODO: implement initState
+
   //   super.initState();
   //   listExample();
   //   downloadURLExample();
@@ -112,60 +113,76 @@ class _FilesState extends State<Files> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            // Text(
-            //   'No files added yet!',
-            //   style: TextStyle(
-            //     fontSize: 20.0,
+      body: SingleChildScrollView(
+          child: Center(
+        child: Container(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+              // Text(
+              //   'No files added yet!',
+              //   style: TextStyle(
+              //     fontSize: 20.0,
+              //   ),
+              // ),
+              // SizedBox(
+              //   height: 100,
+              // ),
+              // Container(
+              //     height: 200,
+              //     child: Image.asset(
+              //       'assets/waiting.png',
+              //       fit: BoxFit.cover,
+              //     )),
+              // ListView.builder(
+              //   itemBuilder: (ctx, index) {
+              Container(
+                // color: ButtonColor,
+
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  // border: Border.all(),
+                ),
+
+                alignment: Alignment.center,
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ListTile(
+                        leading: Padding(
+                          padding: EdgeInsets.all(6),
+                          child: FittedBox(
+                            child: Icon(
+                              Icons.file_copy_outlined,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        title: Text('Document.pdf'
+                            // ignore: deprecated_member_use
+                            ),
+                        trailing: IconButton(
+                          icon: Icon(Icons.delete),
+                          color: Theme.of(context).errorColor,
+                          onPressed: () {},
+                        ),
+                      ),
+                    ]),
+                //},
+                //itemCount: transactions.length,
+                //),
+              )
+            ])
+            // Card(
+            //   elevation: 5,
+            //   margin: EdgeInsets.symmetric(
+            //     vertical: 8,
+            //     horizontal: 5,
             //   ),
-            // ),
-            // SizedBox(
-            //   height: 100,
-            // ),
-            // Container(
-            //     height: 200,
-            //     child: Image.asset(
-            //       'assets/waiting.png',
-            //       fit: BoxFit.cover,
-            //     )),
-            // ListView.builder(
-            //   itemBuilder: (ctx, index) {
-            Card(
-              elevation: 5,
-              margin: EdgeInsets.symmetric(
-                vertical: 8,
-                horizontal: 5,
-              ),
-              child: ListTile(
-                leading: Padding(
-                  padding: EdgeInsets.all(6),
-                  child: FittedBox(
-                    child: Icon(
-                      Icons.file_copy_outlined,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-                title: Text('Document.pdf'
-                    // ignore: deprecated_member_use
-                    ),
-                trailing: IconButton(
-                  icon: Icon(Icons.delete),
-                  color: Theme.of(context).errorColor,
-                  onPressed: () {},
-                ),
-              ),
+
             ),
-            //},
-            //itemCount: transactions.length,
-            //),
-          ],
-        ),
-      ),
+      )),
       floatingActionButton: FloatingActionButton(
         onPressed:
             // () {
