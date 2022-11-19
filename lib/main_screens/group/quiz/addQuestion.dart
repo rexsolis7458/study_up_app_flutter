@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:study_up_app/main_screens/group/quiz/create_quiz.dart';
+import 'package:study_up_app/main_screens/group/quiz/quiz.dart';
 import 'package:study_up_app/services/database.dart';
 
 import '../../../helper/const.dart';
@@ -19,7 +21,7 @@ class _AddQuestionState extends State<AddQuestion> {
 
   DatabaseService databaseService = new DatabaseService();
 
-  uploadQuestinData() async {
+  uploadQuestionData() async {
     if (_formKey.currentState!.validate()) {
       setState(() {
         _isLoading = true;
@@ -129,7 +131,7 @@ class _AddQuestionState extends State<AddQuestion> {
                           },
                           child: Container(
                             width: 150,
-                            height: 40,
+                            height: 60,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(30),
                                 color: ButtonColor),
@@ -146,11 +148,17 @@ class _AddQuestionState extends State<AddQuestion> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            uploadQuestinData();
+                            uploadQuestionData();
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CreateQuiz(),
+                              ),
+                            );
                           },
                           child: Container(
                             width: 150,
-                            height: 40,
+                            height: 60,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(30),
                                 color: ButtonColor),

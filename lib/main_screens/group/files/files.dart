@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
-import '../../helper/const.dart';
-import 'upload.dart';
+import '../../../helper/const.dart';
+import '../upload.dart';
 
 class Files extends StatefulWidget {
   const Files({super.key});

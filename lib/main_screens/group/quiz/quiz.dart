@@ -20,29 +20,28 @@ int _incorrect = 0;
 int _notAttempted = 0;
 
 class _QuizState extends State<Quiz> {
-  late DatabaseService databaseService = new DatabaseService();
-  late QuerySnapshot questionSnapshot;
+  DatabaseService databaseService = new DatabaseService();
+  QuerySnapshot? questionSnapshot;
 
   QuestionModel getQuestionModelFromDatasnapshot(
       DocumentSnapshot questionSnapshot) {
     QuestionModel questionModel = new QuestionModel();
 
-    questionModel.question =
-        (questionSnapshot.data as DocumentSnapshot)['question'];
+    questionModel.question = questionSnapshot['question'];
 
     List<String> options = [
-      (questionSnapshot.data as DocumentSnapshot)['option1'],
-      (questionSnapshot.data as DocumentSnapshot)['option2'],
-      (questionSnapshot.data as DocumentSnapshot)['option3'],
-      (questionSnapshot.data as DocumentSnapshot)['option4'],
-      // questionSnapshot.data['option4'],
+      questionSnapshot['option1'],
+      questionSnapshot['option2'],
+      questionSnapshot['option3'],
+      questionSnapshot['option4'],
     ];
     options.shuffle();
-
+    
     questionModel.option1 = options[0];
-    questionModel.option1 = options[2];
-    questionModel.option1 = options[3];
-    (questionSnapshot.data as DocumentSnapshot)['option1'];
+    questionModel.option2 = options[1];
+    questionModel.option3 = options[2];
+    questionModel.option4 = options[3];
+    questionModel.correctOption = questionSnapshot['option1'];
     questionModel.answered = false;
 
     return questionModel;
@@ -56,7 +55,7 @@ class _QuizState extends State<Quiz> {
       _notAttempted = 0;
       _correct = 0;
       _incorrect = 0;
-      total = questionSnapshot.docs.length;
+      total = questionSnapshot!.docs.length;
       print('$total this is total');
       setState(() {});
     });
@@ -94,11 +93,11 @@ class _QuizState extends State<Quiz> {
                     padding: EdgeInsets.symmetric(horizontal: 24),
                     shrinkWrap: true,
                     physics: ClampingScrollPhysics(),
-                    itemCount: questionSnapshot.docs.length,
+                    itemCount: questionSnapshot!.docs.length,
                     itemBuilder: (context, index) {
                       return QuizTile(
                         questionModel: getQuestionModelFromDatasnapshot(
-                            questionSnapshot.docs[index]),
+                            questionSnapshot!.docs[index]),
                         index: index,
                       );
                     })
@@ -196,7 +195,7 @@ class _QuizTileState extends State<QuizTile> {
             },
             child: OptionTile(
               option: 'B',
-              description: widget.questionModel.option1,
+              description: widget.questionModel.option2,
               correctAnswer: widget.questionModel.correctOption,
               optionSelected: optionSelected,
             ),
@@ -226,7 +225,7 @@ class _QuizTileState extends State<QuizTile> {
             },
             child: OptionTile(
               option: 'C',
-              description: widget.questionModel.option1,
+              description: widget.questionModel.option3,
               correctAnswer: widget.questionModel.correctOption,
               optionSelected: optionSelected,
             ),
@@ -256,7 +255,7 @@ class _QuizTileState extends State<QuizTile> {
             },
             child: OptionTile(
               option: 'D',
-              description: widget.questionModel.option1,
+              description: widget.questionModel.option4,
               correctAnswer: widget.questionModel.correctOption,
               optionSelected: optionSelected,
             ),

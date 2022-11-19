@@ -50,6 +50,20 @@ class _QuizFormState extends State<QuizForm> {
   Widget build(BuildContext context) {
     var buttonColor = ButtonColor;
     return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        elevation: 0,
+        iconTheme: IconThemeData(
+          color: Colors.black54,
+        ),
+        title: Text(
+          'StudyUp',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
       body: _isLoading
           ? Container(
               child: Center(
@@ -59,8 +73,10 @@ class _QuizFormState extends State<QuizForm> {
           : Form(
               key: _formKey,
               child: Container(
+                color: BGColor,
                 padding: EdgeInsets.symmetric(horizontal: 24),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     // TextFormField(
                     //   validator: (val) =>
@@ -105,12 +121,6 @@ class _QuizFormState extends State<QuizForm> {
                     GestureDetector(
                       onTap: () {
                         createQuiz();
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => AddQuestion(quizId),
-                          ),
-                        );
                       },
                       child: Container(
                         width: 150,

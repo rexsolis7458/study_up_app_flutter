@@ -28,9 +28,9 @@ class _CreateQuizState extends State<CreateQuiz> {
                   itemBuilder: (context, index) {
                     return QuizTile(
                       // imgUrl: snapshot.data.doc[index].data['quizImgurl'],
-                      title: snapshot.data.docs[index].data['quizTitle'],
-                      desc: snapshot.data.docs[index].data['quizDesc'],
-                      quizId: snapshot.data.docs[index].data['quizId'],
+                      title: snapshot.data.docs[index].data()['quizTitle'],
+                      desc: snapshot.data.docs[index].data()['quizDescription'],
+                      quizId: snapshot.data.docs[index].data()['quizId'],
                     );
                   },
                 );
@@ -76,10 +76,12 @@ class QuizTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Navigator.push(
-        //     context, MaterialPageRoute(builder: (context) => Quiz(
-        //       quizId,
-        //     )));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Quiz(
+                      quizId,
+                    )));
       },
       child: Container(
         margin: EdgeInsets.only(bottom: 8),
@@ -98,16 +100,17 @@ class QuizTile extends StatelessWidget {
               // color: ButtonColor,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
-                color: ButtonColor,
+                color: BGColor,
               ),
-              color: Colors.black26,
+              // color: Colors.black26,
               alignment: Alignment.center,
-              child: Column( 
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       title,
                       style: TextStyle(
-                          color: Colors.white,
+                          color: MainColor,
                           fontSize: 17,
                           fontWeight: FontWeight.w500),
                     ),
@@ -117,7 +120,7 @@ class QuizTile extends StatelessWidget {
                     Text(
                       desc,
                       style: TextStyle(
-                          color: Colors.white,
+                          color: Colors.black,
                           fontSize: 14,
                           fontWeight: FontWeight.w400),
                     )

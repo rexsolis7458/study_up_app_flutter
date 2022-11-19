@@ -6,9 +6,7 @@ import 'package:study_up_app/main_screens/home/home_tab.dart';
 import 'package:study_up_app/main_screens/profile/profile_tab.dart';
 import 'package:study_up_app/main_screens/search_tab.dart';
 
-
-class HomeScreen extends StatefulWidget 
-{
+class HomeScreen extends StatefulWidget {
   final String? currentUserId;
 
   HomeScreen({Key? key, this.currentUserId}) : super(key: key);
@@ -17,25 +15,22 @@ class HomeScreen extends StatefulWidget
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen>{
+class _HomeScreenState extends State<HomeScreen> {
   int _selectedTab = 0;
 
   @override
-  Widget build(BuildContext context)
-  {
+  Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: [
-        HomeTab(
-        ),
+        HomeTab(),
         SearchTab(
           currentUserId: widget.currentUserId,
         ),
         GroupTab(
-          // currentUserId: widget.currentUserId,
-        ),
-        ProfileTab(
-        ),
+            // currentUserId: widget.currentUserId,
+            ),
+        ProfileTab(),
       ].elementAt(_selectedTab),
       bottomNavigationBar: CupertinoTabBar(
         onTap: (index) {

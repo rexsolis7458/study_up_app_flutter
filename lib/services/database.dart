@@ -1,7 +1,10 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:study_up_app/models/group.dart';
 import 'package:study_up_app/models/users.dart';
+
+import '../main_screens/group/q&a/commentModel.dart';
 
 class Database {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -129,5 +132,70 @@ class DatabaseService {
         .doc(quizId)
         .collection('QNA')
         .get();
+  }
+}
+
+class PostService {
+  List<CommentModel> _postListFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) {
+      return CommentModel(
+        id: doc.id,
+        question: 'question',
+        creator: 'creator',
+        originalId: 'originalId',
+      );
+    }).toList();
+  }
+
+  CommentModel? _postFromSnapshot(DocumentSnapshot snapshot) {
+    return snapshot.exists
+        ? CommentModel(
+            id: snapshot.id,
+            question: 'question',
+            creator: 'creator',
+            originalId: 'originalId',
+          )
+        : null;
+  }
+
+  Future savePost(question) async {
+    await FirebaseFirestore.instance.collection("Question").add({
+      'question': question,
+      'creator': FirebaseAuth.instance.currentUser?.uid,
+      'timestamp': FieldValue.serverTimestamp(),
+    });
+  }
+
+  Future reply(CommentModel post, String question) async {
+    if (question == '') {
+      return;
+    }
+    await post.ref.collection("replies").add({
+      'question': question,
+      'creator': FirebaseAuth.instance.currentUser?.uid,
+      'timestamp': FieldValue.serverTimestamp(),
+    });
+  }
+
+  Future<CommentModel?> getPostById(String id) async {
+    DocumentSnapshot postSnap =
+        await FirebaseFirestore.instance.collection("Question").doc(id).get();
+
+    return _postFromSnapshot(postSnap);
+  }
+
+  Stream<List<CommentModel>> getPostsByUser(uid) {
+    return FirebaseFirestore.instance
+        .collection("Question")
+        .where('creator', isEqualTo: uid)
+        .snapshots()
+        .map(_postListFromSnapshot);
+  }
+
+  Future<List<CommentModel>> getReplies(CommentModel question) async {
+    QuerySnapshot querySnapshot =
+        await question.ref.collection("replies").get();
+
+    return _postListFromSnapshot(querySnapshot);
   }
 }
