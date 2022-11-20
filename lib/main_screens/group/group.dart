@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:study_up_app/main_screens/group/groupChat/chat.dart';
+import 'package:study_up_app/main_screens/group/q&a/feed.dart';
 import 'package:study_up_app/main_screens/group/quiz/quiz_form.dart';
 import 'files/files.dart';
-import 'q&a/feed.dart';
+import 'q&a/question.dart';
 import 'quiz/create_quiz.dart';
 
 class Group extends StatefulWidget {
@@ -66,7 +67,7 @@ class _GroupState extends State<Group> {
               child: Files(),
             ),
             Center(
-              child: Qa(),
+              child: Feed(),
             ),
             Center(
               child: CreateQuiz(),

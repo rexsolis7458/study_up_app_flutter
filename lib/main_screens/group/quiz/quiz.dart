@@ -36,7 +36,7 @@ class _QuizState extends State<Quiz> {
       questionSnapshot['option4'],
     ];
     options.shuffle();
-    
+
     questionModel.option1 = options[0];
     questionModel.option2 = options[1];
     questionModel.option3 = options[2];
@@ -49,14 +49,12 @@ class _QuizState extends State<Quiz> {
 
   @override
   void initState() {
-    print('${widget.quizId}');
     databaseService.getQuizData(widget.quizId).then((val) {
       questionSnapshot = val;
       _notAttempted = 0;
       _correct = 0;
       _incorrect = 0;
       total = questionSnapshot!.docs.length;
-      print('$total this is total');
       setState(() {});
     });
     super.initState();

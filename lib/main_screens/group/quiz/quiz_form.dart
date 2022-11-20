@@ -36,13 +36,15 @@ class _QuizFormState extends State<QuizForm> {
         'quizDescription': quizDescription
       };
 
-      await databaseService.addQuizData(quizId, quizMap).then((value) {
-        setState(() {
-          _isLoading = false;
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => AddQuestion(quizId)));
-        });
-      });
+      await databaseService.addQuizData(quizId, quizMap).then(
+        (value) {
+          setState(() {
+            _isLoading = false;
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => AddQuestion(quizId)));
+          });
+        },
+      );
     }
   }
 
