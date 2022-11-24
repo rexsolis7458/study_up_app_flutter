@@ -43,8 +43,6 @@ class _QuestionState extends State<Question> {
           if (!mounted) return;
           setState(() {
             _isLoading = false;
-            Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (context) => Feed()));
           });
         },
       );
@@ -85,7 +83,7 @@ class _QuestionState extends State<Question> {
                 color: BGColor,
                 padding: EdgeInsets.symmetric(horizontal: 24),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     // TextFormField(
                     //   validator: (val) =>
@@ -100,17 +98,18 @@ class _QuestionState extends State<Question> {
                     const SizedBox(
                       height: 10,
                     ),
-                    // TextFormField(
-                    //   validator: (val) => val!.isEmpty
-                    //       ? "Got a question? Ask right away!"
-                    //       : null,
-                    //   decoration: InputDecoration(),
-                    //   onChanged: (val) {
-                    //     commentDescription = val;
-                    //   },
-                    // ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      validator: (val) => val!.isEmpty
+                          ? "Got a question? Ask right away!"
+                          : null,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        errorBorder: InputBorder.none,
+                        disabledBorder: InputBorder.none,
+                        contentPadding: EdgeInsets.only(
+                            left: 30, bottom: 11, top: 11, right: 15),
                         hintText: "Got a question? Ask right away!",
                       ),
                       onChanged: (val) {
