@@ -16,30 +16,31 @@ class Question extends StatefulWidget {
 }
 
 class _QuestionState extends State<Question> {
-  final _formKey = GlobalKey<FormState>();
+  final _qFormKey = GlobalKey<FormState>();
   // late String quizImgurl, quizTitle, quizDescription, quizId;
-  late String question, questionId;
+  late String commentDescription, commentId;
 
-  QuestionService questionService = new QuestionService();
+  CommentService commentService = new CommentService();
 
   bool _isLoading = false;
 
-  createQuestion() async {
-    if (_formKey.currentState!.validate()) {
+  createComment() async {
+    if (_qFormKey.currentState!.validate()) {
       setState(() {
         _isLoading = true;
       });
 
-      questionId = randomAlphaNumeric(16);
+      commentId = randomAlphaNumeric(16);
 
-      Map<String, String> questionMap = {
+      Map<String, String> commentMap = {
         // 'quizImgurl': quizImgurl,
-        'questionId': questionId,
-        'question': question,
+        'commentId': commentId,
+        'commentDescription': commentDescription
       };
 
-      await questionService.addQuestionData(questionId, questionMap).then(
+      await commentService.addCommentData(commentId, commentMap).then(
         (value) {
+          if (!mounted) return;
           setState(() {
             _isLoading = false;
             Navigator.pushReplacement(
@@ -62,7 +63,7 @@ class _QuestionState extends State<Question> {
         actions: <Widget>[
           TextButton(
             onPressed: () async {
-              createQuestion();
+              createComment();
               Navigator.pop(context);
             },
             child: Text(
@@ -79,7 +80,7 @@ class _QuestionState extends State<Question> {
               ),
             )
           : Form(
-              key: _formKey,
+              key: _qFormKey,
               child: Container(
                 color: BGColor,
                 padding: EdgeInsets.symmetric(horizontal: 24),
@@ -99,15 +100,24 @@ class _QuestionState extends State<Question> {
                     const SizedBox(
                       height: 10,
                     ),
+                    // TextFormField(
+                    //   validator: (val) => val!.isEmpty
+                    //       ? "Got a question? Ask right away!"
+                    //       : null,
+                    //   decoration: InputDecoration(),
+                    //   onChanged: (val) {
+                    //     commentDescription = val;
+                    //   },
+                    // ),
                     TextFormField(
-                      validator: (val) => val!.isEmpty ? " " : null,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         hintText: "Got a question? Ask right away!",
                       ),
                       onChanged: (val) {
-                        question = val;
+                        commentDescription = val;
                       },
                     ),
+
                     const SizedBox(
                       height: 10,
                     ),

@@ -133,26 +133,26 @@ class DatabaseService {
 }
 
 //question
-class QuestionService {
-  Future<void> addQuestionData(
-      String questionId, Map<String, dynamic> questionData) async {
+class CommentService {
+  Future<void> addCommentData(
+      String commentId, Map<String, dynamic> commentData) async {
     await FirebaseFirestore.instance
-        .collection("Question")
-        .doc(questionId)
-        .set(questionData)
+        .collection("Comment")
+        .doc(commentId)
+        .set(commentData)
         .catchError((e) {
       print(e.toString());
     });
   }
 
-  getQuestionsData() async {
-    return await FirebaseFirestore.instance.collection("Question").snapshots();
+  getCommentsData() async {
+    return await FirebaseFirestore.instance.collection("Comment").snapshots();
   }
 
-  getQuestionData(String quizId) async {
+  getCommentData(String commentId) async {
     return await FirebaseFirestore.instance
-        .collection("Question")
-        .doc(quizId)
+        .collection("Comment")
+        .doc(commentId)
         .collection('QNA')
         .get();
   }

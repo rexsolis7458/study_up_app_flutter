@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -17,14 +15,14 @@ class Feed extends StatefulWidget {
 }
 
 class _FeedState extends State<Feed> {
-  Stream? quizStream;
+  Stream? commentStream;
 
-  DatabaseService databaseService = new DatabaseService();
+  CommentService commentService = new CommentService();
 
   Widget commentList() {
     return Container(
       child: StreamBuilder(
-        stream: quizStream,
+        stream: commentStream,
         builder: (context, snapshot) {
           return snapshot.data == null
               ? Container()
@@ -42,27 +40,36 @@ class _FeedState extends State<Feed> {
       ),
     );
   }
+   @override
+  void initState() {
+    commentService.getCommentsData().then((val) {
+      setState(() {
+        commentStream = val;
+      });
+    });
+    super.initState();
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: commentList(),
-      floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => Question(),
-              ),
-            );
-          }),
-    );
+        body: commentList(),
+        floatingActionButton: FloatingActionButton(
+            child: Icon(Icons.add),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Question(),
+                ),
+              );
+            }));
   }
 }
 
 class CommentTile extends StatelessWidget {
-  // final String imgUrl;
+  //final String imgUrl;
   final String comment;
   final String commentId;
 
@@ -75,16 +82,15 @@ class CommentTile extends StatelessWidget {
       height: 150,
       child: Stack(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            // child: Image.network(
-            //   imgUrl,
-            //   width: MediaQuery.of(context).size.width - 48,
-            //   fit: BoxFit.cover,
-            // ),
-          ),
+          // ClipRRect(
+          //   borderRadius: BorderRadius.circular(8),
+          //   child: Image.network(
+          //     imgUrl,
+          //     width: MediaQuery.of(context).size.width - 48,
+          //     fit: BoxFit.cover,
+          //   ),
+          // ),
           Container(
-            // color: ButtonColor,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
               color: BGColor,
@@ -95,10 +101,10 @@ class CommentTile extends StatelessWidget {
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               Text(
                 comment,
-                style: TextStyle(
-                    color: MainColor,
-                    fontSize: 17,
-                    fontWeight: FontWeight.w500),
+                // style: TextStyle(
+                //     color: MainColor,
+                //     fontSize: 17,
+                //     fontWeight: FontWeight.w500),
               ),
               const SizedBox(
                 height: 6,
