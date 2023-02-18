@@ -2,11 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CommentModel {
   late final String creator;
-  late final Timestamp timestamp;
+
 
   CommentModel({
     required this.creator,
-    required this.timestamp,
+
+     required String id, required String question, required String originalId,
   });
 
   get ref => null;

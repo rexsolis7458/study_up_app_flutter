@@ -75,6 +75,7 @@ class _QuizFormState extends State<QuizForm> {
           : Form(
               key: _formKey,
               child: Container(
+                 margin: EdgeInsets.only(bottom: 8, top: 10),
                 color: BGColor,
                 padding: EdgeInsets.symmetric(horizontal: 24),
                 child: Column(

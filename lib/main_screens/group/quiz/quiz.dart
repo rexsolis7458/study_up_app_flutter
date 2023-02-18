@@ -78,6 +78,7 @@ class _QuizState extends State<Quiz> {
         ),
       ),
       body: Container(
+        margin: EdgeInsets.only(bottom: 8, top: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

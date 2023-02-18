@@ -5,6 +5,7 @@ import 'package:study_up_app/main_screens/group/quiz/quiz_form.dart';
 import 'files/files.dart';
 import 'q&a/question.dart';
 import 'quiz/create_quiz.dart';
+import 'schedule/sched.dart';
 
 class Group extends StatefulWidget {
   @override
@@ -73,7 +74,7 @@ class _GroupState extends State<Group> {
               child: CreateQuiz(),
             ),
             Center(
-              child: Text('SCHEDULE'),
+              child: Sched(),
             ),
           ],
         ),

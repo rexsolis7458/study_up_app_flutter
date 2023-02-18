@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:study_up_app/models/group.dart';
 import 'package:study_up_app/models/users.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 import '../main_screens/group/q&a/commentModel.dart';
 
@@ -95,6 +97,8 @@ class Database {
   }
 }
 
+
+
 //quiz
 class DatabaseService {
   Future<void> addQuizData(String quizId, Map<String, dynamic> quizData) async {
@@ -157,6 +161,100 @@ class CommentService {
         .get();
   }
 }
+
+//replies
+class ReplyService {
+  Future<void> addReplyData(
+      String replyId, Map<String, dynamic> replyData) async {
+    String retVal = "error";
+
+    await FirebaseFirestore.instance
+        .collection("Reply")
+        .doc(replyId)
+        .set(replyData)
+        .catchError((e) {
+      print(e.toString());
+    });
+  }
+
+// class ReplyService {
+//   CollectionReference commentCollection =
+//       FirebaseFirestore.instance.collection("Comment");
+
+//   Future<String> addReplyData(Map<String, dynamic> fields, Map<String, String> replyMap) async {
+//     DocumentReference ref = await commentCollection.add(fields);
+// // Required in Ahead Steps
+//     return ref.id;
+//   }
+
+//   Stream<QuerySnapshot> getReplyData() {
+//     return commentCollection.snapshots();
+//   }
+
+//   addComment(Map<String, dynamic> comment, String replyId) {
+//     commentCollection.doc(replyId).collection('Replies').add(comment);
+//     replyList() {}
+//   }
+
+//   Future<Stream<QuerySnapshot<Object?>>> getComments(String replyId) async {
+//     return await commentCollection.doc(replyId).collection('Replies').snapshots();
+//   }
+
+  // Future<void> addReply(
+  //     String replyId, Map<String, dynamic> replyData) async {
+  //        String retVal = "error";
+
+  //   await FirebaseFirestore.instance
+  //       .collection("Reply")
+  //       .doc(replyId)
+  //       .set(replyData)
+  //       .catchError((e) {
+  //     print(e.toString());
+  //   });
+  // }
+
+  getRepliesData() async {
+    return await FirebaseFirestore.instance.collection("Reply").snapshots();
+  }
+
+  getReplyData(String replyId) async {
+    return await FirebaseFirestore.instance
+        .collection("Reply")
+        .doc(replyId)
+        .collection('QNA')
+        .get();
+  }
+
+  replyList() {}
+}
+
+//sched
+class ScheduleService {
+  Future<void> addScheduleData(
+      String schedId, Map<String, dynamic> schedData) async {
+    await FirebaseFirestore.instance
+        .collection("Event")
+        .doc(schedId)
+        .set(schedData)
+        .catchError((e) {
+      print(e.toString());
+    });
+  }
+
+  getScheduleData() async {
+    return await FirebaseFirestore.instance.collection("Event").snapshots();
+  }
+
+  getSchedData(String schedId) async {
+    return await FirebaseFirestore.instance
+        .collection("Event")
+        .doc(schedId)
+        // .collection('QNA')
+        .get();
+  }
+}
+
+//calendar
 
 //questions and answers
 // class PostService {
@@ -223,3 +321,4 @@ class CommentService {
 //     return _postListFromSnapshot(querySnapshot);
 //   }
 // }
+
