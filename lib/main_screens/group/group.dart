@@ -3,6 +3,7 @@ import 'package:study_up_app/main_screens/group/groupChat/chat.dart';
 import 'package:study_up_app/main_screens/group/q&a/feed.dart';
 import 'package:study_up_app/main_screens/group/quiz/quiz_form.dart';
 import 'files/files.dart';
+import 'files/viewPDF.dart';
 import 'q&a/question.dart';
 import 'quiz/create_quiz.dart';
 import 'schedule/sched.dart';
@@ -65,7 +66,7 @@ class _GroupState extends State<Group> {
         body: TabBarView(
           children: [
             Center(
-              child: Files(),
+              child: LoadURL(),
             ),
             Center(
               child: Feed(),

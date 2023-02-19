@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:advance_pdf_viewer_fork/advance_pdf_viewer_fork.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:study_up_app/main_screens/group/files/pdf.dart';
 
 import '../../../services/database.dart';
 import 'files.dart';
@@ -36,7 +38,7 @@ class _LoadURLState extends State<LoadURL> {
 
   Future<void> downloadURLExample() async {
     String downloadURL = await firebase_storage.FirebaseStorage.instance
-        .ref('pdf/files/ $fileName')
+        .ref('files/$fileName')
         .getDownloadURL();
     print(downloadURL);
     PDFDocument doc = await PDFDocument.fromURL(downloadURL);
@@ -50,6 +52,7 @@ class _LoadURLState extends State<LoadURL> {
   @override
   void initState() {
     // TODO: implement initState
+
     super.initState();
     listExample();
     downloadURLExample();
@@ -58,7 +61,57 @@ class _LoadURLState extends State<LoadURL> {
 
   @override
   Widget build(BuildContext context) {
-    return CircularProgressIndicator();
+    return Scaffold(
+      body:
+          // filesList(),
+          FutureBuilder<ListResult>(
+              future: downloadURLExample,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  final files = snapshot.data!.items;
+
+                  return ListView.builder(
+                      itemCount: files.length,
+                      itemBuilder: (context, index) {
+                        final file = files[index];
+
+                        return ListTile(
+                          title: Text(file.name),
+                          trailing: IconButton(
+                            icon: const Icon(
+                              Icons.download,
+                              color: Colors.blue,
+                            ),
+                            onPressed: () => LoadURL(),
+                          ),
+                        );
+                      });
+                } else if (snapshot.hasError) {
+                  return const Center(
+                    child: Text('Error occured'),
+                  );
+                } else {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              }),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Pdf(),
+            ),
+          );
+        },
+        child: Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+    );
   }
 }
 
