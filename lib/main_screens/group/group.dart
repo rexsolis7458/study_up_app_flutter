@@ -66,10 +66,10 @@ class _GroupState extends State<Group> {
         body: TabBarView(
           children: [
             Center(
-              child: LoadURL(),
+              child: Files(),
             ),
             Center(
-              child: Feed(),
+              child: Files(),
             ),
             Center(
               child: CreateQuiz(),

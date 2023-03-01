@@ -2,12 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Event {
   final String title;
-  final String? description;
+  final String description;
   final DateTime date;
   final String id;
   Event({
     required this.title,
-    this.description,
+    required this.description,
     required this.date,
     required this.id,
   });

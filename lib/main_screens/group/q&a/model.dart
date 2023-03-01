@@ -3,8 +3,8 @@ class Comment {
   String commentBody, commentId, userId, timeStamp;
   Comment({
     required this.commentBody,
-   required this.commentId, 
-   required this.userId, 
+   required this.commentId,
+   required this.userId,
    required this.timeStamp});
 
   factory Comment.fromMap(Map comment) {

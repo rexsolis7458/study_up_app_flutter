@@ -13,12 +13,12 @@ import 'package:study_up_app/main_screens/group/files/viewPDF.dart';
 import '../../../helper/const.dart';
 import '../upload.dart';
 
-class Pdf extends StatefulWidget {
+class UploadPdf extends StatefulWidget {
   @override
-  _PdfState createState() => _PdfState();
+  _UploadPdfState createState() => _UploadPdfState();
 }
 
-class _PdfState extends State<Pdf> {
+class _UploadPdfState extends State<UploadPdf> {
   late String fileName, fileId;
 
   //Upload upload = Get.put(Upload());

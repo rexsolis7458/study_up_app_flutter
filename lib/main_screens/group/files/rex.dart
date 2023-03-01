@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 
 class HomeFile extends StatefulWidget
@@ -56,6 +57,7 @@ class _HomeFileState extends State<HomeFile>
               );
             }
           );
+          
         } else if (snapshot.hasError)
         {
           return const Center(child: Text('Error occured'),);

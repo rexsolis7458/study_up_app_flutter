@@ -47,6 +47,7 @@ dependencies:
   advance_pdf_viewer_fork: any
   flutter_document_picker: ^5.1.0
   file_picker: ^5.2.5
+  flutter_pdfview: ^1.2.5
   
 
   flutter_riverpod: ^2.1.3

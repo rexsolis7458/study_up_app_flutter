@@ -1,12 +1,8 @@
 import 'dart:collection';
-import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:study_up_app/helper/const.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../Widgets/event_item.dart';
 import '../../../services/event.dart';
@@ -14,6 +10,8 @@ import 'add_event.dart';
 import 'edit_event.dart';
 
 class Cal extends StatefulWidget {
+  const Cal({super.key});
+
   @override
   _CalState createState() => _CalState();
 }
@@ -188,7 +186,7 @@ class _CalState extends State<Cal> {
                   );
                   if (delete ?? false) {
                     await FirebaseFirestore.instance
-                        .collection('events')
+                        .collection('Events')
                         .doc(event.id)
                         .delete();
                     _loadFirestoreEvents();

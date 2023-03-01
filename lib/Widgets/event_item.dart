@@ -16,8 +16,11 @@ class EventItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(
+      leading: Text(
         event.title,
+      ),
+      title: Text(
+        event.description,
       ),
       subtitle: Text(
         event.date.toString(),

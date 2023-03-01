@@ -70,7 +70,7 @@ class _FilesState extends State<Files> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => Pdf(),
+              builder: (context) => UploadPdf(),
             ),
           );
         },
