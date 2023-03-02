@@ -43,8 +43,7 @@ class _UploadPdfState extends State<UploadPdf> {
     firebase_storage.UploadTask uploadTask;
     // Create a Reference to the file
     firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
-        .ref('pdf')
-        .child('files')
+        .ref('Pdf files')
         .child(fileName);
 
     final metadata = firebase_storage.SettableMetadata(
