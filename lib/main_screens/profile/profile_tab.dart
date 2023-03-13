@@ -175,10 +175,10 @@ class ProfileTab extends StatelessWidget {
                     primary: ButtonColor,
                   ),
                   onPressed: () {
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (context) => EditProfileTab()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => EditProfileTab()));
                   },
                   child: Text('Edit Profile'),
                 ),
