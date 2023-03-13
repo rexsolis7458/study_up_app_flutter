@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:random_string/random_string.dart';
 import 'package:study_up_app/main_screens/group/files/file_model.dart';
 import 'package:study_up_app/main_screens/group/group.dart';
 
@@ -13,28 +14,8 @@ class RateFile extends StatefulWidget {
 class _RateFileState extends State<RateFile> {
   // double? ratingValue;
   // Stream? rateStream;
-  FileModel fileModel = FileModel(fileName: '', rateID: 2, ratingValue: 0);
-  // Widget FileRatings() {
-  //   return Container(
-  //     child: StreamBuilder(
-  //       stream: rateStream,
-  //       builder: (context, snapshot) {
-  //         return snapshot.data == null
-  //             ? Container()
-  //             : ListView.builder(
-  //                 itemCount: snapshot.data.docs.length,
-  //                 itemBuilder: (context, index) {
-  //                   return RateTile(
-  //                     ratingValue:
-  //                         snapshot.data.docs[index].data()['ratingValue'],
-  //                     rateID: snapshot.data.docs[index].data()['rateID'],
-  //                   );
-  //                 },
-  //               );
-  //       },
-  //     ),
-  //   );
-  // }
+  FileModel fileModel =
+      FileModel(fileName: '', rateID: randomAlphaNumeric(16), ratingValue: 0);
 
   @override
   Widget build(BuildContext context) {

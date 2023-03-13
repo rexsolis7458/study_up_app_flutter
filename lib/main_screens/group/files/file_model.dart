@@ -1,7 +1,7 @@
 class FileModel {
   final String fileName;
   late double ratingValue;
-  final int rateID;
+  final String rateID;
 
   FileModel({
     required this.fileName,
