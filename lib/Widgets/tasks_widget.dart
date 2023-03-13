@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:study_up_app/provider/event_provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-import '../main_screens/group/schedule/event_viewing_page.dart';
 import '../models/event_dataSource.dart';
 
 class TasksWidget extends StatefulWidget {

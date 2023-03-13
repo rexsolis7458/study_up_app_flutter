@@ -97,8 +97,6 @@ class Database {
   }
 }
 
-
-
 //quiz
 class DatabaseService {
   Future<void> addQuizData(String quizId, Map<String, dynamic> quizData) async {
@@ -159,6 +157,19 @@ class CommentService {
         .doc(commentId)
         .collection('QNA')
         .get();
+  }
+}
+
+class FileRatings {
+  Future<void> rateFileData(
+      String rateID, Map<String, dynamic> rateData) async {
+    await FirebaseFirestore.instance
+        .collection("File Ratings")
+        .doc(rateID)
+        .set(rateData)
+        .catchError((e) {
+      print(e.toString());
+    });
   }
 }
 

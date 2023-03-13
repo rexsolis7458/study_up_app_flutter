@@ -1,168 +1,132 @@
 import 'dart:io';
-import 'dart:math';
+
 import 'package:advance_pdf_viewer_fork/advance_pdf_viewer_fork.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter_document_picker/flutter_document_picker.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
-import 'package:study_up_app/main_screens/group/files/pdf.dart';
-import 'package:study_up_app/main_screens/group/files/viewPDF.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
-import '../../../helper/const.dart';
-import '../../../services/database.dart';
-import '../upload.dart';
+import 'pdf.dart';
+import 'viewPDF.dart';
 
-class Files extends StatefulWidget {
-  const Files({super.key});
+class HomeFile extends StatefulWidget {
+  HomeFile({Key? key}) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
-  _FilesState createState() => _FilesState();
+  State<HomeFile> createState() => _HomeFileState();
 }
 
-class _FilesState extends State<Files> {
-  late String fileName, fileId;
-  Stream? filesStream;
+class _HomeFileState extends State<HomeFile> {
+  PDFDocument document = PDFDocument();
 
-  LoadURL loadURL = LoadURL();
-  // FilesService filesService = new FilesService();
+  late Future<ListResult> futureFiles;
 
-  Widget filesList() {
-    return Container(
-      child: StreamBuilder(
-        stream: filesStream,
-        builder: (context, snapshot) {
-          return snapshot.data == null
-              ? Container()
-              : ListView.builder(
-                  itemCount: snapshot.data.docs.length,
-                  itemBuilder: (context, index) {
-                    return FilesTile(
-                      fileName: snapshot.data.docs[index].data()['fileName'],
-                    );
-                  },
-                );
-        },
-      ),
-    );
-  }
+  double? ratingValue;
+
+  firebase_storage.FirebaseStorage storage =
+      firebase_storage.FirebaseStorage.instance;
 
   @override
   void initState() {
-    LoadURL(val){
-      setState(() {
-        filesStream = val;
-      });
-    }
-
-    ;
     super.initState();
+    futureFiles = FirebaseStorage.instance.ref('/Pdf files').listAll();
+  }
+
+  Future<void> _delete(String ref) async {
+    await storage.ref(ref).delete();
+    // Rebuild the UI
+    setState(() {});
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: filesList(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => UploadPdf(),
-            ),
-          );
-        },
-        child: Icon(
-          Icons.add,
-          color: Colors.white,
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-    );
-  }
-}
+  Widget build(BuildContext context) => Scaffold(
+        body: FutureBuilder<ListResult>(
+          future: futureFiles,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              final files = snapshot.data!.items;
 
-class FilesTile extends StatelessWidget {
-  late String fileName;
-
-  FilesTile({required this.fileName});
-
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Stack(
-        children: [
-          Row(
-            children: [
-              Padding(
-                padding: EdgeInsets.all(16.0),
-              ),
-              Expanded(
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                    // Text(
-                    //   'No files added yet!',
-                    //   style: TextStyle(
-                    //     fontSize: 20.0,
-                    //   ),
-                    // ),
-                    // SizedBox(
-                    //   height: 100,
-                    // ),
-                    // Container(
-                    //     height: 200,
-                    //     child: Image.asset(
-                    //       'assets/waiting.png',
-                    //       fit: BoxFit.cover,
-                    //     )),
-                    // ListView.builder(
-                    //   itemBuilder: (ctx, index) {
-                    Container(
-                      // color: ButtonColor,
-
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        // border: Border.all(),
-                      ),
-
-                      alignment: Alignment.center,
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            ListTile(
-                              leading: Padding(
-                                padding: EdgeInsets.all(6),
-                                child: FittedBox(
-                                  child: Icon(
-                                    Icons.file_copy_outlined,
-                                    color: Colors.black,
-                                  ),
+              return ListView.builder(
+                  itemCount: files.length,
+                  itemBuilder: (context, index) {
+                    final file = files[index];
+                    return Card(
+                      child: ListTile(
+                        title: Text(file.name),
+                        leading: const Icon(Icons.picture_as_pdf),
+                        subtitle: Text(ratingValue != null
+                            ? ratingValue.toString()
+                            : 'Rate it!'),
+                        trailing: IconButton(
+                            icon: const Icon(Icons.delete),
+                            color: Colors.red,
+                            onPressed: () async {
+                              final delete = await showDialog<bool>(
+                                context: context,
+                                builder: (_) => AlertDialog(
+                                  title: const Text("Delete Event?"),
+                                  content: const Text(
+                                      "Are you sure you want to delete?"),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.pop(context, false),
+                                      style: TextButton.styleFrom(
+                                        foregroundColor: Colors.black,
+                                      ),
+                                      child: const Text("No"),
+                                    ),
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.pop(context, true),
+                                      style: TextButton.styleFrom(
+                                        foregroundColor: Colors.red,
+                                      ),
+                                      child: const Text("Yes"),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                              title: Text(fileName
-                                  // ignore: deprecated_member_use
-                                  ),
-                              onTap: () => LoadURL(),
-                              trailing: IconButton(
-                                icon: Icon(Icons.delete),
-                                color: Theme.of(context).errorColor,
-                                onPressed: () {},
-                              ),
+                              );
+                              if (delete ?? false) {
+                                _delete(file.fullPath);
+                              }
+                            }),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return loadPdf(file);
+                              },
                             ),
-                          ]),
-                      //},
-                      //itemCount: transactions.length,
-                      //),
-                    )
-                  ])),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
+                          );
+                        },
+                      ),
+                    );
+                  });
+            } else if (snapshot.hasError) {
+              return const Center(
+                child: Text('Error occured'),
+              );
+            } else {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          },
+        ),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => UploadPdf(),
+              ),
+            );
+          },
+        ),
+      );
 }

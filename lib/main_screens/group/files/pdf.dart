@@ -59,19 +59,6 @@ class _UploadPdfState extends State<UploadPdf> {
     return Future.value(uploadTask);
   }
 
-  // Future<String> generateFileId() async {
-  //   var randomNumber = new Random();
-  //   String randomName = " ";
-  //   String fileName = " ";
-
-  //   for (var i = 0; i < 10; i++) {
-  //     print(randomNumber.nextInt(100));
-  //     randomName += randomNumber.nextInt(100).toString();
-  //   }
-
-  //   fileName = '$randomName.pdf';
-  //   return fileName;
-  // }
 
   @override
   Widget build(BuildContext context) {

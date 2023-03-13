@@ -1,10 +1,7 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:study_up_app/main_screens/group/groupChat/chat.dart';
 import 'package:study_up_app/main_screens/group/q&a/feed.dart';
-import 'package:study_up_app/main_screens/group/quiz/quiz_form.dart';
 import 'files/files.dart';
-import 'files/viewPDF.dart';
-import 'q&a/question.dart';
 import 'quiz/create_quiz.dart';
 import 'schedule/sched.dart';
 
@@ -22,6 +19,7 @@ String chatRoomId(String user1, String user2) {
 }
 
 class _GroupState extends State<Group> {
+
   @override
   Widget build(BuildContext context) => DefaultTabController(
       length: 4,
@@ -66,10 +64,10 @@ class _GroupState extends State<Group> {
         body: TabBarView(
           children: [
             Center(
-              child: Files(),
+              child: HomeFile(),
             ),
             Center(
-              child: Files(),
+              child: Feed(),
             ),
             Center(
               child: CreateQuiz(),
