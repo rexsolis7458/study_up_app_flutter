@@ -47,6 +47,18 @@ class _AddQuestionState extends State<AddQuestion> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          backgroundColor: MainColor,
+          centerTitle: true,
+          elevation: 0,
+          title: Text(
+            'StudyUp',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
         body: _isLoading
             ? Container(
                 child: Center(
@@ -59,6 +71,7 @@ class _AddQuestionState extends State<AddQuestion> {
                   padding: EdgeInsets.symmetric(horizontal: 24),
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         TextFormField(
                           validator: (val) =>
@@ -123,56 +136,81 @@ class _AddQuestionState extends State<AddQuestion> {
                           },
                         ),
                         Spacer(),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.pop(
-                              context,
-                            );
-                          },
-                          child: Container(
-                            width: 150,
-                            height: 60,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(30),
-                                color: ButtonColor),
-                            child: Center(
-                              child: Text(
-                                "Submit",
-                                style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white),
+                        Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  uploadQuestionData();
+                                },
+                                child: const Text("Add Question"),
                               ),
-                            ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            uploadQuestionData();
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => CreateQuiz(),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text("Submit"),
                               ),
-                            );
-                          },
-                          child: Container(
-                            width: 150,
-                            height: 60,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(30),
-                                color: ButtonColor),
-                            child: Center(
-                              child: Text(
-                                "Add Question",
-                                style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white),
-                              ),
-                            ),
-                          ),
-                        ),
+                            ]),
+                        // Column(
+                        //   children: [
+                        //     GestureDetector(
+                        //       onTap: () {
+                        //         Navigator.pop(
+                        //           context,
+                        //         );
+                        //       },
+                        //       child: Container(
+                        //         width: 150,
+                        //         height: 60,
+                        //         decoration: BoxDecoration(
+                        //             borderRadius: BorderRadius.circular(30),
+                        //             color: ButtonColor),
+                        //         child: Center(
+                        //           child: Text(
+                        //             "Submit",
+                        //             style: TextStyle(
+                        //                 fontSize: 20,
+                        //                 fontWeight: FontWeight.bold,
+                        //                 color: Colors.white),
+                        //           ),
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
+                        // Column(
+                        //   children: [
+                        //     GestureDetector(
+                        //       onTap: () {
+                        //         uploadQuestionData();
+                        //         Navigator.push(
+                        //           context,
+                        //           MaterialPageRoute(
+                        //             builder: (context) => CreateQuiz(),
+                        //           ),
+                        //         );
+                        //       },
+                        //       child: Container(
+                        //         width: 150,
+                        //         height: 60,
+                        //         decoration: BoxDecoration(
+                        //             borderRadius: BorderRadius.circular(30),
+                        //             color: ButtonColor),
+                        //         child: Center(
+                        //           child: Text(
+                        //             "Add Question",
+                        //             style: TextStyle(
+                        //                 fontSize: 20,
+                        //                 fontWeight: FontWeight.bold,
+                        //                 color: Colors.white),
+                        //           ),
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
                       ]),
                 ),
               ));

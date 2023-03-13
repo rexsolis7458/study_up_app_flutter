@@ -1,18 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:random_string/random_string.dart';
-import 'package:study_up_app/main_screens/group/q&a/posting.dart';
-import 'package:study_up_app/models/post.dart';
 import '../../../controller/auth_controller.dart';
 import '../../../controller/userController.dart';
 import '../../../helper/const.dart';
 import '../../../services/database.dart';
-import 'commentModel.dart';
-import 'feed.dart';
-import 'list.dart';
 
 class Reply extends StatefulWidget {
   @override

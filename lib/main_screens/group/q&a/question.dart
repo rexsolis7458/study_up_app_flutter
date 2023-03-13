@@ -6,7 +6,6 @@ import 'package:random_string/random_string.dart';
 import 'package:study_up_app/main_screens/group/q&a/posting.dart';
 import '../../../helper/const.dart';
 import '../../../services/database.dart';
-import 'commentModel.dart';
 import 'feed.dart';
 import 'list.dart';
 

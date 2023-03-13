@@ -55,7 +55,10 @@ class _HomeFileState extends State<HomeFile> {
                     return Card(
                       child: ListTile(
                         title: Text(file.name),
-                        leading: const Icon(Icons.picture_as_pdf),
+                        leading: const Icon(
+                          Icons.picture_as_pdf,
+                          size: 40,
+                        ),
                         subtitle: Text(ratingValue != null
                             ? ratingValue.toString()
                             : 'Rate it!'),

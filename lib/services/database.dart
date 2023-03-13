@@ -1,11 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:study_up_app/models/group.dart';
 import 'package:study_up_app/models/users.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-
-import '../main_screens/group/q&a/commentModel.dart';
 
 class Database {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -37,6 +33,7 @@ class Database {
       rethrow;
     }
   }
+
 
   Future<String?> createGroup(String groupName, String userUid) async {
     String retVal = "error";
@@ -132,6 +129,26 @@ class DatabaseService {
         .collection('QNA')
         .get();
   }
+
+  // deleteQuizData(String quizId) async {
+  //   return await FirebaseFirestore.instance
+  //       .collection("Quiz")
+  //       .get()
+  //       .then((snapshot) {
+  //     for (DocumentSnapshot ds in snapshot.docs) {
+  //       ds.reference.delete();
+  //     }
+  //   });
+  // }
+  deleteQuizData(String quizId) async {
+    return await FirebaseFirestore.instance
+        .collection("Quiz")
+        .doc(quizId)
+        .delete()
+        .then((_) {
+      print("success!");
+    });
+  }
 }
 
 //question
@@ -160,18 +177,17 @@ class CommentService {
   }
 }
 
-class FileRatings {
-  Future<void> rateFileData(
-      String rateID, Map<String, dynamic> rateData) async {
-    await FirebaseFirestore.instance
-        .collection("File Ratings")
-        .doc(rateID)
-        .set(rateData)
-        .catchError((e) {
-      print(e.toString());
-    });
-  }
-}
+// class FileRatings {
+//   Future rateFileData(FileModel fileName, ratingValue) async {
+//     await FirebaseFirestore.instance
+//         .collection("File Ratings")
+//         .doc()
+//         .set(ratingValue)
+//         .catchError((e) {
+//       print(ratingValue.toString());
+//     });
+//   }
+// }
 
 //replies
 class ReplyService {

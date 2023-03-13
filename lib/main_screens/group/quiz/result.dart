@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:study_up_app/main_screens/group/group.dart';
 import '../../../helper/const.dart';
 import '../../home/home_screen.dart';
 
@@ -44,10 +45,9 @@ class _ResultsState extends State<Results> {
                   foregroundColor: ButtonColor,
                 ),
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => HomeScreen()));
+                  Navigator.pop(context);
                 },
-                child: Text('Go to Home'),
+                child: Text('Go Back'),
               ),
             ],
           ),

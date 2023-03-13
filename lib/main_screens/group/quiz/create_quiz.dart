@@ -1,5 +1,4 @@
-// ignore_for_file: unnecessary_new
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:study_up_app/helper/const.dart';
 import 'package:study_up_app/main_screens/group/quiz/quiz.dart';
@@ -68,6 +67,7 @@ class QuizTile extends StatelessWidget {
   final String title;
   final String desc;
   final String quizId;
+  DatabaseService databaseService = new DatabaseService();
 
   // QuizTile({required this.imgUrl, required this.title, required this.desc});
   QuizTile({required this.title, required this.desc, required this.quizId});
@@ -84,51 +84,56 @@ class QuizTile extends StatelessWidget {
                     )));
       },
       child: Container(
-        margin: EdgeInsets.only(bottom: 8),
-        height: 150,
-        child: Stack(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              // child: Image.network(
-              //   imgUrl,
-              //   width: MediaQuery.of(context).size.width - 48,
-              //   fit: BoxFit.cover,
-              // ),
-            ),
-            Container(
-              // color: ButtonColor,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                color: BGColor,
-              ),
-              // color: Colors.black26,
-              alignment: Alignment.center,
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      title,
-                      style: TextStyle(
-                          color: MainColor,
-                          fontSize: 17,
-                          fontWeight: FontWeight.w500),
-                    ),
-                    const SizedBox(
-                      height: 6,
-                    ),
-                    Text(
-                      desc,
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400),
-                    )
-                  ]),
-            )
-          ],
+          child: Card(
+        child: ListTile(
+          leading: const Icon(
+            Icons.ballot_outlined,
+            size: 40,
+          ),
+          title: Text(
+            title,
+            style: TextStyle(
+                color: MainColor, fontSize: 17, fontWeight: FontWeight.w500),
+          ),
+          subtitle: Text(
+            desc,
+            style: TextStyle(
+                color: Colors.black, fontSize: 14, fontWeight: FontWeight.w400),
+          ),
+          trailing: IconButton(
+              icon: const Icon(Icons.delete),
+              color: Colors.red,
+              onPressed: () async {
+                final delete = await showDialog<bool>(
+                  context: context,
+                  builder: (_) => AlertDialog(
+                    title: const Text("Delete Event?"),
+                    content: const Text("Are you sure you want to delete?"),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, false),
+                        style: TextButton.styleFrom(
+                          foregroundColor: Colors.black,
+                        ),
+                        child: const Text("No"),
+                      ),
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, true),
+                        style: TextButton.styleFrom(
+                          foregroundColor: Colors.red,
+                        ),
+                        child: const Text("Yes"),
+                      ),
+                    ],
+                  ),
+                );
+                if (delete ?? false) {
+                  // _delete(file.fullPath);
+                  databaseService.deleteQuizData(quizId);
+                }
+              }),
         ),
-      ),
+      )),
     );
   }
 }

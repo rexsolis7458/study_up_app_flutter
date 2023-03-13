@@ -1,10 +1,10 @@
-import 'dart:io';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:random_string/random_string.dart';
 import 'package:study_up_app/main_screens/group/files/file_model.dart';
 import 'package:study_up_app/main_screens/group/group.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class RateFile extends StatefulWidget {
   @override
@@ -12,10 +12,17 @@ class RateFile extends StatefulWidget {
 }
 
 class _RateFileState extends State<RateFile> {
-  // double? ratingValue;
-  // Stream? rateStream;
   FileModel fileModel =
       FileModel(fileName: '', rateID: randomAlphaNumeric(16), ratingValue: 0);
+
+  // firebase_storage.FirebaseStorage storage =
+  //     firebase_storage.FirebaseStorage.instance;
+      
+
+  // firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
+  //     .ref('Pdf files')
+  //     .getData()
+  //     .then((value) => null) as Reference;
 
   @override
   Widget build(BuildContext context) {
@@ -84,8 +91,19 @@ class _RateFileState extends State<RateFile> {
                           context,
                           MaterialPageRoute(
                             builder: (BuildContext context) {
+                              // fileModel.ratingValue.toString();
+                              FirebaseFirestore.instance
+                                  .collection('File Ratings')
+                                  .add({
+                                'filename': fileModel.fileName,
+                                'fileID': fileModel.rateID,
+                                'rating': fileModel.ratingValue != null
+                                    ? fileModel.ratingValue.toString()
+                                    : 'Rating',
+                              });
+
                               return Group();
-                              Navigator.pop(context);
+                              //Navigator.pop(context);
                             },
                           ),
                         );
