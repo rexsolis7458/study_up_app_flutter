@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:study_up_app/helper/const.dart';
 
 import 'package:study_up_app/main_screens/group/group.dart';
+import 'package:study_up_app/main_screens/group/group_tab.dart';
 
 class JoinGroup extends StatefulWidget {
   const JoinGroup({Key? key}) : super(key: key);
@@ -80,7 +81,7 @@ class _JoinGroupState extends State<JoinGroup> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => Group(),
+                  builder: (context) => GroupTab(),
                 ),
               );
             },

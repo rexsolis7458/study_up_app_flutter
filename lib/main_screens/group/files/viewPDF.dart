@@ -69,19 +69,19 @@ class ViewPDF extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          leading: IconButton(
-            icon: const BackButtonIcon(),
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (BuildContext context) {
-                    return RateFile();
-                  },
-                ),
-              );
-            },
-          ),
+          // leading: IconButton(
+          //   icon: const BackButtonIcon(),
+          //   onPressed: () {
+          //     Navigator.pushReplacement(
+          //       context,
+          //       MaterialPageRoute(
+          //         builder: (BuildContext context) {
+          //           return RateFile();
+          //         },
+          //       ),
+          //     );
+          //   },
+          // ),
         ),
         body: PDFViewer(document: document));
   }

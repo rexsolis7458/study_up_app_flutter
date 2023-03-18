@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:study_up_app/main_screens/group/q&a/feed.dart';
@@ -6,6 +7,11 @@ import 'quiz/create_quiz.dart';
 import 'schedule/sched.dart';
 
 class Group extends StatefulWidget {
+
+  Group(this.group,{Key? key}) : super(key: key);
+  
+  final DocumentSnapshot group;
+
   @override
   State<Group> createState() => _GroupState();
 }
@@ -19,13 +25,12 @@ String chatRoomId(String user1, String user2) {
 }
 
 class _GroupState extends State<Group> {
-
   @override
   Widget build(BuildContext context) => DefaultTabController(
       length: 4,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Programming 1'),
+          title: Text(widget.group['groupName']),
           actions: [
             // action button
             IconButton(

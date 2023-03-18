@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
         initialBinding: AuthBinding(),
         title: 'Study Up',
         theme: ThemeData(
-          colorScheme: ColorScheme(
+          colorScheme:  const ColorScheme(
             brightness: Brightness.light,
             primary: MainColor,
             onPrimary: SecondaryColor,
