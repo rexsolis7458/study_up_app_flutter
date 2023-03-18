@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_document_picker/flutter_document_picker.dart';
 import 'dart:io';
@@ -11,6 +12,7 @@ import 'package:study_up_app/main_screens/group/files/pdf.dart';
 import 'package:study_up_app/main_screens/group/files/viewPDF.dart';
 
 import '../../../helper/const.dart';
+import '../../../services/database.dart';
 import '../upload.dart';
 
 class UploadPdf extends StatefulWidget {
@@ -20,6 +22,8 @@ class UploadPdf extends StatefulWidget {
 
 class _UploadPdfState extends State<UploadPdf> {
   late String fileName, fileId;
+
+  FileLists fileLists = FileLists();
 
   //Upload upload = Get.put(Upload());
   String uploaded = "Waiting For Images To Be Uploaded";
@@ -37,9 +41,7 @@ class _UploadPdfState extends State<UploadPdf> {
       );
       return null;
     }
-
-    //fileId = randomAlphaNumeric(16);
-
+    fileId = randomAlphaNumeric(16);
     firebase_storage.UploadTask uploadTask;
     // Create a Reference to the file
     firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
@@ -47,7 +49,10 @@ class _UploadPdfState extends State<UploadPdf> {
         .child(fileName);
 
     final metadata = firebase_storage.SettableMetadata(
-        contentType: 'pdf', customMetadata: {'picked-file-path': file.path});
+      contentType: 'pdf',
+      customMetadata: {'picked-file-path': file.path, 'token': fileId},
+    );
+
     print("Uploading..!");
 
     uploadTask = ref.putData(await file.readAsBytes(), metadata);
@@ -59,7 +64,8 @@ class _UploadPdfState extends State<UploadPdf> {
     return Future.value(uploadTask);
   }
 
-
+  CollectionReference filesCollection =
+      FirebaseFirestore.instance.collection("File Lists");
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -106,6 +112,16 @@ class _UploadPdfState extends State<UploadPdf> {
               print(path);
               File file = File(path!);
               firebase_storage.UploadTask? task = await uploadFile(file);
+              // await FirebaseFirestore.instance.collection('File Lists').add(
+              //   {
+              //     "date": Timestamp.fromDate(DateTime.now()),
+              //     'fileName': fileName,
+              //   },
+              // );
+
+              
+              fileLists.addFileLists();
+
               Navigator.pop(context);
             },
             child: Text('Upload File'),

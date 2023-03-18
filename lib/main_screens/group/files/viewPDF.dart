@@ -1,4 +1,5 @@
 import 'package:advance_pdf_viewer_fork/advance_pdf_viewer_fork.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -28,8 +29,10 @@ class _loadPdfState extends State<loadPdf> {
     String downloadURL = await firebase_storage.FirebaseStorage.instance
         .ref(widget.files.fullPath)
         .getDownloadURL();
+
     print(downloadURL);
     PDFDocument doc = await PDFDocument.fromURL(downloadURL);
+    // var token = await FirebaseAuth.instance.currentUser.getIdToken();
     // ignore: use_build_context_synchronously
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => ViewPDF(doc)));

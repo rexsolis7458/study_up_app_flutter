@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:random_string/random_string.dart';
 import 'package:study_up_app/models/group.dart';
 import 'package:study_up_app/models/users.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+
+import '../main_screens/group/files/file_model.dart';
 
 class Database {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -33,7 +36,6 @@ class Database {
       rethrow;
     }
   }
-
 
   Future<String?> createGroup(String groupName, String userUid) async {
     String retVal = "error";
@@ -177,6 +179,49 @@ class CommentService {
   }
 }
 
+//Files
+class FileLists {
+  FileModel fileModel = FileModel(
+      fileName: '',
+      rateID: randomAlphaNumeric(16),
+      ratingValue: 0,
+      fileID: '',
+      value: '',
+      average: '',
+      updateid: '');
+
+  Future<String?> addFileLists() async {
+    CollectionReference fLists =
+        FirebaseFirestore.instance.collection('File Lists');
+    var result = await fLists.add(
+      {
+        "date": Timestamp.fromDate(DateTime.now()),
+        'fileName': fileModel.fileName,
+        'id': randomAlphaNumeric(16)
+      },
+    );
+    // results.id;
+    await addMultipleCollection(result.id);
+    return 'Created';
+  }
+
+  Future<String?> addMultipleCollection(String? updateid) async {
+    CollectionReference fLists =
+        FirebaseFirestore.instance.collection('File Lists');
+    fLists.doc(updateid).collection('Ratings').add(
+      {
+        'filename': fileModel.fileName,
+        'id': updateid,
+        "created": Timestamp.fromDate(DateTime.now()),
+        'rating': fileModel.ratingValue
+      },
+    );
+    // results.id;
+    return 'Success';
+  }
+
+  
+}
 // class FileRatings {
 //   Future rateFileData(FileModel fileName, ratingValue) async {
 //     await FirebaseFirestore.instance
