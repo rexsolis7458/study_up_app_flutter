@@ -1,10 +1,14 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hexcolor/hexcolor.dart';
+import 'package:provider/provider.dart';
 import 'package:study_up_app/controller/auth_controller.dart';
 import 'package:study_up_app/controller/bindings/authBinding.dart';
 import 'package:study_up_app/controller/userController.dart';
+import 'package:study_up_app/helper/const.dart';
 import 'package:study_up_app/main_screens/home/home_screen.dart';
+import 'package:study_up_app/provider/event_provider.dart';
 import 'package:study_up_app/sign_up.dart';
 import 'package:study_up_app/utils/root.dart';
 
@@ -18,18 +22,43 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
   @override
-  Widget build(BuildContext context) {
-    // Get.lazyPut(() => UserController(), tag: "User Controller");
-    return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      initialBinding: AuthBinding(),
-      title: 'Study Up',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const SignUpPage(),
-    );
-  }
+  Widget build(BuildContext context) => ChangeNotifierProvider(
+      create: (context) => EventProvider(),
+      // Get.lazyPut(() => UserController(), tag: "User Controller");
+      child: GetMaterialApp(
+        debugShowCheckedModeBanner: false,
+        initialBinding: AuthBinding(),
+        title: 'Study Up',
+        theme: ThemeData(
+          colorScheme:  const ColorScheme(
+            brightness: Brightness.light,
+            primary: MainColor,
+            onPrimary: SecondaryColor,
+            secondary: SecondaryColor,
+            onSecondary: Colors.black,
+            error: Colors.red,
+            onError: Colors.white,
+            background: BGColor,
+            onBackground: BGColor,
+            surface: Colors.white,
+            onSurface: Colors.black,
+          ),
+        ),
+        home: const SignUpPage(),
+      ));
+}
+
+Widget roundedButton(BuildContext context, String label) {
+  return Container(
+    padding: EdgeInsets.symmetric(vertical: 18),
+    decoration: BoxDecoration(
+        color: ButtonColor, borderRadius: BorderRadius.circular(30)),
+    alignment: Alignment.center,
+    width: MediaQuery.of(context).size.width - 48,
+    child: Text(
+      label,
+      style: TextStyle(color: Colors.white, fontSize: 15.5),
+    ),
+  );
 }

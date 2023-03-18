@@ -29,6 +29,7 @@ class LoginPage extends GetWidget<AuthController> {
           title: const Text(
             'Login',
             style: TextStyle(
+              
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),

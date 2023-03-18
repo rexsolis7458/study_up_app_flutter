@@ -1,10 +1,27 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-
-import 'files.dart';
+import 'package:study_up_app/main_screens/group/q&a/feed.dart';
+import 'files/files.dart';
+import 'quiz/create_quiz.dart';
+import 'schedule/sched.dart';
 
 class Group extends StatefulWidget {
+
+  Group(this.group,{Key? key}) : super(key: key);
+  
+  final DocumentSnapshot group;
+
   @override
   State<Group> createState() => _GroupState();
+}
+
+String chatRoomId(String user1, String user2) {
+  if (user1[0].toLowerCase().codeUnits[0] > user2.toLowerCase().codeUnits[0]) {
+    return "$user1$user2";
+  } else {
+    return "$user2$user1";
+  }
 }
 
 class _GroupState extends State<Group> {
@@ -13,10 +30,22 @@ class _GroupState extends State<Group> {
       length: 4,
       child: Scaffold(
         appBar: AppBar(
-          shape: Border(
-            bottom: BorderSide(color: Colors.black),
-          ),
-          title: Text('Programming 1'),
+          title: Text(widget.group['groupName']),
+          actions: [
+            // action button
+            IconButton(
+              icon: Icon(Icons.message_rounded),
+              onPressed: () {
+                // Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //       builder: (_) => GroupChat(
+                //         chatRoomId: 'roomId',
+                //       ),
+                //     ));
+              },
+            ),
+          ],
           centerTitle: true,
           bottom: TabBar(
             unselectedLabelColor: Colors.black,
@@ -40,16 +69,16 @@ class _GroupState extends State<Group> {
         body: TabBarView(
           children: [
             Center(
-              child: Files(),
+              child: HomeFile(),
             ),
             Center(
-              child: Text('Q & A'),
+              child: Feed(),
             ),
             Center(
-              child: Text('QUIZZES'),
+              child: CreateQuiz(),
             ),
             Center(
-              child: Text('SCHEDULE'),
+              child: Sched(),
             ),
           ],
         ),

@@ -144,7 +144,7 @@ class SignUpPage extends GetWidget<AuthController>
                   height: 40,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(30),
-                    color: Colors.blue
+                    color: ButtonColor
                   ),
                   child: const Center(
                     child: Text(
