@@ -16,7 +16,7 @@ class RateFile extends StatefulWidget {
 
 class _RateFileState extends State<RateFile> {
   late String fileName;
-  FileModel fileModel = FileModel(
+  FileModel fileModel = new FileModel(
       fileName: '',
       rateID: randomAlphaNumeric(16),
       ratingValue: 0,
@@ -133,9 +133,7 @@ class _RateFileState extends State<RateFile> {
                                   .update({
                                 'filename': fileModel.fileName,
                                 'fileID': fileModel.rateID,
-                                'rating': fileModel.ratingValue != null
-                                    ? fileModel.ratingValue.toString()
-                                    : 'Rating',
+                                'rating':  fileModel.ratingValue,
                               }).then((value) {
                                 print("Success!");
                               });

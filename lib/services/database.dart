@@ -200,6 +200,7 @@ class FileLists {
         'id': randomAlphaNumeric(16)
       },
     );
+    print(fileModel.fileName);
     // results.id;
     await addMultipleCollection(result.id);
     return 'Created';
@@ -216,11 +217,10 @@ class FileLists {
         'rating': fileModel.ratingValue
       },
     );
+    print(fileModel.fileName);
     // results.id;
     return 'Success';
   }
-
-  
 }
 // class FileRatings {
 //   Future rateFileData(FileModel fileName, ratingValue) async {
