@@ -54,13 +54,22 @@ class _GroupTabState extends State<GroupTab> {
           ),
         ),
         floatingActionButton: Wrap(
-          direction: Axis.horizontal,
+          direction: Axis.vertical,
           children: <Widget>[
             Container(
-              margin: EdgeInsets.all(10),
+              margin: EdgeInsets.all(2),
               child: FloatingActionButton.extended(
+                heroTag: 'create',
                 onPressed: () => _goToCreate(context),
                 label: const Text("Create Group"),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.all(2),
+              child: FloatingActionButton.extended(
+                heroTag: 'join',
+                onPressed: () => _goToJoin(context),
+                label: const Text("Join Group"),
               ),
             ),
           ],

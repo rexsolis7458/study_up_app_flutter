@@ -16,6 +16,10 @@ import '../../../services/database.dart';
 import '../upload.dart';
 
 class UploadPdf extends StatefulWidget {
+
+ final DocumentSnapshot group;
+ UploadPdf(this.group);
+  
   @override
   _UploadPdfState createState() => _UploadPdfState();
 }
@@ -46,11 +50,14 @@ class _UploadPdfState extends State<UploadPdf> {
     // Create a Reference to the file
     firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
         .ref('Pdf files')
+        .child(widget.group.id)
         .child(fileName);
 
     final metadata = firebase_storage.SettableMetadata(
       contentType: 'pdf',
-      customMetadata: {'picked-file-path': file.path, 'token': fileId},
+      customMetadata: {
+       'picked-file-path': file.path,
+       'token': fileId},
     );
 
     print("Uploading..!");

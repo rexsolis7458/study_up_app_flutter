@@ -1,4 +1,5 @@
 // ignore: file_names
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:study_up_app/helper/shadowContainer.dart';
 import 'package:study_up_app/main_screens/group/group_tab.dart';
@@ -20,10 +21,11 @@ class _CreateGroupState extends State<JoinGroup>
 {
   TextEditingController groupNameController = TextEditingController();
   
+  final User? user = FirebaseAuth.instance.currentUser;
   final UserModel _currentUser = UserModel();
   void joinGroup(BuildContext context, String groupName) async
   {
-    String? returnString = await Database().joinGroup(groupName, _currentUser.id!);
+    String? returnString = await Database().joinGroup(groupName, user!.uid);
     
     if (returnString == "success") {
       // ignore: use_build_context_synchronously

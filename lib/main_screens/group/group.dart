@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:study_up_app/main_screens/group/groupChat/groupChat.dart';
 import 'package:study_up_app/main_screens/group/q&a/feed.dart';
 import 'files/files.dart';
 import 'quiz/create_quiz.dart';
@@ -16,13 +17,13 @@ class Group extends StatefulWidget {
   State<Group> createState() => _GroupState();
 }
 
-String chatRoomId(String user1, String user2) {
-  if (user1[0].toLowerCase().codeUnits[0] > user2.toLowerCase().codeUnits[0]) {
-    return "$user1$user2";
-  } else {
-    return "$user2$user1";
-  }
-}
+// String chatRoomId(String user1, String user2) {
+//   if (user1[0].toLowerCase().codeUnits[0] > user2.toLowerCase().codeUnits[0]) {
+//     return "$user1$user2";
+//   } else {
+//     return "$user2$user1";
+//   }
+// }
 
 class _GroupState extends State<Group> {
   @override
@@ -36,13 +37,12 @@ class _GroupState extends State<Group> {
             IconButton(
               icon: Icon(Icons.message_rounded),
               onPressed: () {
-                // Navigator.push(
-                //     context,
-                //     MaterialPageRoute(
-                //       builder: (_) => GroupChat(
-                //         chatRoomId: 'roomId',
-                //       ),
-                //     ));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => GroupChat(widget.group
+                      ),
+                    ));
               },
             ),
           ],
@@ -69,7 +69,7 @@ class _GroupState extends State<Group> {
         body: TabBarView(
           children: [
             Center(
-              child: HomeFile(),
+              child: HomeFile(widget.group),
             ),
             Center(
               child: Feed(),
