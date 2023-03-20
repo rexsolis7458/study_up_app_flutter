@@ -17,14 +17,6 @@ class Group extends StatefulWidget {
   State<Group> createState() => _GroupState();
 }
 
-// String chatRoomId(String user1, String user2) {
-//   if (user1[0].toLowerCase().codeUnits[0] > user2.toLowerCase().codeUnits[0]) {
-//     return "$user1$user2";
-//   } else {
-//     return "$user2$user1";
-//   }
-// }
-
 class _GroupState extends State<Group> {
   @override
   Widget build(BuildContext context) => DefaultTabController(
@@ -47,7 +39,7 @@ class _GroupState extends State<Group> {
             ),
           ],
           centerTitle: true,
-          bottom: TabBar(
+          bottom: const TabBar(
             unselectedLabelColor: Colors.black,
             labelColor: Colors.white,
             tabs: [

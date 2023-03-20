@@ -155,8 +155,7 @@ Future<List<Map<String, dynamic>>> _getMessageDataList(
         .collection('group_chats')
         .doc(widget.group['groupName'])
         .collection('messages')
-        .doc(senderName)
-        .set({
+        .add({
           'senderId': FirebaseAuth.instance.currentUser!.uid,
           'senderName': senderName,
           'messages': message,
