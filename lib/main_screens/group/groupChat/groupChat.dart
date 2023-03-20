@@ -77,37 +77,43 @@ Future<List<Map<String, dynamic>>> _getMessageDataList(
                       var isMe = messageData['senderId'] ==
                           FirebaseAuth.instance.currentUser!.uid;
                       return Column(
-                        crossAxisAlignment: isMe
-                            ? CrossAxisAlignment.end
-                            : CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            senderName,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.grey[600],
-                            ),
-                          ),
-                          Container(
-                            margin: const EdgeInsets.symmetric(vertical: 4.0),
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 8.0, horizontal: 12.0),
-                            decoration: BoxDecoration(
-                              color: isMe
-                                  ? Colors.blue[100]
-                                  : Colors.grey[300],
-                              borderRadius: BorderRadius.circular(16.0),
-                            ),
-                            child: Text(
-                              messageData['messages'],
-                              style: TextStyle(
-                                fontSize: 16.0,
-                                color: isMe ? Colors.black : Colors.black87,
-                              ),
-                            ),
-                          ),
-                        ],
-                      );
+  crossAxisAlignment: isMe
+      ? CrossAxisAlignment.end
+      : CrossAxisAlignment.start,
+  children: [
+    if (!isMe)
+      Text(
+        senderName,
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          color: Colors.grey[600],
+        ),
+      ),
+    Container(
+      margin: const EdgeInsets.symmetric(vertical: 4.0),
+      padding: const EdgeInsets.symmetric(
+        vertical: 8.0,
+        horizontal: 12.0,
+      ),
+      decoration: BoxDecoration(
+        color: isMe ? Colors.blue[100] : Colors.grey[300],
+        borderRadius: BorderRadius.circular(16.0),
+      ),
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxWidth: MediaQuery.of(context).size.width * 0.5,
+        ),
+        child: Text(
+          messageData['messages'],
+          style: TextStyle(
+            fontSize: 16.0,
+            color: isMe ? Colors.black : Colors.black87,
+          ),
+        ),
+      ),
+    ),
+  ],
+);
                     },
                   );
                 }

@@ -10,7 +10,7 @@ import 'joinGroup.dart';
 class GroupTab extends StatefulWidget {
   final String? currentUserId;
 
-  GroupTab({Key? key, this.currentUserId}) : super(key: key);
+  const GroupTab({Key? key, this.currentUserId}) : super(key: key);
   @override
   State<GroupTab> createState() => _GroupTabState();
 }
@@ -45,7 +45,7 @@ class _GroupTabState extends State<GroupTab> {
           backgroundColor: MainColor,
           centerTitle: true,
           elevation: 0,
-          title: Text(
+          title: const Text(
             'My Groups',
             style: TextStyle(
               fontSize: 20,
@@ -57,7 +57,7 @@ class _GroupTabState extends State<GroupTab> {
           direction: Axis.vertical,
           children: <Widget>[
             Container(
-              margin: EdgeInsets.all(2),
+              margin: const EdgeInsets.all(2),
               child: FloatingActionButton.extended(
                 heroTag: 'create',
                 onPressed: () => _goToCreate(context),
@@ -65,7 +65,7 @@ class _GroupTabState extends State<GroupTab> {
               ),
             ),
             Container(
-              margin: EdgeInsets.all(2),
+              margin: const EdgeInsets.all(2),
               child: FloatingActionButton.extended(
                 heroTag: 'join',
                 onPressed: () => _goToJoin(context),
@@ -98,13 +98,13 @@ class _GroupTabState extends State<GroupTab> {
                           // Navigator.pushNamed(context, '/group', arguments: group);
                         },
                         child: Container(
-                          padding: EdgeInsets.all(15.0),
+                          padding: const EdgeInsets.all(15.0),
                           child: Row(
                             children: <Widget>[
-                              SizedBox(width: 10.0),
+                              const SizedBox(width: 10.0),
                               Text(
                                 snap[index]['groupName'],
-                                style: TextStyle(color: Colors.grey),
+                                style: const TextStyle(color: Colors.grey),
                               ),
                             ],
                           ),
