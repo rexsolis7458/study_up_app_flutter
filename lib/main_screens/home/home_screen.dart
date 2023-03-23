@@ -6,6 +6,7 @@ import 'package:study_up_app/main_screens/home/home_tab.dart';
 import 'package:study_up_app/main_screens/profile/profile_tab.dart';
 import 'package:study_up_app/main_screens/search_tab.dart';
 
+
 class HomeScreen extends StatefulWidget {
   final String? currentUserId;
 
@@ -28,8 +29,10 @@ class _HomeScreenState extends State<HomeScreen> {
           currentUserId: widget.currentUserId,
         ),
         GroupTab(
-            // currentUserId: widget.currentUserId,
-            ),
+          // distanceBetween: 0, subChildren: [],
+          currentUserId: widget.currentUserId,
+        ),
+ 
         ProfileTab(),
       ].elementAt(_selectedTab),
       bottomNavigationBar: CupertinoTabBar(

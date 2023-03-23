@@ -8,6 +8,7 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:random_string/random_string.dart';
+import 'package:study_up_app/main_screens/group/files/file_model.dart';
 import 'package:study_up_app/main_screens/group/files/pdf.dart';
 import 'package:study_up_app/main_screens/group/files/viewPDF.dart';
 
@@ -16,12 +17,22 @@ import '../../../services/database.dart';
 import '../upload.dart';
 
 class UploadPdf extends StatefulWidget {
+  final DocumentSnapshot group;
+  UploadPdf(this.group);
+
   @override
   _UploadPdfState createState() => _UploadPdfState();
 }
 
 class _UploadPdfState extends State<UploadPdf> {
-  late String fileName, fileId;
+  FileModel fileModel = FileModel(
+      fileName: '',
+      rateID: randomAlphaNumeric(16),
+      ratingValue: 0,
+      fileID: randomAlphaNumeric(16),
+      value: '',
+      average: '',
+      updateid: '');
 
   FileLists fileLists = FileLists();
 
@@ -41,17 +52,34 @@ class _UploadPdfState extends State<UploadPdf> {
       );
       return null;
     }
-    fileId = randomAlphaNumeric(16);
+
     firebase_storage.UploadTask uploadTask;
     // Create a Reference to the file
     firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
         .ref('Pdf files')
-        .child(fileName);
+        .child(widget.group.id)
+        .child(fileModel.fileName);
 
     final metadata = firebase_storage.SettableMetadata(
       contentType: 'pdf',
-      customMetadata: {'picked-file-path': file.path, 'token': fileId},
+      customMetadata: {
+        'picked-file-path': file.path,
+        'token': fileModel.fileID
+      },
     );
+//for db
+    CollectionReference fLists =
+        FirebaseFirestore.instance.collection('File Lists');
+    var result = await fLists.add(
+      {
+        "date": Timestamp.fromDate(DateTime.now()),
+        'fileName': fileModel.fileName,
+        'id': randomAlphaNumeric(16)
+      },
+    );
+    print(fileModel.fileName);
+    // results.id;
+    // await addMultipleCollection(result.id);
 
     print("Uploading..!");
 
@@ -96,7 +124,7 @@ class _UploadPdfState extends State<UploadPdf> {
                 hintText: "File Name",
               ),
               onChanged: (val) {
-                fileName = val;
+                fileModel.fileName = val;
               },
             ),
           ),
@@ -118,9 +146,6 @@ class _UploadPdfState extends State<UploadPdf> {
               //     'fileName': fileName,
               //   },
               // );
-
-              
-              fileLists.addFileLists();
 
               Navigator.pop(context);
             },

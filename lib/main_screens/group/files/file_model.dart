@@ -1,5 +1,5 @@
 class FileModel {
-  final String fileName;
+  String fileName;
   late double ratingValue;
   final String rateID;
   final String fileID;

@@ -83,57 +83,61 @@ class QuizTile extends StatelessWidget {
                       quizId,
                     )));
       },
-      child: Container(
-          child: Card(
-        child: ListTile(
-          leading: const Icon(
-            Icons.ballot_outlined,
-            size: 40,
-          ),
-          title: Text(
-            title,
-            style: TextStyle(
-                color: MainColor, fontSize: 17, fontWeight: FontWeight.w500),
-          ),
-          subtitle: Text(
-            desc,
-            style: TextStyle(
-                color: Colors.black, fontSize: 14, fontWeight: FontWeight.w400),
-          ),
-          trailing: IconButton(
-              icon: const Icon(Icons.delete),
-              color: Colors.red,
-              onPressed: () async {
-                final delete = await showDialog<bool>(
-                  context: context,
-                  builder: (_) => AlertDialog(
-                    title: const Text("Delete Event?"),
-                    content: const Text("Are you sure you want to delete?"),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.pop(context, false),
-                        style: TextButton.styleFrom(
-                          foregroundColor: Colors.black,
+      child: SingleChildScrollView(
+        child: Container(
+            child: Card(
+          child: ListTile(
+            leading: const Icon(
+              Icons.ballot_outlined,
+              size: 40,
+            ),
+            title: Text(
+              title,
+              style: TextStyle(
+                  color: MainColor, fontSize: 17, fontWeight: FontWeight.w500),
+            ),
+            subtitle: Text(
+              desc,
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400),
+            ),
+            trailing: IconButton(
+                icon: const Icon(Icons.delete),
+                color: Colors.red,
+                onPressed: () async {
+                  final delete = await showDialog<bool>(
+                    context: context,
+                    builder: (_) => AlertDialog(
+                      title: const Text("Delete Event?"),
+                      content: const Text("Are you sure you want to delete?"),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, false),
+                          style: TextButton.styleFrom(
+                            foregroundColor: Colors.black,
+                          ),
+                          child: const Text("No"),
                         ),
-                        child: const Text("No"),
-                      ),
-                      TextButton(
-                        onPressed: () => Navigator.pop(context, true),
-                        style: TextButton.styleFrom(
-                          foregroundColor: Colors.red,
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, true),
+                          style: TextButton.styleFrom(
+                            foregroundColor: Colors.red,
+                          ),
+                          child: const Text("Yes"),
                         ),
-                        child: const Text("Yes"),
-                      ),
-                    ],
-                  ),
-                );
-                if (delete ?? false) {
-                  // _delete(file.fullPath);
-                  databaseService.deleteQuizData(quizId);
-                }
-              }),
-        ),
-      )),
+                      ],
+                    ),
+                  );
+                  if (delete ?? false) {
+                    // _delete(file.fullPath);
+                    databaseService.deleteQuizData(quizId);
+                  }
+                }),
+          ),
+        )),
+      ),
     );
   }
 }

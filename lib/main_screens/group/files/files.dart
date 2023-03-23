@@ -7,11 +7,15 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:study_up_app/main_screens/group/files/upload.dart';
 import 'pdf.dart';
 import 'viewPDF.dart';
 
 class HomeFile extends StatefulWidget {
-  HomeFile({Key? key}) : super(key: key);
+
+  final DocumentSnapshot group;
+
+  HomeFile(this.group,{Key? key}) : super(key: key);
 
   @override
   State<HomeFile> createState() => _HomeFileState();
@@ -31,7 +35,8 @@ class _HomeFileState extends State<HomeFile> {
   @override
   void initState() {
     super.initState();
-    futureFiles = FirebaseStorage.instance.ref('/Pdf files').listAll();
+    final id = widget.group.id;
+    futureFiles = FirebaseStorage.instance.ref('/Pdf files/$id').listAll();
     
   }
 
@@ -127,7 +132,7 @@ class _HomeFileState extends State<HomeFile> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => UploadPdf(),
+                builder: (context) => UploadPdf(widget.group),
               ),
             );
           },

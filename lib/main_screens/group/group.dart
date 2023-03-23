@@ -1,48 +1,45 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:study_up_app/main_screens/group/groupChat/groupChat.dart';
 import 'package:study_up_app/main_screens/group/q&a/feed.dart';
 import 'files/files.dart';
 import 'quiz/create_quiz.dart';
 import 'schedule/sched.dart';
 
 class Group extends StatefulWidget {
+
+  Group(this.group,{Key? key}) : super(key: key);
+  
+  final DocumentSnapshot group;
+
   @override
   State<Group> createState() => _GroupState();
 }
 
-String chatRoomId(String user1, String user2) {
-  if (user1[0].toLowerCase().codeUnits[0] > user2.toLowerCase().codeUnits[0]) {
-    return "$user1$user2";
-  } else {
-    return "$user2$user1";
-  }
-}
-
 class _GroupState extends State<Group> {
-
   @override
   Widget build(BuildContext context) => DefaultTabController(
       length: 4,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Programming 1'),
+          title: Text(widget.group['groupName']),
           actions: [
             // action button
             IconButton(
               icon: Icon(Icons.message_rounded),
               onPressed: () {
-                // Navigator.push(
-                //     context,
-                //     MaterialPageRoute(
-                //       builder: (_) => GroupChat(
-                //         chatRoomId: 'roomId',
-                //       ),
-                //     ));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => GroupChat(widget.group
+                      ),
+                    ));
               },
             ),
           ],
           centerTitle: true,
-          bottom: TabBar(
+          bottom: const TabBar(
             unselectedLabelColor: Colors.black,
             labelColor: Colors.white,
             tabs: [
@@ -64,7 +61,7 @@ class _GroupState extends State<Group> {
         body: TabBarView(
           children: [
             Center(
-              child: HomeFile(),
+              child: HomeFile(widget.group),
             ),
             Center(
               child: Feed(),

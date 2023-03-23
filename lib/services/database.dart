@@ -185,7 +185,7 @@ class FileLists {
       fileName: '',
       rateID: randomAlphaNumeric(16),
       ratingValue: 0,
-      fileID: '',
+      fileID: randomAlphaNumeric(16),
       value: '',
       average: '',
       updateid: '');
@@ -202,7 +202,7 @@ class FileLists {
     );
     print(fileModel.fileName);
     // results.id;
-    await addMultipleCollection(result.id);
+    // await addMultipleCollection(result.id);
     return 'Created';
   }
 

@@ -1,107 +1,102 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:study_up_app/helper/const.dart';
+import 'package:study_up_app/helper/shadowContainer.dart';
+import 'package:study_up_app/main_screens/group/group_tab.dart';
+import 'package:study_up_app/models/users.dart';
+import 'package:study_up_app/services/database.dart';
 
-import 'package:study_up_app/main_screens/group/group.dart';
+import '../../helper/const.dart';
 
 class JoinGroup extends StatefulWidget {
-  const JoinGroup({Key? key}) : super(key: key);
+  final UserModel? userModel;
+
+  const JoinGroup({super.key, this.userModel});
 
   @override
-  State<JoinGroup> createState() => _JoinGroupState();
+  // ignore: library_private_types_in_public_api
+  _CreateGroupState createState() => _CreateGroupState();
 }
 
-class _JoinGroupState extends State<JoinGroup> {
+class _CreateGroupState extends State<JoinGroup> {
+  TextEditingController groupNameController = TextEditingController();
+
+  final User? user = FirebaseAuth.instance.currentUser;
+  final UserModel _currentUser = UserModel();
+  void joinGroup(BuildContext context, String groupName) async {
+    String? returnString = await Database().joinGroup(groupName, user!.uid);
+
+    if (returnString == "success") {
+      // ignore: use_build_context_synchronously
+      // Navigator.pushAndRemoveUntil(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (context) => GroupTab(),
+      //   ), (route) => false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    var subjectController = TextEditingController();
-    var schoolNameController = TextEditingController();
-    double w = MediaQuery.of(context).size.width;
-    double h = MediaQuery.of(context).size.height;
-
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        centerTitle: true,
-        elevation: 0,
-        title: Text(
-          'Join a Group',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
+        appBar: AppBar(
+          backgroundColor: MainColor,
+          centerTitle: true,
+          elevation: 0,
+          title: const Text(
+            'Join Group',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(left: 30, top: 5, right: 30),
-            child: TextField(
-              obscureText: true,
-              controller: subjectController,
-              decoration: InputDecoration(
-                fillColor: Colors.white,
-                filled: true,
-                border: OutlineInputBorder(
-                  borderSide: const BorderSide(width: 3),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                hintText: "Subject",
-                hintStyle: TextStyle(color: Colors.grey[350]),
+        body:
+            // Column(
+            //   children: [
+            //     Padding(
+            //       padding: const EdgeInsets.all(10.0),
+            //       child: Row(
+            //         children: const <Widget>[BackButton()],
+            //       ),
+            //     ),
+            //     // const SizedBox(
+            //     //   height: 20,
+            //     // ),
+            //     const Spacer(),
+            //     Padding(
+            //       padding: const EdgeInsets.all(20.0),
+            //       // child: ShadowContainer(
+            //       child:
+            Column(
+          children: <Widget>[
+            TextFormField(
+              controller: groupNameController,
+              decoration: const InputDecoration(
+                prefixIcon: Icon(Icons.group),
+                hintText: "Group Name",
               ),
             ),
-          ),
-          const SizedBox(
-            width: 40.0,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 30, top: 5, right: 30),
-            child: TextField(
-              obscureText: true,
-              controller: schoolNameController,
-              decoration: InputDecoration(
-                fillColor: Colors.white,
-                filled: true,
-                border: OutlineInputBorder(
-                  borderSide: const BorderSide(width: 3),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                hintText: "School Name",
-                hintStyle: TextStyle(color: Colors.grey[350]),
-              ),
+            const SizedBox(
+              height: 20.0,
             ),
-          ),
-          const SizedBox(
-            width: 20.0,
-          ),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => Group(),
-                ),
-              );
-            },
-            child: Container(
-              width: 150,
-              height: 40,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30), color: ButtonColor),
-              child: Center(
+            GestureDetector(
+              child: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 80),
                 child: Text(
-                  "Sign Up",
+                  "Join Group",
                   style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20.0,
+                  ),
                 ),
               ),
+              onTap: () => joinGroup(context, groupNameController.text),
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ));
+    // )
+
+    // const Spacer(),
   }
 }
