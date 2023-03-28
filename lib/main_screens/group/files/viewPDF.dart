@@ -32,10 +32,16 @@ class _loadPdfState extends State<loadPdf> {
 
     print(downloadURL);
     PDFDocument doc = await PDFDocument.fromURL(downloadURL);
-    // var token = await FirebaseAuth.instance.currentUser.getIdToken();
     // ignore: use_build_context_synchronously
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => ViewPDF(doc)));
+      context,
+      MaterialPageRoute(
+          builder: (context) => ViewPDF(
+                doc,
+                fileName: widget.files.name,
+                // average: widget.files.average,
+              )),
+    );
   }
 
   @override
@@ -53,7 +59,11 @@ class _loadPdfState extends State<loadPdf> {
 
 class ViewPDF extends StatelessWidget {
   PDFDocument document;
-  ViewPDF(this.document);
+  final String fileName;
+  // final String average;
+  ViewPDF(this.document, {required this.fileName,
+  //  required this.average
+   });
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +86,7 @@ class ViewPDF extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (BuildContext context) {
-                    return RateFile();
+                    return RateFile(fileName);
                   },
                 ),
               );

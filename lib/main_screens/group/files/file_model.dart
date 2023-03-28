@@ -4,7 +4,7 @@ class FileModel {
   final String rateID;
   final String fileID;
   String value;
-  String average;
+  double average;
   String updateid;
 
   FileModel({

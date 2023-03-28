@@ -5,6 +5,8 @@ import 'package:study_up_app/controller/auth_controller.dart';
 import 'package:study_up_app/helper/const.dart';
 import 'package:study_up_app/sign_up.dart';
 
+import 'sign_up_sample.dart';
+
 
 // ignore: must_be_immutable
 class LoginPage extends GetWidget<AuthController> {
@@ -130,7 +132,7 @@ class LoginPage extends GetWidget<AuthController> {
                               fontSize: 20,
                               fontWeight: FontWeight.bold),
                           recognizer: TapGestureRecognizer()
-                            ..onTap = () => Get.to(() => const SignUpPage()))
+                            ..onTap = () => Get.to(() => SignupPageSample()))
                     ]),
               ),
             ],

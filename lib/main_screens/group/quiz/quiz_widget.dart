@@ -16,7 +16,7 @@ class _OptionTileState extends State<OptionTile> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(
+      padding: const EdgeInsets.symmetric(
         vertical: 10,
       ),
       child: Row(
@@ -46,7 +46,7 @@ class _OptionTileState extends State<OptionTile> {
           const SizedBox(width: 8),
           Text(
             widget.description,
-            style: TextStyle(fontSize: 16, color: Colors.black54),
+            style: const TextStyle(fontSize: 16, color: Colors.black54),
           )
         ],
       ),

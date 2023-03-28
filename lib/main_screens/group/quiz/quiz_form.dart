@@ -14,7 +14,6 @@ class QuizForm extends StatefulWidget {
 
 class _QuizFormState extends State<QuizForm> {
   final _formKey = GlobalKey<FormState>();
-  // late String quizImgurl, quizTitle, quizDescription, quizId;
   late String quizTitle, quizDescription, quizId;
 
   DatabaseService databaseService = new DatabaseService();
@@ -30,7 +29,6 @@ class _QuizFormState extends State<QuizForm> {
       quizId = randomAlphaNumeric(16);
 
       Map<String, String> quizMap = {
-        // 'quizImgurl': quizImgurl,
         'quizId': quizId,
         'quizTitle': quizTitle,
         'quizDescription': quizDescription
@@ -81,23 +79,13 @@ class _QuizFormState extends State<QuizForm> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // TextFormField(
-                    //   validator: (val) =>
-                    //       val!.isEmpty ? "Quiz Image Url can't be empty" : null,
-                    //   decoration: InputDecoration(
-                    //     hintText: "Quiz Image Url",
-                    //   ),
-                    //   onChanged: (val) {
-                    //     quizImgurl = val;
-                    //   },
-                    // ),
                     const SizedBox(
                       height: 10,
                     ),
                     TextFormField(
                       validator: (val) =>
                           val!.isEmpty ? "Quiz Title can't be empty" : null,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         hintText: "Quiz Title",
                       ),
                       onChanged: (val) {
@@ -131,7 +119,7 @@ class _QuizFormState extends State<QuizForm> {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(30),
                             color: ButtonColor),
-                        child: Center(
+                        child: const Center(
                           child: Text(
                             "Create Quiz",
                             style: TextStyle(

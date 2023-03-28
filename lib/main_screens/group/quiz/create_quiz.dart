@@ -26,7 +26,6 @@ class _CreateQuizState extends State<CreateQuiz> {
                   itemCount: snapshot.data.docs.length,
                   itemBuilder: (context, index) {
                     return QuizTile(
-                      // imgUrl: snapshot.data.doc[index].data['quizImgurl'],
                       title: snapshot.data.docs[index].data()['quizTitle'],
                       desc: snapshot.data.docs[index].data()['quizDescription'],
                       quizId: snapshot.data.docs[index].data()['quizId'],
@@ -53,23 +52,21 @@ class _CreateQuizState extends State<CreateQuiz> {
     return Scaffold(
       body: quizList(),
       floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
+          child: const Icon(Icons.add),
           onPressed: () {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => QuizForm()));
+                context, MaterialPageRoute(builder: (context) => const QuizForm()));
           }),
     );
   }
 }
 
 class QuizTile extends StatelessWidget {
-  // final String imgUrl;
   final String title;
   final String desc;
   final String quizId;
   DatabaseService databaseService = new DatabaseService();
 
-  // QuizTile({required this.imgUrl, required this.title, required this.desc});
   QuizTile({required this.title, required this.desc, required this.quizId});
 
   @override
@@ -131,7 +128,6 @@ class QuizTile extends StatelessWidget {
                     ),
                   );
                   if (delete ?? false) {
-                    // _delete(file.fullPath);
                     databaseService.deleteQuizData(quizId);
                   }
                 }),

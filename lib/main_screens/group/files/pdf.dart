@@ -31,10 +31,10 @@ class _UploadPdfState extends State<UploadPdf> {
       ratingValue: 0,
       fileID: randomAlphaNumeric(16),
       value: '',
-      average: '',
+      average: 0,
       updateid: '');
 
-  FileLists fileLists = FileLists();
+  // FileLists fileLists = FileLists();
 
   //Upload upload = Get.put(Upload());
   String uploaded = "Waiting For Images To Be Uploaded";
@@ -96,6 +96,8 @@ class _UploadPdfState extends State<UploadPdf> {
       FirebaseFirestore.instance.collection("File Lists");
   @override
   Widget build(BuildContext context) {
+    // Set initial value for fileNameController
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MainColor,
@@ -124,7 +126,17 @@ class _UploadPdfState extends State<UploadPdf> {
                 hintText: "File Name",
               ),
               onChanged: (val) {
-                fileModel.fileName = val;
+                setState(() {
+                  fileModel = FileModel(
+                    fileName: val,
+                    rateID: fileModel.rateID,
+                    ratingValue: fileModel.ratingValue,
+                    fileID: fileModel.fileID,
+                    value: fileModel.value,
+                    average: fileModel.average,
+                    updateid: fileModel.updateid,
+                  );
+                });
               },
             ),
           ),
@@ -140,12 +152,6 @@ class _UploadPdfState extends State<UploadPdf> {
               print(path);
               File file = File(path!);
               firebase_storage.UploadTask? task = await uploadFile(file);
-              // await FirebaseFirestore.instance.collection('File Lists').add(
-              //   {
-              //     "date": Timestamp.fromDate(DateTime.now()),
-              //     'fileName': fileName,
-              //   },
-              // );
 
               Navigator.pop(context);
             },

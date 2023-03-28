@@ -28,6 +28,11 @@ class _EditProfileTabState extends State<EditProfileTab> {
   bool _newemailValid = true;
   bool _newpassValid = true;
 
+  late String _imagePickedType;
+  late File _profileImage;
+  final _formKey = GlobalKey<FormState>();
+  bool _isLoading = false;
+
   UserModel userModel = UserModel();
 
   late File pickedFile;
@@ -51,40 +56,7 @@ class _EditProfileTabState extends State<EditProfileTab> {
 // });
 // }
 
-  Future<bool> getPhoto(ImageSource source) async {
-    try {
-      final pickedImage =
-          await imagePicker.pickImage(source: source, imageQuality: 100);
-      if (pickedImage != null) {
-        pickedFile = File(pickedImage.path);
-        return true;
-      } else {
-        return false;
-      }
-    } on Exception catch (e) {
-      print(e.toString());
-      return false;
-    }
-  }
-
-  Future<String?> sendProfilePicData() async {
-    try {
-      String fileName =
-          '${DateTime.now().millisecondsSinceEpoch}${FirebaseAuth.instance.currentUser!.uid}.jpg';
-      Reference reference =
-          FirebaseStorage.instance.ref().child('Profile Image').child(fileName);
-      UploadTask uploadTask = reference.putFile(pickedFile);
-      await uploadTask.whenComplete(() async {
-        imgUrl = await uploadTask.snapshot.ref.getDownloadURL();
-      });
-      return imgUrl;
-    } on Exception catch (e) {
-      print(e.toString());
-    }
-    return null;
-  }
-
-  Widget firstnameTextField() {
+  firstnameTextField() {
     return TextFormField(
       decoration: InputDecoration(
         border: OutlineInputBorder(
@@ -191,68 +163,11 @@ class _EditProfileTabState extends State<EditProfileTab> {
               ),
             ),
           ),
-          // Positioned(
-          //   top: 0.1,
-          //   right: 150,
-          //   child: Container(
-          //     child: Padding(
-          //       padding: EdgeInsets.all(1),
-          //       child: InkWell(
-          //         onTap: () {
-          //           showModalBottomSheet(
-          //             context: context,
-          //             builder: ((builder) => bottomSheet()),
-          //           );
-          //         },
-          //         child: Icon(
-          //           Icons.add_a_photo,
-          //           color: Colors.black,
-          //         ),
-          //       ),
-          //     ),
-          //     decoration: BoxDecoration(
-          //         border: Border.all(
-          //           width: 3,
-          //           color: Colors.white,
-          //         ),
-          //         borderRadius: BorderRadius.all(
-          //           Radius.circular(
-          //             50,
-          //           ),
-          //         ),
-          //         color: Colors.white,
-          //         boxShadow: [
-          //           BoxShadow(
-          //             offset: Offset(2, 4),
-          //             color: Colors.black.withOpacity(
-          //               0.3,
-          //             ),
-          //             blurRadius: 3,
-          //           ),
-          //         ]),
-          //   ),
-          // ),
+         
         ],
       ),
     );
   }
-
-  // void _showModalSheet() {
-  //   showModalBottomSheet(
-  //       context: context,
-  //       builder: (builder) {
-  //         return new Container(
-  //           height: 200.0,
-  //           color: Colors.green,
-  //           child: new Center(
-  //             child: new Text(" Modal BottomSheet",
-  //                 textScaleFactor: 2,
-  //                 style: TextStyle(
-  //                     color: Colors.white, fontWeight: FontWeight.bold)),
-  //           ),
-  //         );
-  //       });
-  // }
 
   Widget bottomSheet() {
     return Container(
@@ -284,8 +199,8 @@ class _EditProfileTabState extends State<EditProfileTab> {
                   ElevatedButton.icon(
                     icon: Icon(Icons.image),
                     onPressed: () => {
-                      getPhoto(ImageSource.gallery),
-                      sendProfilePicData(),
+                       _imagePickedType = 'profile',
+                      handleImageFromGallery(),
                       Navigator.of(context).pop(),
                     },
                     label: Text('Gallery'),
@@ -293,6 +208,28 @@ class _EditProfileTabState extends State<EditProfileTab> {
                 ])
           ]),
     );
+  }
+
+  handleImageFromGallery() async {
+    try {
+      final imageFile =
+          await ImagePicker().getImage(source: ImageSource.gallery);
+      if (imageFile != null) {
+        if (_imagePickedType == 'profile') {
+          setState(() {
+            _profileImage = imageFile as File;
+          });
+        }
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // _name = widget.user.name;
   }
 
   @override
@@ -306,56 +243,13 @@ class _EditProfileTabState extends State<EditProfileTab> {
                 primary: ButtonColor,
               ),
               onPressed: () {
-                // var displayFName = _displayFNameController.text;
-                // locator.get<UserController>().updateDisplayName(displayFName);
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => ProfileTab()));
               },
               child: Text('Done'),
             )
           ],
-          // leading: Builder(builder: (context) {
-          //   return InkWell(
-          //       // child: Container(
-          //       //   child: Text("Cancel"),
-          //       // ),
-          //       // onTap: () {
-          //       //   ProfileTab();
-          //       //   Navigator.pushReplacement(context,
-          //       //       MaterialPageRoute(builder: (context) => ProfileTab()));
-          //       // },
-          //       );
-          // }),
-          // title: Row(children: <Widget>[
-          //   TextButton(
-          //     style: TextButton.styleFrom(
-          //       primary: ButtonColor,
-          //     ),
-          //     onPressed: () {
-          //       Navigator.push(context,
-          //           MaterialPageRoute(builder: (context) => ProfileTab()));
-          //     },
-          //     child: Text('Cancel'),
-          //   ),
-          //   // SizedBox(
-          //   //   width: 110,
-          //   // ),
-          //   Center(
-          //     child: Text('Edit Profile'),
-          //   ),
-          //   TextButton(
-          //     style: TextButton.styleFrom(
-          //       primary: ButtonColor,
-          //     ),
-          //     onPressed: () {
-          //       // var displayFName = _displayFNameController.text;
-          //       // locator.get<UserController>().updateDisplayName(displayFName);
-          //       Navigator.push(context,
-          //           MaterialPageRoute(builder: (context) => ProfileTab()));
-          //     },
-          //     child: Text('Done'),
-          //   ),
-          // ]),
+
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:study_up_app/main_screens/group/groupChat/groupChat.dart';
 import 'package:study_up_app/main_screens/group/q&a/feed.dart';
 import 'files/files.dart';
+import 'q&a/PostList.dart';
 import 'quiz/create_quiz.dart';
 import 'schedule/sched.dart';
 
@@ -64,7 +65,7 @@ class _GroupState extends State<Group> {
               child: HomeFile(widget.group),
             ),
             Center(
-              child: Feed(),
+              child: PostList(widget.group),
             ),
             Center(
               child: CreateQuiz(),

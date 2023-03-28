@@ -10,28 +10,39 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import '../../../services/database.dart';
 
 class RateFile extends StatefulWidget {
+  final String fileName;
+
+  RateFile(this.fileName);
+
   @override
   _RateFileState createState() => _RateFileState();
 }
 
 class _RateFileState extends State<RateFile> {
-  FileModel fileModel = new FileModel(
-      fileName: '',
-      rateID: randomAlphaNumeric(16),
-      ratingValue: 0,
-      fileID: '',
-      value: '',
-      average: '',
-      updateid: '');
+  FileModel fileModel = FileModel(
+    fileName: '',
+    rateID: randomAlphaNumeric(16),
+    ratingValue: 0,
+    fileID: '',
+    value: '',
+    average: 0,
+    updateid: '',
+  );
 
-  FileLists fileLists = FileLists();
+
+
+  @override
+  void initState() {
+    super.initState();
+    fileModel.fileName = widget.fileName; // Set fileName from widget property
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Container(
-      child: Center(
-        child: AlertDialog(
+      body: Container(
+        child: Center(
+          child: AlertDialog(
             title: const Text("Rate this File"),
             content: Container(
               child: RatingBar(
@@ -40,15 +51,10 @@ class _RateFileState extends State<RateFile> {
                 allowHalfRating: true,
                 itemCount: 5,
                 ratingWidget: RatingWidget(
-                    full: const Icon(Icons.star, color: Colors.orange),
-                    half: const Icon(
-                      Icons.star_half,
-                      color: Colors.orange,
-                    ),
-                    empty: const Icon(
-                      Icons.star_outline,
-                      color: Colors.orange,
-                    )),
+                  full: const Icon(Icons.star, color: Colors.orange),
+                  half: const Icon(Icons.star_half, color: Colors.orange),
+                  empty: const Icon(Icons.star_outline, color: Colors.orange),
+                ),
                 onRatingUpdate: (value) {
                   setState(() {
                     fileModel.ratingValue = value;
@@ -65,97 +71,52 @@ class _RateFileState extends State<RateFile> {
                       fileModel.ratingValue != null
                           ? fileModel.ratingValue.toString()
                           : 'Rate it!',
-                      style: const TextStyle(color: Colors.black, fontSize: 25),
+                      style:
+                          const TextStyle(color: Colors.black, fontSize: 25),
                     ),
                   ),
                 ],
               ),
               Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    TextButton(
-                      onPressed: () async {
-                        Navigator.pop(context);
-                      },
-                      child: const Text("Later"),
-                    ),
-                    TextButton(
-                      onPressed: () async {
-                        CollectionReference fLists =
-                            FirebaseFirestore.instance.collection('File Lists');
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  TextButton(
+                    onPressed: () async {
+                      Navigator.pop(context);
+                    },
+                    child: const Text("Later"),
+                  ),
+                  TextButton(
+                    onPressed: () async {
+                      CollectionReference fLists =
+                          FirebaseFirestore.instance.collection('File Info');
 
+                      if (fileModel.fileName.isNotEmpty) {
                         fLists
-                            .doc(fLists.id)
-                            .collection(fileModel.fileName)
-                            .doc()
+                            .doc(fileModel.fileName)
                             .collection('Ratings')
-                            .add(
-                          {
-                            'filename': fileModel.fileName,
-                            'id': fLists.id,
-                            "created": Timestamp.fromDate(DateTime.now()),
-                            'rating': fileModel.ratingValue != null
-                                ? fileModel.ratingValue.toString()
-                                : 'Rating',
-                          },
-                        );
-                        // CollectionReference fLists =
-                        //     FirebaseFirestore.instance.collection('File Lists');
-                        // fLists.doc(fLists.id).collection('Ratings').add(
-                        //   {
-                        //     'filename': fileModel.fileName,
-                        //     'id': fLists.id,
-                        //     "created": Timestamp.fromDate(DateTime.now()),
-                        //     'rating': fileModel.ratingValue != null
-                        //         ? fileModel.ratingValue.toString()
-                        //         : 'Rating',
-                        //   },
-                        // );
-                        // fileLists.fileModel;
-                        // fileModel.ratingValue.toString();
-                        // FirebaseFirestore.instance
-                        //     .collection('File Ratings')
-                        //     .add({
-                        //   'filename': fileModel.fileName,
-                        //   'fileID': fileModel.rateID,
-                        //   'rating': fileModel.ratingValue != null
-                        //       ? fileModel.ratingValue.toString()
-                        //       : 'Rating',
-                        // });
-
-                        // var fLists = FirebaseFirestore.instance
-                        //     .collection('File Lists');
-                        // fLists
-                        //     .doc(fLists
-                        //         .id) // <-- Doc ID where data should be updated.
-                        //     .update({
-                        //   'filename': fileModel.fileName,
-                        //   'fileID': fileModel.rateID,
-                        //   'rating': fileModel.ratingValue != null
-                        //       ? fileModel.ratingValue.toString()
-                        //       : 'Rating',
-                        // });
-
-                        // FirebaseFirestore.instance
-                        //     .collection('Ratings')
-                        //     .doc(fileModel.updateid)
-                        //     .update({
-                        //   'filename': fileModel.fileName,
-                        //   'fileID': fileModel.rateID,
-                        //   'rating': fileModel.ratingValue,
-                        // }).then((value) {
-                        //   print("Success!");
-                        // });
-
-                        //Navigator.pop(context);
+                            .add({
+                          'filename': fileModel.fileName,
+                          'id': fLists.id,
+                          "created": Timestamp.fromDate(DateTime.now()),
+                          'rating': fileModel.ratingValue != null
+                              ? fileModel.ratingValue.toString()
+                              : 'Rating',
+                        });
                         Navigator.pop(context);
-                      },
-                      child: const Text("Rate"),
-                    ),
-                  ]),
-            ]),
+                      } else {
+                        print('File name is empty');
+                      }
+                    },
+                    child: const Text("Rate"),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
       ),
-    ));
+    );
   }
 }

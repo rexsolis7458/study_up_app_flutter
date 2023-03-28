@@ -30,9 +30,9 @@ class _GroupChatState extends State<GroupChat> {
         if (messageData.containsKey('senderName')) {
           var senderName = messageData['senderName'];
           messageData['senderName'] =
-              senderName ?? (sender.fname! + ' ' + sender.lname!);
+              senderName ?? (sender.firstname! + ' ' + sender.lastname!);
         } else {
-          messageData['senderName'] = sender.fname! + ' ' + sender.lname!;
+          messageData['senderName'] = sender.firstname! + ' ' + sender.lastname!;
         }
         messageDataList.add(messageData);
       }

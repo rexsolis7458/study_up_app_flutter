@@ -20,7 +20,7 @@ int _incorrect = 0;
 int _notAttempted = 0;
 
 class _QuizState extends State<Quiz> {
-  DatabaseService databaseService = new DatabaseService();
+  DatabaseService databaseService = DatabaseService();
   QuerySnapshot? questionSnapshot;
 
   QuestionModel getQuestionModelFromDatasnapshot(
@@ -66,10 +66,10 @@ class _QuizState extends State<Quiz> {
       appBar: AppBar(
         centerTitle: true,
         elevation: 0,
-        iconTheme: IconThemeData(
+        iconTheme: const IconThemeData(
           color: Colors.black54,
         ),
-        title: Text(
+        title: const Text(
           'StudyUp',
           style: TextStyle(
             fontSize: 20,
@@ -78,7 +78,7 @@ class _QuizState extends State<Quiz> {
         ),
       ),
       body: Container(
-        margin: EdgeInsets.only(bottom: 8, top: 10),
+        margin: const EdgeInsets.only(bottom: 8, top: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -104,7 +104,7 @@ class _QuizState extends State<Quiz> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.check),
+          child: const Icon(Icons.check),
           onPressed: () {
             Navigator.pushReplacement(
               context,

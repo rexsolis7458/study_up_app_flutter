@@ -19,12 +19,11 @@ class AuthController extends GetxController {
 
   late DocumentReference reference;
 
-
   // String userCollection = "users";
   Rx<UserModel> userModel = UserModel().obs;
 
   get user => null;
-  
+
   @override
   // onInit() {
   //   _user.bindStream(auth.onAuthStateChanged);
@@ -42,20 +41,32 @@ class AuthController extends GetxController {
       print("login page");
       Get.offAll(() => LoginPage());
     } else {
-      reference = FirebaseFirestore.instance.collection('users').doc(auth.currentUser!.uid);
+      reference = FirebaseFirestore.instance
+          .collection('users')
+          .doc(auth.currentUser!.uid);
       Get.offAll(() => HomeScreen());
     }
   }
 
-  void register(String firstname, String lastname, String email, String password,) async {
+  void register(
+    String firstname,
+    String lastname,
+    String email,
+    String password,
+    String birthday,
+    String gender,
+  ) async {
     try {
-      UserCredential authResult = await auth.createUserWithEmailAndPassword(email: email.trim(), password: password);
+      UserCredential authResult = await auth.createUserWithEmailAndPassword(
+          email: email.trim(), password: password);
       UserModel users = UserModel(
         email: authResult.user!.email,
         id: authResult.user!.uid,
-        fname: firstname,
-        lname: lastname,
+        firstname: firstname,
+        lastname: lastname,
         password: password,
+        birthday: birthday,
+        gender: gender,
       );
       if (await Database().createNewUser(users)) {
         Get.find<UserController>().user = users;
@@ -87,24 +98,12 @@ class AuthController extends GetxController {
   }
 
   void logOut() async {
-    try{
-    auth.signOut();
-    Get.find<UserController>().clear();
+    try {
+      auth.signOut();
+      Get.find<UserController>().clear();
     } catch (e) {
-      Get.snackbar(
-        "Error signing out",
-         "error",
-         snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar("Error signing out", "error",
+          snackPosition: SnackPosition.BOTTOM);
     }
   }
-
-  // addUserToFirestore(String userId)
-  // {
-  //   firebaseFirestore.collection(userCollection).doc(userId).set({
-  //     "first name": firstName.text.trim(),
-  //     "last name": lastName.text.trim(),
-  //     "email": email.text.trim(),
-  //     "id": userId
-  //   });
-  // }
 }

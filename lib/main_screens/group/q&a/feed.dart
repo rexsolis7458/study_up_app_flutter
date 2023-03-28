@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:study_up_app/main_screens/group/q&a/posting.dart';
+import 'package:study_up_app/main_screens/group/q&a/Posting.dart';
 import 'package:study_up_app/main_screens/group/q&a/replies.dart';
 import 'package:study_up_app/main_screens/group/q&a/reply.dart';
 import '../../../controller/userController.dart';

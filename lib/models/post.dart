@@ -5,20 +5,11 @@ class PostModel {
   final String creator;
   final String text;
   final Timestamp timestamp;
-  // final String originalId;
-  // final String question;
-  // DocumentReference ref;
-
-  // int likesCount;
 
   PostModel(
       {required this.id,
       required this.creator,
       required this.text,
       required this.timestamp,
-      // required this.likesCount,
-      // required this.originalId,
-      // required this.question,
-      // required this.ref,
       });
 }

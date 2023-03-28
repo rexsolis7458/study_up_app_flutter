@@ -65,45 +65,51 @@ class ProfileTab extends StatelessWidget {
           return Scaffold(
             resizeToAvoidBottomInset: false,
             drawer: Drawer(
-                child: ListView(
-              children: [
-                DrawerHeader(
-                  decoration: BoxDecoration(
-                    color: MainColor,
-                  ),
-                  child: CircleAvatar(
-                    backgroundColor: MainColor,
-                    child: SizedBox(
-                      width: 100,
-                      height: 95,
-                      child: ClipOval(
-                        child: Image.asset("assets/logo.png"),
+              child: ListView(
+                children: [
+                  DrawerHeader(
+                    decoration: BoxDecoration(
+                      color: MainColor,
+                    ),
+                    child: CircleAvatar(
+                      backgroundColor: MainColor,
+                      child: SizedBox(
+                        width: 100,
+                        height: 95,
+                        child: ClipOval(
+                          child: _.user.profilePicture != null
+                              ? Image.network(
+                                  _.user.profilePicture!,
+                                  fit: BoxFit.cover,
+                                )
+                              : Image.asset("assets/logo.png"),
+                        ),
                       ),
                     ),
                   ),
-                ),
-                Container(
-                  height: 30,
-                ),
-                ListTile(
-                  title: const Text('About Us'),
-                  leading: const Icon(Icons.info_rounded),
-                  onTap: () {},
-                ),
-                ListTile(
-                  title: const Text('Help'),
-                  leading: Icon(Icons.help),
-                  onTap: () {},
-                ),
-                ListTile(
-                  title: const Text('Sign out'),
-                  leading: const Icon(Icons.logout),
-                  onTap: () {
-                    AuthController.instance.logOut();
-                  },
-                ),
-              ],
-            )),
+                  Container(
+                    height: 30,
+                  ),
+                  ListTile(
+                    title: const Text('About Us'),
+                    leading: const Icon(Icons.info_rounded),
+                    onTap: () {},
+                  ),
+                  ListTile(
+                    title: const Text('Help'),
+                    leading: Icon(Icons.help),
+                    onTap: () {},
+                  ),
+                  ListTile(
+                    title: const Text('Sign out'),
+                    leading: const Icon(Icons.logout),
+                    onTap: () {
+                      AuthController.instance.logOut();
+                    },
+                  ),
+                ],
+              ),
+            ),
             appBar: AppBar(
               backgroundColor: MainColor,
               title: const Text('Profile'),
@@ -120,53 +126,51 @@ class ProfileTab extends StatelessWidget {
                         radius: 75,
                         backgroundColor: Colors.grey,
                         child: ClipOval(
-                          child: Image.asset('assets/logo.png'),
+                          child: _.user.profilePicture != null
+                              ? Image.network(
+                                  _.user.profilePicture!,
+                                  fit: BoxFit.cover,
+                                )
+                              : Image.asset("assets/logo.png"),
                         ),
                       ),
                     ),
-                    // Positioned(
-                    //   top: 0.1,
-                    //   right: 150,
-                    //   child: Container(
-                    //     child: InkWell(
-                    //       onTap: () async {
-                    //         getPhoto(ImageSource.gallery);
-                    //       },
-                    //       child: const Padding(
-                    //         padding: EdgeInsets.all(2.0),
-                    //         child: Icon(
-                    //           Icons.add_a_photo,
-                    //         ),
-                    //       ),
-                    //     ),
-                    //     decoration: BoxDecoration(
-                    //         border: Border.all(
-                    //           width: 3,
-                    //           color: Colors.white,
-                    //         ),
-                    //         borderRadius: const BorderRadius.all(
-                    //           Radius.circular(50),
-                    //         ),
-                    //         color: Colors.white,
-                    //         boxShadow: [
-                    //           BoxShadow(
-                    //             offset: Offset(2, 4),
-                    //             color: Colors.black.withOpacity(0.3),
-                    //             blurRadius: 3,
-                    //           ),
-                    //         ]),
-                    //   ),
-                    // )
+                    Positioned(
+                      top: 0.1,
+                      right: 109,
+                      child: Container(
+                        // ignore: sort_child_properties_last
+                        child: InkWell(
+                          onTap: () async {
+                            getPhoto(ImageSource.gallery);
+                          },
+                          child: const Padding(
+                            padding: EdgeInsets.all(2.0),
+                            child: Icon(
+                              Icons.add_a_photo,
+                            ),
+                          ),
+                        ),
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                              width: 3,
+                              color: Colors.white,
+                            ),
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(50),
+                            ),
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                offset: Offset(2, 4),
+                                color: Colors.black.withOpacity(0.3),
+                                blurRadius: 3,
+                              ),
+                            ]),
+                      ),
+                    )
                   ],
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Text('${_.user.fname} ${_.user.lname}'),
-                const SizedBox(
-                  height: 5,
-                ),
-                Text('${_.user.email}'),
                 const SizedBox(
                   height: 25,
                 ),
@@ -182,6 +186,14 @@ class ProfileTab extends StatelessWidget {
                   },
                   child: Text('Edit Profile'),
                 ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Text('${_.user.firstname} ${_.user.lastname}'),
+                const SizedBox(
+                  height: 5,
+                ),
+                Text('${_.user.email}'),
                 Row(
                   children: [
                     const SizedBox(
@@ -301,14 +313,14 @@ class ProfileTab extends StatelessWidget {
                     ),
                   ),
                 ),
-                const Spacer(),
-                GestureDetector(
-                  child: Text("Save!"),
-                  onTap: () async {
-                    _.user.profPic = await Get.put(sendProfilePicData());
-                    userController.saveProfileData(_.user);
-                  },
-                )
+                // const Spacer(),
+                // GestureDetector(
+                //   child: Text("Save!"),
+                //   onTap: () async {
+                //     _.user.profPic = await Get.put(sendProfilePicData());
+                //     userController.saveProfileData(_.user);
+                //   },
+                // )
               ],
             ),
           );

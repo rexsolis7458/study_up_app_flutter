@@ -7,8 +7,6 @@ class UserController extends GetxController {
   static UserController instance = Get.find();
   final Rx<UserModel> _userModel = UserModel().obs;
 
-  late UserController userController;
-
   UserModel get user => _userModel.value;
 
   set user(UserModel value) => _userModel.value = value;
@@ -25,20 +23,24 @@ class UserController extends GetxController {
   Future<void> saveProfileData(UserModel user) async {
     User currentUser = FirebaseAuth.instance.currentUser!;
     var id = user.id;
-    var fname = user.fname;
-    var lname = user.lname;
+    var firstname = user.firstname;
+    var lastname = user.lastname;
     var email = user.email;
-    var profPic = user.profPic;
+    var profilePicture = user.profilePicture;
+    var birthday = user.birthday;
+    var gender = user.gender;
     try {
       UserModel user = UserModel(
         id: id,
-        fname: fname,
-        lname: lname,
+        firstname: firstname,
+        lastname: lastname,
         email: email,
-        profPic: profPic,
+        profilePicture: profilePicture,
+        birthday: birthday,
+        gender: gender,
       );
       if (await Database().createNewUser(user)) {
-        userController.user = user;
+        this.user = user;
       }
     } on Exception catch (e) {
       print(e.toString());

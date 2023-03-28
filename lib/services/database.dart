@@ -13,11 +13,12 @@ class Database {
     try {
       await _firestore.collection("users").doc(user.id).set({
         "id": user.id,
-        "fname": user.fname.toString(),
-        "lname": user.lname.toString(),
+        "fname": user.firstname.toString(),
+        "lname": user.lastname.toString(),
         "email": user.email,
-        "profPic": user.profPic.toString(),
-        // "password": user.password,
+        "profPic": user.profilePicture.toString(),
+        "birthday": user.birthday.toString(),
+        "gender": user.gender.toString(),
       });
       return true;
     } catch (e) {
@@ -179,61 +180,6 @@ class CommentService {
   }
 }
 
-//Files
-class FileLists {
-  FileModel fileModel = FileModel(
-      fileName: '',
-      rateID: randomAlphaNumeric(16),
-      ratingValue: 0,
-      fileID: randomAlphaNumeric(16),
-      value: '',
-      average: '',
-      updateid: '');
-
-  Future<String?> addFileLists() async {
-    CollectionReference fLists =
-        FirebaseFirestore.instance.collection('File Lists');
-    var result = await fLists.add(
-      {
-        "date": Timestamp.fromDate(DateTime.now()),
-        'fileName': fileModel.fileName,
-        'id': randomAlphaNumeric(16)
-      },
-    );
-    print(fileModel.fileName);
-    // results.id;
-    // await addMultipleCollection(result.id);
-    return 'Created';
-  }
-
-  Future<String?> addMultipleCollection(String? updateid) async {
-    CollectionReference fLists =
-        FirebaseFirestore.instance.collection('File Lists');
-    fLists.doc(updateid).collection('Ratings').add(
-      {
-        'filename': fileModel.fileName,
-        'id': updateid,
-        "created": Timestamp.fromDate(DateTime.now()),
-        'rating': fileModel.ratingValue
-      },
-    );
-    print(fileModel.fileName);
-    // results.id;
-    return 'Success';
-  }
-}
-// class FileRatings {
-//   Future rateFileData(FileModel fileName, ratingValue) async {
-//     await FirebaseFirestore.instance
-//         .collection("File Ratings")
-//         .doc()
-//         .set(ratingValue)
-//         .catchError((e) {
-//       print(ratingValue.toString());
-//     });
-//   }
-// }
-
 //replies
 class ReplyService {
   Future<void> addReplyData(
@@ -248,42 +194,6 @@ class ReplyService {
       print(e.toString());
     });
   }
-
-// class ReplyService {
-//   CollectionReference commentCollection =
-//       FirebaseFirestore.instance.collection("Comment");
-
-//   Future<String> addReplyData(Map<String, dynamic> fields, Map<String, String> replyMap) async {
-//     DocumentReference ref = await commentCollection.add(fields);
-// // Required in Ahead Steps
-//     return ref.id;
-//   }
-
-//   Stream<QuerySnapshot> getReplyData() {
-//     return commentCollection.snapshots();
-//   }
-
-//   addComment(Map<String, dynamic> comment, String replyId) {
-//     commentCollection.doc(replyId).collection('Replies').add(comment);
-//     replyList() {}
-//   }
-
-//   Future<Stream<QuerySnapshot<Object?>>> getComments(String replyId) async {
-//     return await commentCollection.doc(replyId).collection('Replies').snapshots();
-//   }
-
-  // Future<void> addReply(
-  //     String replyId, Map<String, dynamic> replyData) async {
-  //        String retVal = "error";
-
-  //   await FirebaseFirestore.instance
-  //       .collection("Reply")
-  //       .doc(replyId)
-  //       .set(replyData)
-  //       .catchError((e) {
-  //     print(e.toString());
-  //   });
-  // }
 
   getRepliesData() async {
     return await FirebaseFirestore.instance.collection("Reply").snapshots();
@@ -325,7 +235,3 @@ class ScheduleService {
         .get();
   }
 }
-
-//calendar
-
-
