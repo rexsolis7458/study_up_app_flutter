@@ -13,10 +13,10 @@ class Database {
     try {
       await _firestore.collection("users").doc(user.id).set({
         "id": user.id,
-        "fname": user.firstname.toString(),
-        "lname": user.lastname.toString(),
+        "firstname": user.firstname.toString(),
+        "lastname": user.lastname.toString(),
         "email": user.email,
-        "profPic": user.profilePicture.toString(),
+        "profilePicture": user.profilePicture.toString(),
         "birthday": user.birthday.toString(),
         "gender": user.gender.toString(),
       });

@@ -154,7 +154,7 @@ class _GroupChatState extends State<GroupChat> {
           .collection('users')
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .get();
-      final senderName = userDoc['fname'] + ' ' + userDoc['lname'];
+      final senderName = userDoc['firstname'] + ' ' + userDoc['lastname'];
 
       // Add the message to the group chat
       FirebaseFirestore.instance
