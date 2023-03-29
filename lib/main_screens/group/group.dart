@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+
 import 'package:study_up_app/main_screens/group/groupChat/groupChat.dart';
-import 'package:study_up_app/main_screens/group/q&a/feed.dart';
+import 'package:study_up_app/main_screens/group/q&a/PostList.dart';
+
 import 'files/files.dart';
 import 'quiz/create_quiz.dart';
 import 'schedule/sched.dart';
@@ -64,13 +66,13 @@ class _GroupState extends State<Group> {
               child: HomeFile(widget.group),
             ),
             Center(
-              child: Feed(),
+              child: PostList(widget.group),
             ),
             Center(
-              child: CreateQuiz(),
+              child: CreateQuiz(widget.group),
             ),
             Center(
-              child: Sched(),
+              child: Sched(widget.group),
             ),
           ],
         ),

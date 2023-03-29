@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:random_string/random_string.dart';
 import 'package:study_up_app/main_screens/group/quiz/addQuestion.dart';
@@ -6,7 +7,8 @@ import 'package:study_up_app/services/database.dart';
 import '../../../helper/const.dart';
 
 class QuizForm extends StatefulWidget {
-  const QuizForm({super.key});
+  final DocumentSnapshot group;
+  const QuizForm(this.group,{super.key});
 
   @override
   State<QuizForm> createState() => _QuizFormState();
@@ -17,9 +19,17 @@ class _QuizFormState extends State<QuizForm> {
   // late String quizImgurl, quizTitle, quizDescription, quizId;
   late String quizTitle, quizDescription, quizId;
 
-  DatabaseService databaseService = new DatabaseService();
-
   bool _isLoading = false;
+
+  Future<void> addQuizData(String quizId, Map<String, dynamic> quizData) async {
+    await FirebaseFirestore.instance
+        .collection("Quiz")
+        .doc(quizId)
+        .set(quizData)
+        .catchError((e) {
+      print(e.toString());
+    });
+  }
 
   createQuiz() async {
     if (_formKey.currentState!.validate()) {
@@ -31,12 +41,13 @@ class _QuizFormState extends State<QuizForm> {
 
       Map<String, String> quizMap = {
         // 'quizImgurl': quizImgurl,
+        'groupId': widget.group.id,
         'quizId': quizId,
         'quizTitle': quizTitle,
         'quizDescription': quizDescription
       };
 
-      await databaseService.addQuizData(quizId, quizMap).then(
+      await addQuizData(quizId, quizMap).then(
         (value) {
           setState(() {
             _isLoading = false;

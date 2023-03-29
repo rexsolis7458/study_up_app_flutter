@@ -1,13 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 import 'package:random_string/random_string.dart';
 import 'package:study_up_app/models/group.dart';
 import 'package:study_up_app/models/users.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
+import '../controller/userController.dart';
 import '../main_screens/group/files/file_model.dart';
 
 class Database {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  UserController userController = Get.put(UserController());
 
   Future<bool> createNewUser(UserModel user) async {
     try {
@@ -25,6 +30,7 @@ class Database {
       return false;
     }
   }
+
 
   Future<UserModel> getUser(String id) async {
     try {
@@ -98,39 +104,42 @@ class Database {
 
 //quiz
 class DatabaseService {
-  Future<void> addQuizData(String quizId, Map<String, dynamic> quizData) async {
-    await FirebaseFirestore.instance
-        .collection("Quiz")
-        .doc(quizId)
-        .set(quizData)
-        .catchError((e) {
-      print(e.toString());
-    });
-  }
 
-  Future<void> addQuestionData(
-      String quizId, Map<String, dynamic> questionData) async {
-    await FirebaseFirestore.instance
-        .collection("Quiz")
-        .doc(quizId)
-        .collection('QNA')
-        .add(questionData)
-        .catchError((e) {
-      print(e.toString());
-    });
-  }
+  late DocumentSnapshot group;
+  
+  // Future<void> addQuizData(String quizId, Map<String, dynamic> quizData) async {
+  //   await FirebaseFirestore.instance
+  //       .collection("Quiz")
+  //       .doc(quizId)
+  //       .set(quizData)
+  //       .catchError((e) {
+  //     print(e.toString());
+  //   });
+  // }
 
-  getQuizesData() async {
-    return await FirebaseFirestore.instance.collection("Quiz").snapshots();
-  }
+  // Future<void> addQuestionData(
+  //     String quizId, Map<String, dynamic> questionData) async {
+  //   await FirebaseFirestore.instance
+  //       .collection("Quiz")
+  //       .doc(quizId)
+  //       .collection('QNA')
+  //       .add(questionData)
+  //       .catchError((e) {
+  //     print(e.toString());
+  //   });
+  // }
 
-  getQuizData(String quizId) async {
-    return await FirebaseFirestore.instance
-        .collection("Quiz")
-        .doc(quizId)
-        .collection('QNA')
-        .get();
-  }
+  // getQuizesData() async {
+  //   return await FirebaseFirestore.instance.collection("Quiz").where('groudId', isEqualTo: group.id).snapshots();
+  // }
+
+  // getQuizData(String quizId) async {
+  //   return await FirebaseFirestore.instance
+  //       .collection("Quiz")
+  //       .doc(quizId)
+  //       .collection('QNA')
+  //       .get();
+  // }
 
   // deleteQuizData(String quizId) async {
   //   return await FirebaseFirestore.instance

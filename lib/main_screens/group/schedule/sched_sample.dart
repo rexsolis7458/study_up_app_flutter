@@ -10,7 +10,8 @@ import 'add_event.dart';
 import 'edit_event.dart';
 
 class Cal extends StatefulWidget {
-  const Cal({super.key});
+  final DocumentSnapshot group;
+  const Cal({super.key, required this.group});
 
   @override
   _CalState createState() => _CalState();
@@ -49,7 +50,7 @@ class _CalState extends State<Cal> {
     _events = {};
 
     final snap = await FirebaseFirestore.instance
-        .collection('Events')
+        .collection('Events/${widget.group['groupName']}/events')
         .where('date', isGreaterThanOrEqualTo: firstDay)
         .where('date', isLessThanOrEqualTo: lastDay)
         .withConverter(
@@ -122,11 +123,11 @@ class _CalState extends State<Cal> {
                           topRight: Radius.circular(10))),
                 );
                 headerStyle:
-                CalendarStyle(
-                    selectedDecoration: const BoxDecoration(
+                const CalendarStyle(
+                    selectedDecoration: BoxDecoration(
                         color: Color.fromRGBO(227, 148, 53, 1),
                         shape: BoxShape.circle),
-                    todayDecoration: const BoxDecoration(
+                    todayDecoration: BoxDecoration(
                         color: Color.fromRGBO(76, 92, 50, 1),
                         shape: BoxShape.circle),
                     todayTextStyle: TextStyle(
@@ -203,7 +204,8 @@ class _CalState extends State<Cal> {
               builder: (_) => AddEvent(
                 firstDate: _firstDay,
                 lastDate: _lastDay,
-                selectedDate: _selectedDay,
+                selectedDate: _selectedDay, 
+                group: widget.group,
               ),
             ),
           );

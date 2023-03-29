@@ -6,6 +6,9 @@ import 'package:study_up_app/main_screens/group/quiz/quiz_form.dart';
 import 'package:study_up_app/services/database.dart';
 
 class CreateQuiz extends StatefulWidget {
+  final DocumentSnapshot group;
+
+  CreateQuiz(this.group);
   @override
   State<CreateQuiz> createState() => _CreateQuizState();
 }
@@ -13,7 +16,11 @@ class CreateQuiz extends StatefulWidget {
 class _CreateQuizState extends State<CreateQuiz> {
   Stream? quizStream;
 
-  DatabaseService databaseService = new DatabaseService();
+  // DatabaseService databaseService = new DatabaseService();
+
+  getQuizesData() async {
+    return await FirebaseFirestore.instance.collection("Quiz").where('groupId', isEqualTo: widget.group.id).snapshots();
+  }
 
   Widget quizList() {
     return Container(
@@ -27,6 +34,7 @@ class _CreateQuizState extends State<CreateQuiz> {
                   itemBuilder: (context, index) {
                     return QuizTile(
                       // imgUrl: snapshot.data.doc[index].data['quizImgurl'],
+                      groupId: widget.group.id,
                       title: snapshot.data.docs[index].data()['quizTitle'],
                       desc: snapshot.data.docs[index].data()['quizDescription'],
                       quizId: snapshot.data.docs[index].data()['quizId'],
@@ -40,7 +48,7 @@ class _CreateQuizState extends State<CreateQuiz> {
 
   @override
   void initState() {
-    databaseService.getQuizesData().then((val) {
+    getQuizesData().then((val) {
       setState(() {
         quizStream = val;
       });
@@ -56,7 +64,7 @@ class _CreateQuizState extends State<CreateQuiz> {
           child: Icon(Icons.add),
           onPressed: () {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => QuizForm()));
+                context, MaterialPageRoute(builder: (context) => QuizForm(widget.group)));
           }),
     );
   }
@@ -67,10 +75,11 @@ class QuizTile extends StatelessWidget {
   final String title;
   final String desc;
   final String quizId;
+  final String groupId;
   DatabaseService databaseService = new DatabaseService();
 
   // QuizTile({required this.imgUrl, required this.title, required this.desc});
-  QuizTile({required this.title, required this.desc, required this.quizId});
+  QuizTile({required this.title, required this.desc, required this.quizId, required this.groupId});
 
   @override
   Widget build(BuildContext context) {

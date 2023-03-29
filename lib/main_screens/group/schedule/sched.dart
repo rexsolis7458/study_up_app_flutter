@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../../helper/const.dart';
 import '../../../services/database.dart';
@@ -5,6 +6,10 @@ import 'sched_form.dart';
 import 'sched_sample.dart';
 
 class Sched extends StatefulWidget {
+  final DocumentSnapshot group;
+  
+  Sched(this.group);
+
   @override
   _SchedState createState() => _SchedState();
 }
@@ -61,7 +66,7 @@ class _SchedState extends State<Sched> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => Cal()),
+            MaterialPageRoute(builder: (context) => Cal(group: widget.group,)),
           );
         },
       ),
