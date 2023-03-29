@@ -67,26 +67,28 @@ class ProfileTab extends StatelessWidget {
             drawer: Drawer(
               child: ListView(
                 children: [
-                  // DrawerHeader(
-                  //   decoration: BoxDecoration(
-                  //     color: MainColor,
-                  //   ),
-                  //   child: CircleAvatar(
-                  //     backgroundColor: MainColor,
-                  //     child: SizedBox(
-                  //       width: 100,
-                  //       height: 95,
-                  //       child: ClipOval(
-                  //         child: _.user.profilePicture != null
-                  //             ? Image.network(
-                  //                 _.user.profilePicture!,
-                  //                 fit: BoxFit.cover,
-                  //               )
-                  //             : Image.asset("assets/logo.png"),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
+                  DrawerHeader(
+                    decoration: BoxDecoration(
+                      color: MainColor,
+                    ),
+                    child: CircleAvatar(
+                      backgroundColor: MainColor,
+                      child: SizedBox(
+                        width: 100,
+                        height: 95,
+                        child: ClipOval(
+                          child:
+                          //  _.user.profilePicture != null
+                          //     ? Image.network(
+                          //         _.user.profilePicture!,
+                          //         fit: BoxFit.cover,
+                          //       )
+                          //     : 
+                              Image.asset("assets/logo.png"),
+                        ),
+                      ),
+                    ),
+                  ),
                   Container(
                     height: 30,
                   ),
@@ -122,35 +124,37 @@ class ProfileTab extends StatelessWidget {
                 Stack(
                   children: [
                     Center(
-                      // child: CircleAvatar(
-                      //   radius: 75,
-                      //   backgroundColor: Colors.grey,
-                      //   child: ClipOval(
-                      //     child: _.user.profilePicture != null
-                      //         ? Image.network(
-                      //             _.user.profilePicture!,
-                      //             fit: BoxFit.cover,
-                      //           )
-                      //         : Image.asset("assets/logo.png"),
-                      //   ),
-                      // ),
+                      child: CircleAvatar(
+                        radius: 75,
+                        backgroundColor: Colors.grey,
+                        child: ClipOval(
+                          child: 
+                          // _.user.profilePicture != null
+                          //     ? Image.network(
+                          //         _.user.profilePicture!,
+                          //         fit: BoxFit.cover,
+                          //       )
+                          //     :
+                               Image.asset("assets/logo.png"),
+                        ),
+                      ),
                     ),
                     Positioned(
                       top: 0.1,
                       right: 109,
                       child: Container(
                         // ignore: sort_child_properties_last
-                        // child: InkWell(
-                        //   onTap: () async {
-                        //     getPhoto(ImageSource.gallery);
-                        //   },
-                        //   child: const Padding(
-                        //     padding: EdgeInsets.all(2.0),
-                        //     child: Icon(
-                        //       Icons.add_a_photo,
-                        //     ),
-                        //   ),
-                        // ),
+                        child: InkWell(
+                          onTap: () async {
+                            getPhoto(ImageSource.gallery);
+                          },
+                          child: const Padding(
+                            padding: EdgeInsets.all(2.0),
+                            child: Icon(
+                              Icons.add_a_photo,
+                            ),
+                          ),
+                        ),
                         decoration: BoxDecoration(
                             border: Border.all(
                               width: 3,

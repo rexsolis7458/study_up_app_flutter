@@ -20,8 +20,16 @@ int _incorrect = 0;
 int _notAttempted = 0;
 
 class _QuizState extends State<Quiz> {
-  DatabaseService databaseService = DatabaseService();
+  // DatabaseService databaseService = DatabaseService();
   QuerySnapshot? questionSnapshot;
+
+  getQuizData(String quizId) async {
+    return await FirebaseFirestore.instance
+        .collection("Quiz")
+        .doc(quizId)
+        .collection('QNA')
+        .get();
+  }
 
   QuestionModel getQuestionModelFromDatasnapshot(
       DocumentSnapshot questionSnapshot) {
@@ -49,7 +57,7 @@ class _QuizState extends State<Quiz> {
 
   @override
   void initState() {
-    databaseService.getQuizData(widget.quizId).then((val) {
+    getQuizData(widget.quizId).then((val) {
       questionSnapshot = val;
       _notAttempted = 0;
       _correct = 0;

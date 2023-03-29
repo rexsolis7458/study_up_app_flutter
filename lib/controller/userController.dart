@@ -6,6 +6,7 @@ import 'package:study_up_app/services/database.dart';
 class UserController extends GetxController {
   static UserController instance = Get.find();
   final Rx<UserModel> _userModel = UserModel().obs;
+  final _userRepo = Get.put(Database());
 
   UserModel get user => _userModel.value;
 
@@ -45,5 +46,9 @@ class UserController extends GetxController {
     } on Exception catch (e) {
       print(e.toString());
     }
+  }
+
+  updateRecords(UserModel user) async {
+    await _userRepo.updateUser(user);
   }
 }

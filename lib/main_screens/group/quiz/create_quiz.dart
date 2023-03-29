@@ -13,7 +13,11 @@ class CreateQuiz extends StatefulWidget {
 class _CreateQuizState extends State<CreateQuiz> {
   Stream? quizStream;
 
-  DatabaseService databaseService = new DatabaseService();
+  // DatabaseService databaseService = new DatabaseService();
+
+  getQuizesData() async {
+    return await FirebaseFirestore.instance.collection("Quiz").snapshots();
+  }
 
   Widget quizList() {
     return Container(
@@ -39,7 +43,7 @@ class _CreateQuizState extends State<CreateQuiz> {
 
   @override
   void initState() {
-    databaseService.getQuizesData().then((val) {
+    getQuizesData().then((val) {
       setState(() {
         quizStream = val;
       });
@@ -54,8 +58,8 @@ class _CreateQuizState extends State<CreateQuiz> {
       floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
           onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => const QuizForm()));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const QuizForm()));
           }),
     );
   }
@@ -65,9 +69,20 @@ class QuizTile extends StatelessWidget {
   final String title;
   final String desc;
   final String quizId;
-  DatabaseService databaseService = new DatabaseService();
+
+  // DatabaseService databaseService = new DatabaseService();
 
   QuizTile({required this.title, required this.desc, required this.quizId});
+
+  deleteQuizData(String quizId) async {
+    return await FirebaseFirestore.instance
+        .collection("Quiz")
+        .doc(quizId)
+        .delete()
+        .then((_) {
+      print("success!");
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +143,7 @@ class QuizTile extends StatelessWidget {
                     ),
                   );
                   if (delete ?? false) {
-                    databaseService.deleteQuizData(quizId);
+                    deleteQuizData(quizId);
                   }
                 }),
           ),

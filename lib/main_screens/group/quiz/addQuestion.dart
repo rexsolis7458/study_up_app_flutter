@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:study_up_app/main_screens/group/quiz/create_quiz.dart';
 import 'package:study_up_app/main_screens/group/quiz/quiz.dart';
@@ -19,8 +20,19 @@ class _AddQuestionState extends State<AddQuestion> {
 
   bool _isLoading = false;
 
-  DatabaseService databaseService = new DatabaseService();
+  // DatabaseService databaseService = new DatabaseService();
 
+Future<void> addQuestionData(
+      String quizId, Map<String, dynamic> questionData) async {
+    await FirebaseFirestore.instance
+        .collection("Quiz")
+        .doc(quizId)
+        .collection('QNA')
+        .add(questionData)
+        .catchError((e) {
+      print(e.toString());
+    });
+  }
   uploadQuestionData() async {
     if (_formKey.currentState!.validate()) {
       setState(() {
@@ -34,8 +46,8 @@ class _AddQuestionState extends State<AddQuestion> {
         'option3': option3,
         'option4': option4,
       };
-      await databaseService
-          .addQuestionData(widget.quizId, questionMap)
+      await 
+          addQuestionData(widget.quizId, questionMap)
           .then((value) {
         setState(() {
           _isLoading = false;
