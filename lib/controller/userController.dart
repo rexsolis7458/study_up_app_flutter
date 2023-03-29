@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:study_up_app/models/users.dart';
@@ -7,6 +8,8 @@ class UserController extends GetxController {
   static UserController instance = Get.find();
   final Rx<UserModel> _userModel = UserModel().obs;
   final _userRepo = Get.put(Database());
+
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   UserModel get user => _userModel.value;
 
@@ -48,7 +51,7 @@ class UserController extends GetxController {
     }
   }
 
-  updateRecords(UserModel user) async {
-    await _userRepo.updateUser(user);
-  }
+
+
+
 }

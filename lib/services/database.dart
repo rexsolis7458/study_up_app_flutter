@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:random_string/random_string.dart';
+import 'package:study_up_app/controller/userController.dart';
 import 'package:study_up_app/models/group.dart';
 import 'package:study_up_app/models/users.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -8,6 +10,8 @@ import '../main_screens/group/files/file_model.dart';
 
 class Database {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+
 
   Future<bool> createNewUser(UserModel user) async {
     try {
@@ -27,6 +31,8 @@ class Database {
     }
   }
 
+  
+
   Future<UserModel> getUser(String id) async {
     try {
       DocumentSnapshot doc = await _firestore.collection("users").doc(id).get();
@@ -38,9 +44,24 @@ class Database {
     }
   }
 
-  Future<void> updateUser(UserModel user) async {
-    await _firestore.collection("users").doc(user.id).update(user.toMap());
-  }
+// Future<void> updateUserProfile(UserModel userModel, User user) async {
+//     try {
+//       await _firestore.collecton('users').doc(user.uid).update({
+//         'firstName': userModel?.firstname,
+//         'lastName': userModel.firstname,
+//         'email': userModel.email,
+//         'password': userModel.password,
+//       });
+//       await user.updateEmail(userModel.email);
+//       await user.updateProfile(displayName: userModel.firstname);
+//       print('User profile updated successfully!');
+//     } catch (error) {
+//       print('Error updating user profile: $error');
+//     }
+//   }
+
+
+
 
   Future<String?> createGroup(String groupName, String userUid) async {
     String retVal = "error";
@@ -66,6 +87,7 @@ class Database {
 
     return retVal;
   }
+  
 
   Future<String> joinGroup(String groupId, String userUid) async {
     String retVal = "error";
