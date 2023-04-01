@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
@@ -12,9 +13,19 @@ class UserController extends GetxController {
 
   set user(UserModel value) => _userModel.value = value;
 
-  void clear() {
-    _userModel.value = UserModel();
+  void setUser(UserModel user) {
+    user = user;
   }
+
+  void clear() {
+    _userModel.value = UserModel(email: '');
+  }
+
+  // Future<void> updateUser(UserModel updatedUser) async {
+  //   final userRef = FirebaseFirestore.instance.collection('users').doc(user.id);
+  //   await userRef.update(updatedUser.toMap());
+  //   setUser(updatedUser);
+  // }
 
   Future<void> saveProfileData(UserModel user) async {
     var id = user.id;

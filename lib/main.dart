@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
             onSurface: Colors.black,
           ),
         ),
-        home: const SignUpPage(),
+        home: SignUpPage(),
       ));
 }
 

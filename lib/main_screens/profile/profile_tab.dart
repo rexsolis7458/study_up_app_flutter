@@ -9,6 +9,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:study_up_app/controller/auth_controller.dart';
 import 'package:study_up_app/controller/userController.dart';
 import 'package:study_up_app/helper/const.dart';
+import 'package:study_up_app/main_screens/profile/edit.dart';
+import 'package:study_up_app/main_screens/profile/editPage.dart';
+import 'package:study_up_app/models/users.dart';
 import 'package:study_up_app/services/database.dart';
 
 class ProfileTab extends StatelessWidget {
@@ -20,46 +23,46 @@ class ProfileTab extends StatelessWidget {
 
   ProfileTab({Key? key}) : super(key: key);
 
-  Future<bool> getPhoto(ImageSource source) async {
-    try {
-      final pickedImage =
-          await imagePicker.pickImage(source: source, imageQuality: 100);
-      if (pickedImage != null) {
-        pickedFile = File(pickedImage.path);
-        return true;
-      } else {
-        return false;
-      }
-    } on Exception catch (e) {
-      if (kDebugMode) {
-        print(e.toString());
-      }
-      return false;
-    }
-  }
+//   Future<bool> getPhoto(ImageSource source) async {
+//     try {
+//       final pickedImage =
+//           await imagePicker.pickImage(source: source, imageQuality: 100);
+//       if (pickedImage != null) {
+//         pickedFile = File(pickedImage.path);
+//         return true;
+//       } else {
+//         return false;
+//       }
+//     } on Exception catch (e) {
+//       if (kDebugMode) {
+//         print(e.toString());
+//       }
+//       return false;
+//     }
+//   }
 
- Future<String?> sendProfilePicData() async {
-  if (pickedFile == null) {
-    return null;
-  }
-  try {
-    String fileName =
-        '${DateTime.now().millisecondsSinceEpoch}${FirebaseAuth.instance.currentUser!.uid}.jpg';
-    Reference reference =
-        FirebaseStorage.instance.ref().child('Profile Image').child(fileName);
-    UploadTask uploadTask = reference.putFile(pickedFile!);
-    await uploadTask.whenComplete(() async {
-      imgUrl = await uploadTask.snapshot.ref.getDownloadURL();
-    });
-    return imgUrl;
-  } on Exception catch (e) {
-    if (kDebugMode) {
-      print(e.toString());
-      print('Error uploading profile picture: $e');
-    }
-  }
-  return null;
-}
+//  Future<String?> sendProfilePicData() async {
+//   if (pickedFile == null) {
+//     return null;
+//   }
+//   try {
+//     String fileName =
+//         '${DateTime.now().millisecondsSinceEpoch}${FirebaseAuth.instance.currentUser!.uid}.jpg';
+//     Reference reference =
+//         FirebaseStorage.instance.ref().child('Profile Image').child(fileName);
+//     UploadTask uploadTask = reference.putFile(pickedFile!);
+//     await uploadTask.whenComplete(() async {
+//       imgUrl = await uploadTask.snapshot.ref.getDownloadURL();
+//     });
+//     return imgUrl;
+//   } on Exception catch (e) {
+//     if (kDebugMode) {
+//       print(e.toString());
+//       print('Error uploading profile picture: $e');
+//     }
+//   }
+//   return null;
+// }
 
   @override
   Widget build(BuildContext context) =>
@@ -73,27 +76,27 @@ class ProfileTab extends StatelessWidget {
             drawer: Drawer(
                 child: ListView(
               children: [
-                DrawerHeader(
-                  decoration: BoxDecoration(
-                    color: MainColor,
-                  ),
-                  child: CircleAvatar(
-                    backgroundColor: MainColor,
-                    child: SizedBox(
-                      width: 100,
-                      height: 95,
-                      child: ClipOval(
-    child:
-     _.user.profPic != null 
-     && _.user.profPic!.isNotEmpty
-    ? 
-    Image.network(_.user.profPic!, fit: BoxFit.cover,)
-    : 
-    Image.asset("assets/logo.png"),
-  ),
-                    ),
-                  ),
-                ),
+  //               DrawerHeader(
+  //                 decoration: BoxDecoration(
+  //                   color: MainColor,
+  //                 ),
+  //                 child: CircleAvatar(
+  //                   backgroundColor: MainColor,
+  //                   child: SizedBox(
+  //                     width: 100,
+  //                     height: 95,
+  //                     child: ClipOval(
+  //   child:
+  //    _.user.profPic != null 
+  //    && _.user.profPic!.isNotEmpty
+  //   ? 
+  //   Image.network(_.user.profPic!, fit: BoxFit.cover,)
+  //   : 
+  //   Image.asset("assets/logo.png"),
+  // ),
+  //                   ),
+  //                 ),
+  //               ),
                 Container(
                   height: 30,
                 ),
@@ -127,55 +130,55 @@ class ProfileTab extends StatelessWidget {
                 ),
                 Stack(
                   children: [
-                    Center(
-                      child: CircleAvatar(
-  radius: 75,
-  backgroundColor: Colors.grey,
-  child: ClipOval(
-    child: 
-    _.user.profPic != null
-     && _.user.profPic!.isNotEmpty
-    ?
-     Image.network(_.user.profPic!, fit: BoxFit.cover,)
-    : 
-    Image.asset("assets/logo.png"),
-  ),
-),
-                    ),
-                    Positioned(
-                      top: 0.1,
-                      right: 109,
-                      child: Container(
-                       // ignore: sort_child_properties_last
-                        child: InkWell(
-                          onTap: () async {
-                            getPhoto(ImageSource.gallery);
-                          },
-                          child: const Padding(
-                            padding: EdgeInsets.all(2.0),
-                            child: Icon(
-                              Icons.add_a_photo,
-                            ),
-                          ),
-                        ),
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                              width: 3,
-                              color: Colors.white,
-                            ),
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(50),
-                            ),
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                offset: Offset(2, 4),
-                                color: Colors.black.withOpacity(0.3),
-                                blurRadius: 3,
-                              ),
-                            ]),
-                      ),
-                    )
+//                     Center(
+//                       child: CircleAvatar(
+//   radius: 75,
+//   backgroundColor: Colors.grey,
+//   child: ClipOval(
+//     child: 
+//     _.user.profPic != null
+//      && _.user.profPic!.isNotEmpty
+//     ?
+//      Image.network(_.user.profPic!, fit: BoxFit.cover,)
+//     : 
+//     Image.asset("assets/logo.png"),
+//   ),
+// ),
+//                     ),
+                    // Positioned(
+                    //   top: 0.1,
+                    //   right: 109,
+                    //   child: Container(
+                    //    // ignore: sort_child_properties_last
+                    //     child: InkWell(
+                    //       onTap: () async {
+                    //         getPhoto(ImageSource.gallery);
+                    //       },
+                    //       child: const Padding(
+                    //         padding: EdgeInsets.all(2.0),
+                    //         child: Icon(
+                    //           Icons.add_a_photo,
+                    //         ),
+                    //       ),
+                    //     ),
+                    //     decoration: BoxDecoration(
+                    //         border: Border.all(
+                    //           width: 3,
+                    //           color: Colors.white,
+                    //         ),
+                    //         borderRadius: const BorderRadius.all(
+                    //           Radius.circular(50),
+                    //         ),
+                    //         color: Colors.white,
+                    //         boxShadow: [
+                    //           BoxShadow(
+                    //             offset: Offset(2, 4),
+                    //             color: Colors.black.withOpacity(0.3),
+                    //             blurRadius: 3,
+                    //           ),
+                    //         ]),
+                    //   ),
+                    // )
                   ],
                 ),
                 const SizedBox(
@@ -186,6 +189,17 @@ class ProfileTab extends StatelessWidget {
                   height: 5,
                 ),
                 Text('${_.user.email}'),
+                SizedBox(),
+                TextButton(
+                  onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => EditProfilePage(user: UserModel(),)
+                    ));
+              },
+              child: Text('Edit Profile'),
+                ),
                 Row(
                   children: [
                     const SizedBox(
@@ -305,14 +319,14 @@ class ProfileTab extends StatelessWidget {
                     ),
                   ),
                 ),
-                const Spacer(),
-                GestureDetector(
-                  child: Text("Save!"),
-                  onTap: () async {
-                    _.user.profPic = await Get.put(sendProfilePicData());
-                    userController.saveProfileData(_.user);
-                  },
-                )
+                // const Spacer(),
+                // GestureDetector(
+                //   child: Text("Save!"),
+                //   onTap: () async {
+                //     _.user.profPic = await Get.put(sendProfilePicData());
+                //     userController.saveProfileData(_.user);
+                //   },
+                // )
               ],
             ),
           );

@@ -14,6 +14,7 @@ class AuthController extends GetxController {
   // email, password, name...
   late Rx<User?> firebaseUser;
   FirebaseAuth auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   // User? get user => firebaseUser.value;
 
@@ -47,7 +48,7 @@ class AuthController extends GetxController {
     }
   }
 
-  void register(String firstname, String lastname, String email, String password,) async {
+  void register(String firstname, String lastname, String email, String password) async {
     try {
       UserCredential authResult = await auth.createUserWithEmailAndPassword(email: email.trim(), password: password);
       UserModel users = UserModel(
@@ -97,6 +98,38 @@ class AuthController extends GetxController {
          snackPosition: SnackPosition.BOTTOM);
     }
   }
+
+  // Future<void> updateUser(UserModel updatedUser) async {
+  //   final user = auth.currentUser;
+  //   if (user != null) {
+  //     final userRef = _firestore.collection('users').doc(user.uid);
+  //     await userRef.update({'email': updatedUser.email});
+  //   }
+  // }
+
+//   Future<void> updateEmail(String email) async {
+//     User? user = firebaseUser.value;
+//     if (user != null) {
+//       await user.updateEmail(email);
+//     }
+//   }
+
+//   Future<void> updatePassword(String password) async {
+//     User? user = firebaseUser.value;
+//     if (user != null) {
+//       await user.updatePassword(password);
+//     }
+//   }
+
+//   Future<void> updateUser(UserModel updatedUser) async {
+//   try {
+//     await auth.currentUser!.updateDisplayName(updatedUser.fname);
+//     await user.doc(updatedUser.id).update(updatedUser.toMap());
+//     print('User updated successfully: ${updatedUser.toMap()}');
+//   } catch (error) {
+//     print('Error updating user: $error');
+//   }
+// }
 
   // addUserToFirestore(String userId)
   // {

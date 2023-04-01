@@ -22,7 +22,7 @@ class _CreateGroupState extends State<CreateGroup>
   TextEditingController groupNameController = TextEditingController();
   
   final User? user = FirebaseAuth.instance.currentUser;
-  final UserModel _currentUser = UserModel();
+  final UserModel _currentUser = UserModel(email: '');
   void creatingGroup(BuildContext context, String groupName) async
   {
     String? returnString = await Database().createGroup(groupName, user!.uid);
