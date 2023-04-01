@@ -32,8 +32,8 @@ class _OtherDetailsState extends State<OtherDetails> {
   TextEditingController _bdayController = TextEditingController();
   TextEditingController _institutionController = TextEditingController();
 
-  int? genderValue;
-  int? degreeValue;
+  late String genderValue;
+  late String degreeValue;
 
   String genderDropdownValue = 'Male';
   String degreeDropdownValue = 'BSIT';
@@ -62,9 +62,21 @@ class _OtherDetailsState extends State<OtherDetails> {
     _email = widget.email;
     _password = widget.password;
 
+    _bdayController.addListener(_validateFields);
+    _institutionController.addListener(_validateFields);
+
     //   _minDate=DateTime(2020,3,5,9,0,0);
     // _maxDate=DateTime(2020,3,25,9,0,0);
   }
+
+  void _validateFields() {
+    setState(() {
+      _validate = _bdayController.text.trim().isEmpty ||
+          _institutionController.text.trim().isEmpty;
+    });
+  }
+
+  bool _validate = false;
 
   @override
   Widget build(BuildContext context) {
@@ -122,6 +134,7 @@ class _OtherDetailsState extends State<OtherDetails> {
                 decoration: InputDecoration(
                   // labelText: "Date of Birth",
                   hintText: "08-18-1998",
+                  errorText: _validate ? 'Date of Birth Can\'t Be Empty' : null,
                   hintStyle: TextStyle(color: Colors.grey[600]),
                   fillColor: Colors.white,
                   filled: true,
@@ -131,18 +144,17 @@ class _OtherDetailsState extends State<OtherDetails> {
                   ),
                 ),
                 onTap: () async {
-                  DateTime date = DateTime(1900);
+                  DateTime? date = DateTime(1900);
                   FocusScope.of(context).requestFocus(new FocusNode());
 
-                  date = (await showDatePicker(
-                      context: context,
-                      initialDate:
-                          DateTime.now().subtract(const Duration(days: 6570)),
-                      firstDate: DateTime(1990, 9, 7, 17, 30),
-                      lastDate: DateTime.now()
-                          .subtract(const Duration(days: 6570))))!;
-
-                  _bdayController.text = date.toString();
+                  date = await showDatePicker(
+                    context: context,
+                    initialDate:
+                        DateTime.now().subtract(const Duration(days: 6570)),
+                    firstDate: DateTime(1990, 9, 7, 17, 30),
+                    lastDate:
+                        DateTime.now().subtract(const Duration(days: 6570)),
+                  );
 
                   if (date != null) {
                     print(date);
@@ -151,14 +163,14 @@ class _OtherDetailsState extends State<OtherDetails> {
                     print(formattedDate);
                     setState(() {
                       _bdayController.text =
-                          formattedDate; //set output date to TextField value.
+                          formattedDate; // set output date to TextField value.
                     });
                   } else {
                     print("Date is not selected");
                   }
                 },
                 validator: (value) {
-                  if (value!.isEmpty || value.length < 1) {
+                  if (value == null || value.isEmpty) {
                     return 'Choose Date';
                   }
                 },
@@ -220,10 +232,21 @@ class _OtherDetailsState extends State<OtherDetails> {
                               ),
                             );
                           }).toList(),
+
                           // After selecting the desired option,it will
                           // change button value to selected value
                           onChanged: (String? newValue) {
-                            genderDropdownValue = newValue!;
+                            setState(
+                              () {
+                                genderDropdownValue = newValue!;
+                              },
+                            );
+                            validator:
+                            (String value) {
+                              if (value?.isEmpty ?? true) {
+                                return 'Kindly select a gender.';
+                              }
+                            };
                           },
                         ),
                       ],
@@ -256,6 +279,7 @@ class _OtherDetailsState extends State<OtherDetails> {
                   ),
                   hintText: "USJR",
                   hintStyle: TextStyle(color: Colors.grey[600]),
+                  errorText: _validate ? 'Institution Can\'t Be Empty' : null,
                 ),
               ),
             ),
@@ -317,7 +341,17 @@ class _OtherDetailsState extends State<OtherDetails> {
                           // After selecting the desired option,it will
                           // change button value to selected value
                           onChanged: (String? newValue) {
-                            degreeDropdownValue = newValue!;
+                            setState(
+                              () {
+                                degreeDropdownValue = newValue!;
+                              },
+                            );
+                            validator:
+                            (String value) {
+                              if (value?.isEmpty ?? true) {
+                                return 'Kindly select a degree.';
+                              }
+                            };
                           },
                         ),
                       ],
@@ -335,23 +369,52 @@ class _OtherDetailsState extends State<OtherDetails> {
             ),
             GestureDetector(
               onTap: () async {
-                authController.register(
-                  _firstName.trim(),
-                  _lastName.trim(),
-                  _email.trim(),
-                  _password.trim(),
-                  _bdayController.text.trim(),
-                  genderDropdownValue,
-                  _institutionController.text.trim(),
-                  degreeDropdownValue,
-                );
+                if (_firstName.trim().isEmpty ||
+                    _lastName.trim().isEmpty ||
+                    _email.trim().isEmpty ||
+                    _password.trim().isEmpty ||
+                    _bdayController.text.trim().isEmpty ||
+                    genderDropdownValue == null ||
+                    _institutionController.text.trim().isEmpty ||
+                    degreeDropdownValue == null) {
+                  // Show a warning message that some data is missing
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text('Missing Data'),
+                        content: const Text(
+                            'Please fill in all the required fields.'),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () => Navigator.of(context).pop(),
+                            child: const Text('OK'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                } else {
+                  // Proceed with the registration process
+                  authController.register(
+                    _firstName.trim(),
+                    _lastName.trim(),
+                    _email.trim(),
+                    _password.trim(),
+                    _bdayController.text.trim(),
+                    genderDropdownValue!,
+                    _institutionController.text.trim(),
+                    degreeDropdownValue!,
+                  );
+                }
               },
               child: Container(
                 width: 150,
                 height: 40,
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    color: ButtonColor),
+                  borderRadius: BorderRadius.circular(30),
+                  color: _validate ? Colors.grey : ButtonColor,
+                ),
                 child: const Center(
                   child: Text(
                     "Sign Up",

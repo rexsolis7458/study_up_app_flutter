@@ -35,6 +35,7 @@ class _SignUpPageState extends State<SignUpPage> {
   UserModel userModel = UserModel();
 
   bool _validate = false;
+  
   void initState() {
     super.initState();
     _firstNameController.addListener(_validateFields);
