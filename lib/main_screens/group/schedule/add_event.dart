@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class AddEvent extends StatefulWidget {
+  final DocumentSnapshot group;
   final DateTime firstDate;
   final DateTime lastDate;
   final DateTime? selectedDate;
@@ -9,7 +10,7 @@ class AddEvent extends StatefulWidget {
       {Key? key,
       required this.firstDate,
       required this.lastDate,
-      this.selectedDate})
+      this.selectedDate, required this.group,})
       : super(key: key);
 
   @override
@@ -73,7 +74,9 @@ class _AddEventState extends State<AddEvent> {
       print('title cannot be empty');
       return;
     }
-    await FirebaseFirestore.instance.collection('Events').add({
+    await FirebaseFirestore.instance.collection('Events/${widget.group['groupName']}/events')
+    .add({
+      "id": widget.group.id,
       "title": title,
       "description": description,
       "date": Timestamp.fromDate(_selectedDate),

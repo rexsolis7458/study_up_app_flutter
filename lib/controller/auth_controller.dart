@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:study_up_app/controller/userController.dart';
 import 'package:study_up_app/login_page.dart';
 import 'package:study_up_app/main_screens/home/home_screen.dart';
-import 'package:study_up_app/main_screens/profile/userRepo.dart';
+
 import 'package:study_up_app/models/users.dart';
 import 'package:study_up_app/services/database.dart';
 
@@ -32,7 +32,7 @@ class AuthController extends GetxController {
   final email = TextEditingController();
   final password = TextEditingController();
 
-  final _userRepo = Get.put(UserRepository());
+
   @override
   // onInit() {
   //   _user.bindStream(auth.onAuthStateChanged);
@@ -64,6 +64,9 @@ class AuthController extends GetxController {
     String password,
     String birthday,
     String gender,
+    String institution,
+     String degree,
+     
   ) async {
     try {
       UserCredential authResult = await auth.createUserWithEmailAndPassword(
@@ -76,6 +79,8 @@ class AuthController extends GetxController {
         password: password,
         birthday: birthday,
         gender: gender,
+        institution:institution,
+         degree: degree,
       );
       if (await Database().createNewUser(users)) {
         Get.find<UserController>().user = users;
@@ -116,16 +121,6 @@ class AuthController extends GetxController {
     }
   }
 
-  getUserData() {
-    final email = auth.currentUser?.email;
-    if (email != null) {
-      return _userRepo.getUserDetails(email);
-    } else {
-      Get.snackbar('Error', 'Login to Continue');
-    }
-  }
 
-  updateRecord(UserModel user) async {
-    await _userRepo.updateUserRecords(user);
-  }
+
 }

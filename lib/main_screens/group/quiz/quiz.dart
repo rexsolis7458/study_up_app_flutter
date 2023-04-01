@@ -2,8 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:study_up_app/main_screens/group/quiz/quiz_widget.dart';
 import 'package:study_up_app/main_screens/group/quiz/result.dart';
-
-import '../../../services/database.dart';
 import 'question_model.dart';
 
 class Quiz extends StatefulWidget {
@@ -20,7 +18,7 @@ int _incorrect = 0;
 int _notAttempted = 0;
 
 class _QuizState extends State<Quiz> {
-  // DatabaseService databaseService = DatabaseService();
+  // DatabaseService databaseService = new DatabaseService();
   QuerySnapshot? questionSnapshot;
 
   getQuizData(String quizId) async {
@@ -74,10 +72,10 @@ class _QuizState extends State<Quiz> {
       appBar: AppBar(
         centerTitle: true,
         elevation: 0,
-        iconTheme: const IconThemeData(
+        iconTheme: IconThemeData(
           color: Colors.black54,
         ),
-        title: const Text(
+        title: Text(
           'StudyUp',
           style: TextStyle(
             fontSize: 20,
@@ -85,34 +83,36 @@ class _QuizState extends State<Quiz> {
           ),
         ),
       ),
-      body: Container(
-        margin: const EdgeInsets.only(bottom: 8, top: 10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            questionSnapshot == null
-                ? Container(
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  )
-                : ListView.builder(
-                    padding: EdgeInsets.symmetric(horizontal: 24),
-                    shrinkWrap: true,
-                    physics: ClampingScrollPhysics(),
-                    itemCount: questionSnapshot!.docs.length,
-                    itemBuilder: (context, index) {
-                      return QuizTile(
-                        questionModel: getQuestionModelFromDatasnapshot(
-                            questionSnapshot!.docs[index]),
-                        index: index,
-                      );
-                    })
-          ],
+      body: SingleChildScrollView(
+        child: Container(
+          margin: EdgeInsets.only(bottom: 8, top: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              questionSnapshot == null
+                  ? Container(
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    )
+                  : ListView.builder(
+                      padding: EdgeInsets.symmetric(horizontal: 24),
+                      shrinkWrap: true,
+                      physics: ClampingScrollPhysics(),
+                      itemCount: questionSnapshot!.docs.length,
+                      itemBuilder: (context, index) {
+                        return QuizTile(
+                          questionModel: getQuestionModelFromDatasnapshot(
+                              questionSnapshot!.docs[index]),
+                          index: index,
+                        );
+                      })
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.check),
+          child: Icon(Icons.check),
           onPressed: () {
             Navigator.pushReplacement(
               context,

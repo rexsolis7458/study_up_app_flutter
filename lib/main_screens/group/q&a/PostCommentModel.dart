@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-
 class PostModel {
   String id;
   String title;
@@ -75,9 +74,6 @@ class PostModel {
     }
   }
 }
-
-
-
 
 class CommentModel {
   final String content;

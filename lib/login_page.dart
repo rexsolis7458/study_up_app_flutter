@@ -5,12 +5,8 @@ import 'package:study_up_app/controller/auth_controller.dart';
 import 'package:study_up_app/helper/const.dart';
 import 'package:study_up_app/sign_up.dart';
 
-import 'sign_up_sample.dart';
-
-
 // ignore: must_be_immutable
 class LoginPage extends GetWidget<AuthController> {
-
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
 
@@ -31,7 +27,6 @@ class LoginPage extends GetWidget<AuthController> {
           title: const Text(
             'Login',
             style: TextStyle(
-              
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
@@ -40,11 +35,9 @@ class LoginPage extends GetWidget<AuthController> {
         body: Padding(
           padding: const EdgeInsets.all(50),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              const SizedBox(
-                height: 20,
-              ),
               const CircleAvatar(
                 backgroundImage: AssetImage('assets/logo.png'),
                 radius: 40,
@@ -52,9 +45,16 @@ class LoginPage extends GetWidget<AuthController> {
               const SizedBox(
                 height: 10,
               ),
-              const Text('Study Up'),
+              const Text(
+                'Study Up',
+                style: const TextStyle(
+                  color: SecondaryColor,
+                  fontSize: 40,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               const SizedBox(
-                height: 20,
+                height: 60,
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -93,7 +93,7 @@ class LoginPage extends GetWidget<AuthController> {
                 ),
               ),
               const SizedBox(
-                width: 20.0,
+                height: 30,
               ),
               GestureDetector(
                 onTap: () {
@@ -105,7 +105,7 @@ class LoginPage extends GetWidget<AuthController> {
                   height: 40,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(30),
-                      color: Colors.blue),
+                      color: ButtonColor),
                   child: const Center(
                     child: Text(
                       'Sign in',
@@ -117,8 +117,8 @@ class LoginPage extends GetWidget<AuthController> {
                   ),
                 ),
               ),
-              SizedBox(
-                height: w * 0.16,
+              const SizedBox(
+                height: 30,
               ),
               RichText(
                 text: TextSpan(
@@ -132,13 +132,13 @@ class LoginPage extends GetWidget<AuthController> {
                               fontSize: 20,
                               fontWeight: FontWeight.bold),
                           recognizer: TapGestureRecognizer()
-                            ..onTap = () => Get.to(() => SignupPageSample()))
+                            ..onTap = () => Get.to(() => SignUpPage()))
                     ]),
               ),
             ],
           ),
         ),
       ),
-    );           
+    );
   }
 }

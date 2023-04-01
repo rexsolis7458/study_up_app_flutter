@@ -1,38 +1,59 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
-import 'package:study_up_app/controller/auth_controller.dart';
-import 'package:study_up_app/gender.dart';
-import 'package:study_up_app/helper/const.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:study_up_app/models/users.dart';
 
-import 'Bday.dart';
+import 'controller/auth_controller.dart';
+import 'helper/const.dart';
+import 'package:intl/intl.dart';
 
-class SignUpPage extends GetWidget<AuthController> {
-  SignUpPage({Key? key}) : super(key: key);
+import 'other.dart';
+
+class SignUpPage extends StatefulWidget {
   @override
-  int? genderValue;
-  String dropdownvalue = 'Male';
-  var items = [
-    'Male',
-    'Female',
-    'Others',
-  ];
+  _SignUpPageState createState() => _SignUpPageState();
+}
 
-  TextEditingController bdayController = TextEditingController();
+class _SignUpPageState extends State<SignUpPage> {
+  final AuthController controller = Get.put(AuthController());
+  AuthController authController = AuthController.instance;
+
+  TextEditingController _firstNameController = TextEditingController();
+  TextEditingController _lastNameController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+
+  late String _firstName;
+  late String _lastName;
+  late String _email;
+  late String _password;
+
+  UserModel userModel = UserModel();
+
+  bool _validate = false;
+  void initState() {
+    super.initState();
+    _firstNameController.addListener(_validateFields);
+    _lastNameController.addListener(_validateFields);
+    _emailController.addListener(_validateFields);
+    _passwordController.addListener(_validateFields);
+  }
+
+  void _validateFields() {
+    setState(() {
+      _validate = _firstNameController.text.trim().isEmpty ||
+          _lastNameController.text.trim().isEmpty ||
+          _emailController.text.trim().isEmpty ||
+          _passwordController.text.trim().isEmpty;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    FirebaseAuth _auth = FirebaseAuth.instance;
-    AuthController authController = AuthController.instance;
-
-    TextEditingController firstNameController = TextEditingController();
-    TextEditingController lastNameController = TextEditingController();
-    TextEditingController emailController = TextEditingController();
-    TextEditingController passwordController = TextEditingController();
-
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
@@ -53,22 +74,43 @@ class SignUpPage extends GetWidget<AuthController> {
         body: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              const CircleAvatar(
-                backgroundImage: AssetImage('assets/logo.png'),
-                radius: 40,
+              const SizedBox(
+                height: 15,
               ),
+              // const CircleAvatar(
+              //   backgroundImage: AssetImage('assets/logo.png'),
+              //   radius: 40,
+              // ),
               const SizedBox(
                 height: 10,
               ),
-              const Text('StudyUp'),
-              const SizedBox(
-                height: 10,
+
+              Text(
+                'PERSONAL INFORMATION',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
+              const SizedBox(
+                height: 40,
+              ),
+              Container(
+                padding: const EdgeInsets.only(left: 30, top: 5, right: 30),
+                alignment: Alignment.topLeft,
+                child: Text(
+                  'First Name',
+                  textAlign: TextAlign.start,
+                ),
+              ),
+
               Padding(
                 padding: const EdgeInsets.only(left: 30, top: 5, right: 30),
                 child: TextField(
-                  controller: firstNameController,
+                  controller: _firstNameController,
                   decoration: InputDecoration(
                     fillColor: Colors.white,
                     filled: true,
@@ -76,18 +118,27 @@ class SignUpPage extends GetWidget<AuthController> {
                       borderSide: const BorderSide(width: 3),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    hintText: "First Name",
-                    hintStyle: TextStyle(color: Colors.grey[350]),
+                    hintText: "Joshua Angelo",
+                    hintStyle: TextStyle(color: Colors.grey[600]),
+                    errorText: _validate ? 'First Name Can\'t Be Empty' : null,
                   ),
                 ),
               ),
               const SizedBox(
-                height: 15,
+                height: 20,
+              ),
+              Container(
+                padding: const EdgeInsets.only(left: 30, top: 5, right: 30),
+                alignment: Alignment.topLeft,
+                child: Text(
+                  'Last Name',
+                  textAlign: TextAlign.start,
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 30, top: 5, right: 30),
                 child: TextField(
-                  controller: lastNameController,
+                  controller: _lastNameController,
                   decoration: InputDecoration(
                     fillColor: Colors.white,
                     filled: true,
@@ -95,18 +146,27 @@ class SignUpPage extends GetWidget<AuthController> {
                       borderSide: const BorderSide(width: 3),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    hintText: "Last Name",
-                    hintStyle: TextStyle(color: Colors.grey[350]),
+                    hintText: "Alemania",
+                    hintStyle: TextStyle(color: Colors.grey[600]),
+                    errorText: _validate ? 'Last Name Can\'t Be Empty' : null,
                   ),
                 ),
               ),
               const SizedBox(
-                height: 15,
+                height: 20,
+              ),
+              Container(
+                padding: const EdgeInsets.only(left: 30, top: 5, right: 30),
+                alignment: Alignment.topLeft,
+                child: Text(
+                  'Email',
+                  textAlign: TextAlign.start,
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 30, top: 5, right: 30),
                 child: TextField(
-                  controller: emailController,
+                  controller: _emailController,
                   decoration: InputDecoration(
                     fillColor: Colors.white,
                     filled: true,
@@ -114,18 +174,27 @@ class SignUpPage extends GetWidget<AuthController> {
                       borderSide: const BorderSide(width: 3),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    hintText: "Email",
-                    hintStyle: TextStyle(color: Colors.grey[350]),
+                    hintText: "joshuaangelo.alemania.20@usjr.edu.ph",
+                    hintStyle: TextStyle(color: Colors.grey[600]),
+                    errorText: _validate ? 'Email Can\'t Be Empty' : null,
                   ),
                 ),
               ),
               const SizedBox(
-                height: 15,
+                height: 20,
+              ),
+              Container(
+                padding: const EdgeInsets.only(left: 30, top: 5, right: 30),
+                alignment: Alignment.topLeft,
+                child: Text(
+                  'Password',
+                  textAlign: TextAlign.start,
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 30, top: 5, right: 30),
                 child: TextField(
-                  controller: passwordController,
+                  controller: _passwordController,
                   obscureText: true,
                   decoration: InputDecoration(
                     fillColor: Colors.white,
@@ -134,109 +203,14 @@ class SignUpPage extends GetWidget<AuthController> {
                       borderSide: const BorderSide(width: 3),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    hintText: "Password",
-                    hintStyle: TextStyle(color: Colors.grey[350]),
+                    hintText: "*******",
+                    hintStyle: TextStyle(color: Colors.grey[600]),
+                    errorText: _validate ? 'Password Can\'t Be Empty' : null,
                   ),
                 ),
               ),
               const SizedBox(
-                height: 15,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 30),
-                child: Container(
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text("Date of Birth"),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 30),
-                child: Container(
-                  child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: InkWell(
-                        onTap: () {
-                          // _selectDate(); // Call Function that has showDatePicker()
-                        },
-                        child: IgnorePointer(
-                          child: TextFormField(
-                            // focusNode: _focusNode,
-                            keyboardType: TextInputType.phone,
-                            autocorrect: false,
-                            controller: bdayController,
-                            // onSaved: (value) {
-                            //   data.registrationdate = value;
-                            // },
-                            onTap: () {
-                              // _selectDate();
-                              FocusScope.of(context)
-                                  .requestFocus(new FocusNode());
-                            },
-
-                            maxLines: 1,
-                            //initialValue: 'Aseem Wangoo',
-                            validator: (value) {
-                              if (value!.isEmpty || value.length < 1) {
-                                return 'Choose Date';
-                              }
-                            },
-                            decoration: InputDecoration(
-                              labelText: 'Date of Birth',
-                              //filled: true,
-                              icon: const Icon(Icons.calendar_today),
-                              labelStyle: TextStyle(
-                                  decorationStyle: TextDecorationStyle.solid),
-                            ),
-                          ),
-                        ),
-                      )),
-                ),
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 30),
-                child: Container(
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text("Gender"),
-                  ),
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(1.0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    DropdownButton(
-                      // Initial Value
-                      value: dropdownvalue,
-
-                      // Down Arrow Icon
-                      icon: const Icon(Icons.keyboard_arrow_down),
-
-                      // Array list of items
-                      items: items.map((String items) {
-                        return DropdownMenuItem(
-                          value: items,
-                          child: Text(items),
-                        );
-                      }).toList(),
-                      // After selecting the desired option,it will
-                      // change button value to selected value
-                      onChanged: (String? newValue) {
-                        dropdownvalue = newValue!;
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 5,
+                height: 25,
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 30),
@@ -244,28 +218,44 @@ class SignUpPage extends GetWidget<AuthController> {
               ),
               GestureDetector(
                 onTap: () async {
-                  authController.register(
-                    firstNameController.text.trim(),
-                    lastNameController.text.trim(),
-                    emailController.text.trim(),
-                    passwordController.text.trim(),
-                    bdayController as String,
-                   genderValue as String,
-                  );
+                  bool isEmpty = _firstNameController.text.trim().isEmpty ||
+                      _lastNameController.text.trim().isEmpty ||
+                      _emailController.text.trim().isEmpty ||
+                      _passwordController.text.trim().isEmpty;
+
+                  setState(() {
+                    _validate = isEmpty;
+                  });
+
+                  if (!isEmpty) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => OtherDetails(
+                          _firstNameController.text.trim(),
+                          _lastNameController.text.trim(),
+                          _emailController.text.trim(),
+                          _passwordController.text.trim(),
+                        ),
+                      ),
+                    );
+                  }
                 },
                 child: Container(
                   width: 150,
                   height: 40,
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                      color: ButtonColor),
-                  child: const Center(
+                    borderRadius: BorderRadius.circular(30),
+                    color: _validate ? Colors.grey : ButtonColor,
+                  ),
+                  child: Center(
                     child: Text(
-                      "Sign Up",
+                      "Next",
                       style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white),
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
@@ -274,13 +264,14 @@ class SignUpPage extends GetWidget<AuthController> {
                 height: 30,
               ),
               RichText(
-                  text: TextSpan(
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () => Get.back(),
-                      text: "Have an account already?",
-                      style: TextStyle(fontSize: 20, color: Colors.black54))),
+                text: TextSpan(
+                  recognizer: TapGestureRecognizer()..onTap = () => Get.back(),
+                  text: "Have an account already?",
+                  style: TextStyle(fontSize: 20, color: Colors.black54),
+                ),
+              ),
               const SizedBox(
-                height: 0.16,
+                height: 50,
               ),
             ],
           ),

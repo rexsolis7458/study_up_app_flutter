@@ -1,13 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:study_up_app/Widgets/tasks_widget.dart';
 import 'package:study_up_app/main_screens/group/schedule/sched_sample.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-
 import '../../../models/event_dataSource.dart';
 import '../../../provider/event_provider.dart';
 
 class Calendar extends StatefulWidget {
+  final DocumentSnapshot group;
+
+  Calendar(this.group);
+  
   @override
   _CalendarState createState() => _CalendarState();
 }
@@ -38,7 +42,7 @@ class _CalendarState extends State<Calendar> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => Cal(),
+                  builder: (context) => Cal(group: widget.group,),
                 ),
               );
             },

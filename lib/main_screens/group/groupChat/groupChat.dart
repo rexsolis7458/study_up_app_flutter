@@ -32,7 +32,8 @@ class _GroupChatState extends State<GroupChat> {
           messageData['senderName'] =
               senderName ?? (sender.firstname! + ' ' + sender.lastname!);
         } else {
-          messageData['senderName'] = sender.firstname! + ' ' + sender.lastname!;
+          messageData['senderName'] =
+              sender.firstname! + ' ' + sender.lastname!;
         }
         messageDataList.add(messageData);
       }

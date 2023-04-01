@@ -2,19 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_document_picker/flutter_document_picker.dart';
 import 'dart:io';
-import 'dart:math';
-import 'package:advance_pdf_viewer_fork/advance_pdf_viewer_fork.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
 import 'package:random_string/random_string.dart';
 import 'package:study_up_app/main_screens/group/files/file_model.dart';
-import 'package:study_up_app/main_screens/group/files/pdf.dart';
-import 'package:study_up_app/main_screens/group/files/viewPDF.dart';
-
 import '../../../helper/const.dart';
-import '../../../services/database.dart';
-import '../upload.dart';
+
 
 class UploadPdf extends StatefulWidget {
   final DocumentSnapshot group;

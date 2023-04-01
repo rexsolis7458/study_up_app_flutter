@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:study_up_app/main_screens/group/group.dart';
 import '../../../helper/const.dart';
-import '../../home/home_screen.dart';
 
 class Results extends StatefulWidget {
   final int correct, incorrect, total;
@@ -26,18 +24,18 @@ class _ResultsState extends State<Results> {
             children: [
               Text(
                 '${widget.correct}/${widget.total}',
-                style: const TextStyle(fontSize: 25),
+                style: TextStyle(fontSize: 25),
               ),
-              const SizedBox(
+              SizedBox(
                 height: 8,
               ),
               Text(
                 "You answered ${widget.correct} answers correctly and"
                 "${widget.incorrect} answers incorrectly",
-                style: const TextStyle(fontSize: 15, color: Colors.grey),
+                style: TextStyle(fontSize: 15, color: Colors.grey),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(
+              SizedBox(
                 height: 14,
               ),
               TextButton(
@@ -47,7 +45,7 @@ class _ResultsState extends State<Results> {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: const Text('Go Back'),
+                child: Text('Go Back'),
               ),
             ],
           ),

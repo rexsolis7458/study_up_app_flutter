@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:study_up_app/helper/shadowContainer.dart';
 import 'package:study_up_app/main_screens/group/group_tab.dart';
 import 'package:study_up_app/models/users.dart';
 import 'package:study_up_app/services/database.dart';
+import 'package:intl/intl.dart';
 
 class CreateGroup extends StatefulWidget {
   final UserModel? userModel;
@@ -17,6 +17,8 @@ class CreateGroup extends StatefulWidget {
 
 class _CreateGroupState extends State<CreateGroup> {
   TextEditingController groupNameController = TextEditingController();
+  TextEditingController _from = TextEditingController();
+  TextEditingController _to = TextEditingController();
 
   final User? user = FirebaseAuth.instance.currentUser;
   final UserModel _currentUser = UserModel();
@@ -32,6 +34,13 @@ class _CreateGroupState extends State<CreateGroup> {
           ),
           (route) => false);
     }
+  }
+
+  @override
+  void initState() {
+    _from.text = "";
+    _to.text = "";
+    super.initState();
   }
 
   @override
@@ -60,6 +69,130 @@ class _CreateGroupState extends State<CreateGroup> {
                   prefixIcon: Icon(Icons.group),
                   hintText: "Group Name",
                 ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Container(
+                padding: const EdgeInsets.only(left: 30, top: 5, right: 30),
+                child: Text(
+                  'Time Available',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Column(
+                children: [
+                  Container(
+                    child: Text(
+                      'From',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 15,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding:
+                        const EdgeInsets.only(left: 120, top: 5, right: 120),
+                    child: TextFormField(
+                      controller: _from,
+                      decoration: InputDecoration(
+                        // labelText: "Date of Birth",
+                        icon: Icon(Icons.timer),
+                        hintText: "Enter Time",
+                        hintStyle: TextStyle(color: Colors.grey[600]),
+                      ),
+                      readOnly:
+                          true, //set it true, so that user will not able to edit text
+                      onTap: () async {
+                        TimeOfDay? pickedTime = await showTimePicker(
+                          initialTime: TimeOfDay.now(),
+                          context: context,
+                        );
+
+                        if (pickedTime != null) {
+                          print(pickedTime.format(context)); //output 10:51 PM
+                          DateTime parsedTime = DateFormat.jm()
+                              .parse(pickedTime.format(context).toString());
+                          //converting to DateTime so that we can further format on different pattern.
+                          print(parsedTime); //output 1970-01-01 22:53:00.000
+                          String formattedTime =
+                              DateFormat('HH:mm').format(parsedTime);
+                          print(formattedTime); //output 14:59:00
+                          //DateFormat() is from intl package, you can format the time on any pattern you need.
+
+                          setState(() {
+                            _from.text =
+                                formattedTime; //set the value of text field.
+                          });
+                        } else {
+                          print("Time is not selected");
+                        }
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Column(
+                children: [
+                  Text(
+                    'To',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 15,
+                    ),
+                  ),
+                  Container(
+                    padding:
+                        const EdgeInsets.only(left: 120, top: 5, right: 120),
+                    child: TextFormField(
+                      controller: _to,
+                      decoration: InputDecoration(
+                        // labelText: "Date of Birth",
+                        icon: Icon(Icons.timer),
+                        hintText: "Enter Time",
+                        hintStyle: TextStyle(color: Colors.grey[600]),
+                      ),
+                      readOnly:
+                          true, //set it true, so that user will not able to edit text
+                      onTap: () async {
+                        TimeOfDay? pickedTime = await showTimePicker(
+                          initialTime: TimeOfDay.now(),
+                          context: context,
+                        );
+
+                        if (pickedTime != null) {
+                          print(pickedTime.format(context)); //output 10:51 PM
+                          DateTime parsedTime = DateFormat.jm()
+                              .parse(pickedTime.format(context).toString());
+                          //converting to DateTime so that we can further format on different pattern.
+                          print(parsedTime); //output 1970-01-01 22:53:00.000
+                          String formattedTime =
+                              DateFormat('HH:mm').format(parsedTime);
+                          print(formattedTime); //output 14:59:00
+                          //DateFormat() is from intl package, you can format the time on any pattern you need.
+
+                          setState(() {
+                            _to.text =
+                                formattedTime; //set the value of text field.
+                          });
+                        } else {
+                          print("Time is not selected");
+                        }
+                      },
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(
                 height: 20.0,

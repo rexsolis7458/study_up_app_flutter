@@ -1,20 +1,20 @@
 import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:study_up_app/controller/auth_controller.dart';
 import 'package:study_up_app/controller/userController.dart';
 import 'package:study_up_app/helper/const.dart';
-import 'package:study_up_app/main_screens/profile/edit_profile.dart';
 import 'package:study_up_app/models/users.dart';
 import 'package:study_up_app/services/database.dart';
+import 'edit_profile.dart';
+import 'editprofileSample.dart';
 
 class ProfileTab extends StatelessWidget {
-  late File pickedFile;
+  File? pickedFile;
   ImagePicker imagePicker = ImagePicker();
   String imgUrl = '';
 
@@ -33,24 +33,32 @@ class ProfileTab extends StatelessWidget {
         return false;
       }
     } on Exception catch (e) {
-      print(e.toString());
+      if (kDebugMode) {
+        print(e.toString());
+      }
       return false;
     }
   }
 
   Future<String?> sendProfilePicData() async {
+    if (pickedFile == null) {
+      return null;
+    }
     try {
       String fileName =
           '${DateTime.now().millisecondsSinceEpoch}${FirebaseAuth.instance.currentUser!.uid}.jpg';
       Reference reference =
           FirebaseStorage.instance.ref().child('Profile Image').child(fileName);
-      UploadTask uploadTask = reference.putFile(pickedFile);
+      UploadTask uploadTask = reference.putFile(pickedFile!);
       await uploadTask.whenComplete(() async {
         imgUrl = await uploadTask.snapshot.ref.getDownloadURL();
       });
       return imgUrl;
     } on Exception catch (e) {
-      print(e.toString());
+      if (kDebugMode) {
+        print(e.toString());
+        print('Error uploading profile picture: $e');
+      }
     }
     return null;
   }
@@ -65,53 +73,51 @@ class ProfileTab extends StatelessWidget {
           return Scaffold(
             resizeToAvoidBottomInset: false,
             drawer: Drawer(
-              child: ListView(
-                children: [
-                  DrawerHeader(
-                    decoration: BoxDecoration(
-                      color: MainColor,
-                    ),
-                    child: CircleAvatar(
-                      backgroundColor: MainColor,
-                      child: SizedBox(
-                        width: 100,
-                        height: 95,
-                        child: ClipOval(
-                          child:
-                          //  _.user.profilePicture != null
-                          //     ? Image.network(
-                          //         _.user.profilePicture!,
-                          //         fit: BoxFit.cover,
-                          //       )
-                          //     : 
-                              Image.asset("assets/logo.png"),
-                        ),
+                child: ListView(
+              children: [
+                DrawerHeader(
+                  decoration: BoxDecoration(
+                    color: MainColor,
+                  ),
+                  child: CircleAvatar(
+                    backgroundColor: MainColor,
+                    child: SizedBox(
+                      width: 100,
+                      height: 95,
+                      child: ClipOval(
+                        child: _.user.profilePicture != null &&
+                                _.user.profilePicture!.isNotEmpty
+                            ? Image.network(
+                                _.user.profilePicture!,
+                                fit: BoxFit.cover,
+                              )
+                            : Image.asset("assets/logo.png"),
                       ),
                     ),
                   ),
-                  Container(
-                    height: 30,
-                  ),
-                  ListTile(
-                    title: const Text('About Us'),
-                    leading: const Icon(Icons.info_rounded),
-                    onTap: () {},
-                  ),
-                  ListTile(
-                    title: const Text('Help'),
-                    leading: Icon(Icons.help),
-                    onTap: () {},
-                  ),
-                  ListTile(
-                    title: const Text('Sign out'),
-                    leading: const Icon(Icons.logout),
-                    onTap: () {
-                      AuthController.instance.logOut();
-                    },
-                  ),
-                ],
-              ),
-            ),
+                ),
+                Container(
+                  height: 30,
+                ),
+                ListTile(
+                  title: const Text('About Us'),
+                  leading: const Icon(Icons.info_rounded),
+                  onTap: () {},
+                ),
+                ListTile(
+                  title: const Text('Help'),
+                  leading: Icon(Icons.help),
+                  onTap: () {},
+                ),
+                ListTile(
+                  title: const Text('Sign out'),
+                  leading: const Icon(Icons.logout),
+                  onTap: () {
+                    AuthController.instance.logOut();
+                  },
+                ),
+              ],
+            )),
             appBar: AppBar(
               backgroundColor: MainColor,
               title: const Text('Profile'),
@@ -128,14 +134,13 @@ class ProfileTab extends StatelessWidget {
                         radius: 75,
                         backgroundColor: Colors.grey,
                         child: ClipOval(
-                          child: 
-                          // _.user.profilePicture != null
-                          //     ? Image.network(
-                          //         _.user.profilePicture!,
-                          //         fit: BoxFit.cover,
-                          //       )
-                          //     :
-                               Image.asset("assets/logo.png"),
+                          child: _.user.profilePicture != null &&
+                                  _.user.profilePicture!.isNotEmpty
+                              ? Image.network(
+                                  _.user.profilePicture!,
+                                  fit: BoxFit.cover,
+                                )
+                              : Image.asset("assets/logo.png"),
                         ),
                       ),
                     ),
@@ -175,9 +180,6 @@ class ProfileTab extends StatelessWidget {
                     )
                   ],
                 ),
-                const SizedBox(
-                  height: 25,
-                ),
                 TextButton(
                   style: TextButton.styleFrom(
                     primary: ButtonColor,
@@ -186,7 +188,8 @@ class ProfileTab extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => EditProfileTab()));
+                            builder: (context) =>
+                                EditProfilePage(user: UserModel())));
                   },
                   child: Text('Edit Profile'),
                 ),
@@ -317,14 +320,14 @@ class ProfileTab extends StatelessWidget {
                     ),
                   ),
                 ),
-                // const Spacer(),
-                // GestureDetector(
-                //   child: Text("Save!"),
-                //   onTap: () async {
-                //     _.user.profPic = await Get.put(sendProfilePicData());
-                //     userController.saveProfileData(_.user);
-                //   },
-                // )
+                const Spacer(),
+                GestureDetector(
+                  child: Text("Save!"),
+                  onTap: () async {
+                    _.user.profilePicture = await Get.put(sendProfilePicData());
+                    userController.saveProfileData(_.user);
+                  },
+                )
               ],
             ),
           );

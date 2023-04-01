@@ -9,6 +9,8 @@ class UserModel {
   late String? profilePicture;
   late String? birthday;
   late String? gender;
+  late String? institution;
+  late String? degree;
 
   UserModel({
     this.id,
@@ -19,6 +21,8 @@ class UserModel {
     this.profilePicture,
     this.birthday,
     this.gender,
+    this.institution,
+    this.degree,
   });
 
   UserModel.fromDocumentSnapshot({DocumentSnapshot? doc}) {
@@ -36,6 +40,8 @@ class UserModel {
     birthday =
         doc.data().toString().contains('birthday') ? doc.get('birthday') : '';
     gender = doc.data().toString().contains('gender') ? doc.get('gender') : '';
+    institution = doc.data().toString().contains('institution') ? doc.get('institution') : '';
+    degree = doc.data().toString().contains('degree') ? doc.get('degree') : '';
   }
 
   Map<String, dynamic> toMap() {
@@ -48,6 +54,8 @@ class UserModel {
       'profilePicture': profilePicture,
       'birthday': birthday,
       'gender': gender,
+      'institution': institution,
+      'degree': degree,
     };
   }
 }

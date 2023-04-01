@@ -20,7 +20,7 @@ class _PostPostState extends State<PostPost> {
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .get();
-    final posterName = userDoc['firstname'] + ' ' + userDoc['lastname'];
+    final posterName = userDoc['fname'] + ' ' + userDoc['lname'];
 
     FirebaseFirestore.instance
         .collection('Post/${widget.group['groupName']}/posts')

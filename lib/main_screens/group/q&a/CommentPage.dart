@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-
 import 'PostCommentModel.dart';
 
 class CommentsPage extends StatefulWidget {
@@ -96,14 +94,13 @@ class _CommentsPageState extends State<CommentsPage> {
                           content: _commentController.text.trim(),
                           authorId: FirebaseAuth.instance.currentUser!.uid,
                           commenterName: commenterName,
-                          createdAt: Timestamp.now(),
-                          postId: '',
+                          createdAt: Timestamp.now(), postId: '',
                         ).toFirestore())
                         .then((value) {
                       _commentController.clear();
                     }).catchError((error) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Failed to add comment')));
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text('Failed to add comment')));
                     });
                   },
                   icon: const Icon(Icons.send),

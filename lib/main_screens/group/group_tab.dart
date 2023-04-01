@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:study_up_app/main_screens/group/createGroup.dart';
 import 'package:study_up_app/main_screens/group/group.dart';
-
 import '../../helper/const.dart';
 import 'joinGroup.dart';
 import 'dart:math' as math;
@@ -134,8 +133,16 @@ class _GroupTabState extends State<GroupTab> {
                       itemBuilder: (context, index) {
                         final group = snap[index];
                         return Card(
+                          color: BGColor,
                           elevation: 2,
-                          child: GestureDetector(
+                          child: ListTile(
+                            title: Text(
+                              snap[index]['groupName'],
+                            ),
+                            leading: const Icon(
+                              Icons.diversity_3,
+                              size: 40,
+                            ),
                             onTap: () {
                               Navigator.push(
                                   context,
@@ -143,18 +150,6 @@ class _GroupTabState extends State<GroupTab> {
                                       builder: (context) => Group(group)));
                               // Navigator.pushNamed(context, '/group', arguments: group);
                             },
-                            child: Container(
-                              padding: const EdgeInsets.all(15.0),
-                              child: Row(
-                                children: <Widget>[
-                                  const SizedBox(width: 10.0),
-                                  Text(
-                                    snap[index]['groupName'],
-                                    style: const TextStyle(color: Colors.grey),
-                                  ),
-                                ],
-                              ),
-                            ),
                           ),
                         );
                       });

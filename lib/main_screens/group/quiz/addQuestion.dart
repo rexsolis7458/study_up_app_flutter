@@ -20,9 +20,7 @@ class _AddQuestionState extends State<AddQuestion> {
 
   bool _isLoading = false;
 
-  // DatabaseService databaseService = new DatabaseService();
-
-Future<void> addQuestionData(
+  Future<void> addQuestionData(
       String quizId, Map<String, dynamic> questionData) async {
     await FirebaseFirestore.instance
         .collection("Quiz")
@@ -33,6 +31,7 @@ Future<void> addQuestionData(
       print(e.toString());
     });
   }
+
   uploadQuestionData() async {
     if (_formKey.currentState!.validate()) {
       setState(() {
@@ -47,7 +46,7 @@ Future<void> addQuestionData(
         'option4': option4,
       };
       await 
-          addQuestionData(widget.quizId, questionMap)
+           addQuestionData(widget.quizId, questionMap)
           .then((value) {
         setState(() {
           _isLoading = false;

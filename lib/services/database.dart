@@ -11,8 +11,6 @@ import '../main_screens/group/files/file_model.dart';
 class Database {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-
-
   Future<bool> createNewUser(UserModel user) async {
     try {
       await _firestore.collection("users").doc(user.id).set({
@@ -21,8 +19,10 @@ class Database {
         "lastname": user.lastname.toString(),
         "email": user.email,
         "profilePicture": user.profilePicture.toString(),
-        "birthday": user.birthday.toString(),
-        "gender": user.gender.toString(),
+         "birthday": user.birthday.toString(),
+         "gender": user.gender.toString(),
+         "institution": user.institution.toString(),
+         "degree": user.degree.toString(),
       });
       return true;
     } catch (e) {
@@ -30,8 +30,6 @@ class Database {
       return false;
     }
   }
-
-  
 
   Future<UserModel> getUser(String id) async {
     try {
@@ -60,9 +58,6 @@ class Database {
 //     }
 //   }
 
-
-
-
   Future<String?> createGroup(String groupName, String userUid) async {
     String retVal = "error";
     List<String> members = [];
@@ -87,7 +82,6 @@ class Database {
 
     return retVal;
   }
-  
 
   Future<String> joinGroup(String groupId, String userUid) async {
     String retVal = "error";
@@ -124,61 +118,61 @@ class Database {
 }
 
 //quiz
-// class DatabaseService {
-//   Future<void> addQuizData(String quizId, Map<String, dynamic> quizData) async {
-//     await FirebaseFirestore.instance
-//         .collection("Quiz")
-//         .doc(quizId)
-//         .set(quizData)
-//         .catchError((e) {
-//       print(e.toString());
-//     });
-//   }
+class DatabaseService {
+  Future<void> addQuizData(String quizId, Map<String, dynamic> quizData) async {
+    await FirebaseFirestore.instance
+        .collection("Quiz")
+        .doc(quizId)
+        .set(quizData)
+        .catchError((e) {
+      print(e.toString());
+    });
+  }
 
-//   Future<void> addQuestionData(
-//       String quizId, Map<String, dynamic> questionData) async {
-//     await FirebaseFirestore.instance
-//         .collection("Quiz")
-//         .doc(quizId)
-//         .collection('QNA')
-//         .add(questionData)
-//         .catchError((e) {
-//       print(e.toString());
-//     });
-//   }
+  Future<void> addQuestionData(
+      String quizId, Map<String, dynamic> questionData) async {
+    await FirebaseFirestore.instance
+        .collection("Quiz")
+        .doc(quizId)
+        .collection('QNA')
+        .add(questionData)
+        .catchError((e) {
+      print(e.toString());
+    });
+  }
 
-//   getQuizesData() async {
-//     return await FirebaseFirestore.instance.collection("Quiz").snapshots();
-//   }
+  getQuizesData() async {
+    return await FirebaseFirestore.instance.collection("Quiz").snapshots();
+  }
 
-//   getQuizData(String quizId) async {
-//     return await FirebaseFirestore.instance
-//         .collection("Quiz")
-//         .doc(quizId)
-//         .collection('QNA')
-//         .get();
-//   }
+  getQuizData(String quizId) async {
+    return await FirebaseFirestore.instance
+        .collection("Quiz")
+        .doc(quizId)
+        .collection('QNA')
+        .get();
+  }
 
-//   // deleteQuizData(String quizId) async {
-//   //   return await FirebaseFirestore.instance
-//   //       .collection("Quiz")
-//   //       .get()
-//   //       .then((snapshot) {
-//   //     for (DocumentSnapshot ds in snapshot.docs) {
-//   //       ds.reference.delete();
-//   //     }
-//   //   });
-//   // }
-//   deleteQuizData(String quizId) async {
-//     return await FirebaseFirestore.instance
-//         .collection("Quiz")
-//         .doc(quizId)
-//         .delete()
-//         .then((_) {
-//       print("success!");
-//     });
-//   }
-// }
+  // deleteQuizData(String quizId) async {
+  //   return await FirebaseFirestore.instance
+  //       .collection("Quiz")
+  //       .get()
+  //       .then((snapshot) {
+  //     for (DocumentSnapshot ds in snapshot.docs) {
+  //       ds.reference.delete();
+  //     }
+  //   });
+  // }
+  deleteQuizData(String quizId) async {
+    return await FirebaseFirestore.instance
+        .collection("Quiz")
+        .doc(quizId)
+        .delete()
+        .then((_) {
+      print("success!");
+    });
+  }
+}
 
 //question
 class CommentService {

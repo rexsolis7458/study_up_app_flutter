@@ -1,7 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:study_up_app/helper/shadowContainer.dart';
-import 'package:study_up_app/main_screens/group/group_tab.dart';
 import 'package:study_up_app/models/users.dart';
 import 'package:study_up_app/services/database.dart';
 

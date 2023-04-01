@@ -1,10 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../../helper/const.dart';
 import '../../../services/database.dart';
-import 'sched_form.dart';
 import 'sched_sample.dart';
 
 class Sched extends StatefulWidget {
+  final DocumentSnapshot group;
+
+  Sched(this.group);
+
   @override
   _SchedState createState() => _SchedState();
 }
@@ -37,7 +41,6 @@ class _SchedState extends State<Sched> {
     );
   }
 
- 
   @override
   void initState() {
     scheduleService.getScheduleData().then((val) {
@@ -61,7 +64,10 @@ class _SchedState extends State<Sched> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => Cal()),
+            MaterialPageRoute(
+                builder: (context) => Cal(
+                      group: widget.group,
+                    )),
           );
         },
       ),
@@ -85,7 +91,7 @@ class SchedTile extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(bottom: 8, top: 10, left: 8, right: 8),
       height: 150,
-      width: 200,
+      width: 190,
       child: Stack(
         children: [
           ClipRRect(
@@ -111,7 +117,7 @@ class SchedTile extends StatelessWidget {
               const SizedBox(
                 height: 6,
               ),
-              
+
               // Text(
               //   desc,
               //   style: TextStyle(
