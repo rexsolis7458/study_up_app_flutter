@@ -23,6 +23,7 @@ class Database {
          "gender": user.gender.toString(),
          "institution": user.institution.toString(),
          "degree": user.degree.toString(),
+          "age": user.age.toString(),
       });
       return true;
     } catch (e) {

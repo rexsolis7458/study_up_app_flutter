@@ -10,6 +10,7 @@ import 'package:study_up_app/sign_up.dart';
 PyService pyService = new PyService();
 
 Future<APiResponse<Map<String, dynamic>>> extractInformation() async {
+      print("shit");
   return await pyService.extractInformation();
 }
 
@@ -105,8 +106,10 @@ class LoginPage extends GetWidget<AuthController> {
               ),
               GestureDetector(
                 onTap: () async {
+                  print("tap");
                   final result = await extractInformation();
                   print(result.data!['result']);
+                
                   AuthController.instance.login(emailController.text.trim(),
                       passwordController.text.trim());
                 },
