@@ -35,7 +35,7 @@ class _SignUpPageState extends State<SignUpPage> {
   UserModel userModel = UserModel();
 
   bool _validate = false;
-  
+
   void initState() {
     super.initState();
     _firstNameController.addListener(_validateFields);
@@ -227,7 +227,23 @@ class _SignUpPageState extends State<SignUpPage> {
                   setState(() {
                     _validate = isEmpty;
                   });
-
+// Show a warning message that some data is missing
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text('Missing Data'),
+                        content: const Text(
+                            'Please fill in all the required fields.'),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () => Navigator.of(context).pop(),
+                            child: const Text('OK'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
                   if (!isEmpty) {
                     Navigator.push(
                       context,

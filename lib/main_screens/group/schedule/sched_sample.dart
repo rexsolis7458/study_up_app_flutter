@@ -1,7 +1,9 @@
 import 'dart:collection';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
+
 import '../../../Widgets/event_item.dart';
 import '../../../services/event.dart';
 import 'add_event.dart';
@@ -202,7 +204,7 @@ class _CalState extends State<Cal> {
               builder: (_) => AddEvent(
                 firstDate: _firstDay,
                 lastDate: _lastDay,
-                selectedDate: _selectedDay, 
+                selectedDate: _selectedDay,
                 group: widget.group,
               ),
             ),

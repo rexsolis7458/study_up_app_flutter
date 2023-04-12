@@ -3,7 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:study_up_app/controller/auth_controller.dart';
 import 'package:study_up_app/helper/const.dart';
+import 'package:study_up_app/services/py_services.dart';
+import 'package:study_up_app/services/response.dart';
 import 'package:study_up_app/sign_up.dart';
+
+PyService pyService = new PyService();
+
+Future<APiResponse<Map<String, dynamic>>> extractInformation() async {
+  return await pyService.extractInformation();
+}
 
 // ignore: must_be_immutable
 class LoginPage extends GetWidget<AuthController> {
@@ -96,7 +104,9 @@ class LoginPage extends GetWidget<AuthController> {
                 height: 30,
               ),
               GestureDetector(
-                onTap: () {
+                onTap: () async {
+                  final result = await extractInformation();
+                  print(result.data!['result']);
                   AuthController.instance.login(emailController.text.trim(),
                       passwordController.text.trim());
                 },

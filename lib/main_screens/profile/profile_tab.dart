@@ -82,18 +82,18 @@ class ProfileTab extends StatelessWidget {
                   child: CircleAvatar(
                     backgroundColor: MainColor,
                     child: SizedBox(
-                      width: 100,
-                      height: 95,
-                      child: ClipOval(
-                        child: _.user.profilePicture != null &&
-                                _.user.profilePicture!.isNotEmpty
-                            ? Image.network(
-                                _.user.profilePicture!,
-                                fit: BoxFit.cover,
-                              )
-                            : Image.asset("assets/logo.png"),
-                      ),
-                    ),
+                        width: 100,
+                        height: 95,
+                        child: ClipOval(
+                          child: Image.network(
+                            _.user.profilePicture ??
+                                "https://example.com/default_profile_picture.png",
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, __, ___) => Image.asset(
+                                "assets/logo.png",
+                                fit: BoxFit.cover),
+                          ),
+                        )),
                   ),
                 ),
                 Container(
@@ -131,18 +131,18 @@ class ProfileTab extends StatelessWidget {
                   children: [
                     Center(
                       child: CircleAvatar(
-                        radius: 75,
-                        backgroundColor: Colors.grey,
-                        child: ClipOval(
-                          child: _.user.profilePicture != null &&
-                                  _.user.profilePicture!.isNotEmpty
-                              ? Image.network(
-                                  _.user.profilePicture!,
-                                  fit: BoxFit.cover,
-                                )
-                              : Image.asset("assets/logo.png"),
-                        ),
-                      ),
+                          radius: 75,
+                          backgroundColor: Colors.grey,
+                          child: ClipOval(
+                            child: Image.network(
+                              _.user.profilePicture ??
+                                  "https://example.com/default_profile_picture.png",
+                              fit: BoxFit.cover,
+                              errorBuilder: (_, __, ___) => Image.asset(
+                                  "assets/logo.png",
+                                  fit: BoxFit.cover),
+                            ),
+                          )),
                     ),
                     Positioned(
                       top: 0.1,
@@ -151,7 +151,47 @@ class ProfileTab extends StatelessWidget {
                         // ignore: sort_child_properties_last
                         child: InkWell(
                           onTap: () async {
-                            getPhoto(ImageSource.gallery);
+                            final didGetPhoto =
+                                await getPhoto(ImageSource.gallery);
+                            if (didGetPhoto) {
+                              // Show alert dialog
+                              showDialog(
+                                context: context,
+                                builder: (_) => AlertDialog(
+                                  title: const Text('Save as profile picture?'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context, true);
+                                      },
+                                      child: const Text('Yes'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context, false);
+                                      },
+                                      child: const Text('No'),
+                                    ),
+                                  ],
+                                ),
+                              ).then((result) async {
+                                if (result == true) {
+                                  // User chose to save as profile picture
+                                  String? profilePic =
+                                      await sendProfilePicData();
+                                  if (profilePic != null) {
+                                    _.user.profilePicture = profilePic;
+                                    userController.saveProfileData(_.user);
+                                  } else {
+                                    Get.snackbar("Error",
+                                        "Failed to save profile picture.");
+                                  }
+                                  userController.saveProfileData(_.user);
+                                } else {
+                                  // User chose not to save as profile picture
+                                }
+                              });
+                            }
                           },
                           child: const Padding(
                             padding: EdgeInsets.all(2.0),
@@ -321,13 +361,13 @@ class ProfileTab extends StatelessWidget {
                   ),
                 ),
                 const Spacer(),
-                GestureDetector(
-                  child: Text("Save!"),
-                  onTap: () async {
-                    _.user.profilePicture = await Get.put(sendProfilePicData());
-                    userController.saveProfileData(_.user);
-                  },
-                )
+                // GestureDetector(
+                //   child: Text("Save!"),
+                //   onTap: () async {
+                //     _.user.profilePicture = await Get.put(sendProfilePicData());
+                //     userController.saveProfileData(_.user);
+                //   },
+                // )
               ],
             ),
           );
