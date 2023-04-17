@@ -23,6 +23,7 @@ class Database {
          "gender": user.gender.toString(),
          "institution": user.institution.toString(),
          "degree": user.degree.toString(),
+         "age": user.age.toString(),
       });
       return true;
     } catch (e) {
@@ -57,8 +58,37 @@ class Database {
 //       print('Error updating user profile: $error');
 //     }
 //   }
+  Future<String> joinGroupByName(String groupName, String userUid) async {
+  String retVal = "error";
+  List<String> members = [];
 
-  Future<String?> createGroup(String groupName, String userUid) async {
+  try {
+    // Get the group document reference with the matching group name
+    final groupDocRef = await _firestore.collection("groups").where("groupName", isEqualTo: groupName).limit(1).get();
+    
+    if (groupDocRef.docs.isNotEmpty) {
+      // Add the user to the group members list
+      members.add(userUid);
+      await groupDocRef.docs.first.reference.update({
+        'members': FieldValue.arrayUnion(members),
+      });
+
+      // Update the user's group ID in their user document
+      // Uncomment the following lines if you want to update the user's group ID as well
+      // await _firestore.collection("users").doc(userUid).update({
+      //   'groupId': groupDocRef.docs.first.id,
+      // });
+
+      retVal = "success";
+    } else {
+      print("Group with name $groupName not found.");
+    }
+  } catch (e) {
+    print(e);
+  }
+  return retVal;
+}
+ Future<String?> createGroup(String groupName, String userUid, List<String> selectedValues, String from, String to) async {
     String retVal = "error";
     List<String> members = [];
 
@@ -68,6 +98,9 @@ class Database {
         'groupName': groupName,
         'groupLeader': userUid,
         'members': members,
+        'Subjects' : selectedValues,
+        'Time available Start': from,
+        'Time available End': to,
         'groupCreated': Timestamp.now(),
       });
 

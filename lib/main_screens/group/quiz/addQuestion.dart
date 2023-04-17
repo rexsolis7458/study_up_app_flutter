@@ -45,9 +45,7 @@ class _AddQuestionState extends State<AddQuestion> {
         'option3': option3,
         'option4': option4,
       };
-      await 
-           addQuestionData(widget.quizId, questionMap)
-          .then((value) {
+      await addQuestionData(widget.quizId, questionMap).then((value) {
         setState(() {
           _isLoading = false;
         });
@@ -79,15 +77,23 @@ class _AddQuestionState extends State<AddQuestion> {
             : Form(
                 key: _formKey,
                 child: Container(
+                  color: BGColor,
                   padding: EdgeInsets.symmetric(horizontal: 24),
                   child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
+                        const SizedBox(
+                          height: 40,
+                        ),
                         TextFormField(
                           validator: (val) =>
                               val!.isEmpty ? "Question can't be empty" : null,
                           decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderSide: const BorderSide(width: 3),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
                             hintText: "Question",
                           ),
                           onChanged: (val) {
@@ -95,7 +101,7 @@ class _AddQuestionState extends State<AddQuestion> {
                           },
                         ),
                         const SizedBox(
-                          height: 10,
+                          height: 40,
                         ),
                         TextFormField(
                           validator: (val) =>
@@ -146,82 +152,32 @@ class _AddQuestionState extends State<AddQuestion> {
                             option4 = val;
                           },
                         ),
-                        Spacer(),
+                        const SizedBox(
+                          height: 50,
+                        ),
                         Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: <Widget>[
                               TextButton(
+                                style: TextButton.styleFrom(
+                                  foregroundColor: ButtonColor,
+                                ),
                                 onPressed: () {
                                   uploadQuestionData();
                                 },
                                 child: const Text("Add Question"),
                               ),
                               TextButton(
+                                style: TextButton.styleFrom(
+                                  foregroundColor: ButtonColor,
+                                ),
                                 onPressed: () {
                                   Navigator.pop(context);
                                 },
                                 child: const Text("Submit"),
                               ),
                             ]),
-                        // Column(
-                        //   children: [
-                        //     GestureDetector(
-                        //       onTap: () {
-                        //         Navigator.pop(
-                        //           context,
-                        //         );
-                        //       },
-                        //       child: Container(
-                        //         width: 150,
-                        //         height: 60,
-                        //         decoration: BoxDecoration(
-                        //             borderRadius: BorderRadius.circular(30),
-                        //             color: ButtonColor),
-                        //         child: Center(
-                        //           child: Text(
-                        //             "Submit",
-                        //             style: TextStyle(
-                        //                 fontSize: 20,
-                        //                 fontWeight: FontWeight.bold,
-                        //                 color: Colors.white),
-                        //           ),
-                        //         ),
-                        //       ),
-                        //     ),
-                        //   ],
-                        // ),
-                        // Column(
-                        //   children: [
-                        //     GestureDetector(
-                        //       onTap: () {
-                        //         uploadQuestionData();
-                        //         Navigator.push(
-                        //           context,
-                        //           MaterialPageRoute(
-                        //             builder: (context) => CreateQuiz(),
-                        //           ),
-                        //         );
-                        //       },
-                        //       child: Container(
-                        //         width: 150,
-                        //         height: 60,
-                        //         decoration: BoxDecoration(
-                        //             borderRadius: BorderRadius.circular(30),
-                        //             color: ButtonColor),
-                        //         child: Center(
-                        //           child: Text(
-                        //             "Add Question",
-                        //             style: TextStyle(
-                        //                 fontSize: 20,
-                        //                 fontWeight: FontWeight.bold,
-                        //                 color: Colors.white),
-                        //           ),
-                        //         ),
-                        //       ),
-                        //     ),
-                        //   ],
-                        // ),
                       ]),
                 ),
               ));

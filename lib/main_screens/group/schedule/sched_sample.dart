@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../../Widgets/event_item.dart';
+import '../../../helper/const.dart';
 import '../../../services/event.dart';
 import 'add_event.dart';
 import 'edit_event.dart';
@@ -76,6 +77,7 @@ class _CalState extends State<Cal> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: BGColor,
       appBar: AppBar(
         title: Text(
           'StudyUp',
@@ -88,62 +90,71 @@ class _CalState extends State<Cal> {
       body: ListView(
         children: [
           TableCalendar(
-              locale: 'en_US',
-              rowHeight: 43,
-              eventLoader: _getEventsForTheDay,
-              calendarFormat: _calendarFormat,
-              onFormatChanged: (format) {
-                setState(() {
-                  _calendarFormat = format;
-                });
-              },
-              focusedDay: _focusedDay,
-              firstDay: _firstDay,
-              lastDay: _lastDay,
-              onPageChanged: (focusedDay) {
-                setState(() {
-                  _focusedDay = focusedDay;
-                });
-                _loadFirestoreEvents();
-              },
-              selectedDayPredicate: (day) => isSameDay(day, _selectedDay),
-              onDaySelected: (selectedDay, focusedDay) {
-                print(_events[selectedDay]);
-                setState(() {
-                  _selectedDay = selectedDay;
-                  _focusedDay = focusedDay;
-                });
-                calendarStyle:
-                const HeaderStyle(
-                  formatButtonVisible: false,
-                  titleCentered: true,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                          topRight: Radius.circular(10))),
-                );
-                headerStyle:
-                const CalendarStyle(
-                    selectedDecoration: BoxDecoration(
-                        color: Color.fromRGBO(227, 148, 53, 1),
-                        shape: BoxShape.circle),
-                    todayDecoration: BoxDecoration(
-                        color: Color.fromRGBO(76, 92, 50, 1),
-                        shape: BoxShape.circle),
-                    todayTextStyle: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18.0,
-                        color: Colors.white));
-                calendarBuilders:
-                CalendarBuilders(
-                  headerTitleBuilder: (context, day) {
-                    return Container(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(day.toString()),
-                    );
-                  },
-                );
-              }),
+            headerStyle: HeaderStyle(titleCentered: true),
+            availableCalendarFormats: const {
+              CalendarFormat.month: 'Month',
+            },
+            locale: 'en_US',
+            rowHeight: 43,
+            eventLoader: _getEventsForTheDay,
+            calendarFormat: _calendarFormat,
+            onFormatChanged: (format) {
+              setState(() {
+                _calendarFormat = format;
+              });
+            },
+            focusedDay: _focusedDay,
+            firstDay: _firstDay,
+            lastDay: _lastDay,
+            onPageChanged: (focusedDay) {
+              setState(() {
+                _focusedDay = focusedDay;
+              });
+              _loadFirestoreEvents();
+            },
+            selectedDayPredicate: (day) => isSameDay(day, _selectedDay),
+            onDaySelected: (selectedDay, focusedDay) {
+              print(_events[selectedDay]);
+              setState(() {
+                _selectedDay = selectedDay;
+                _focusedDay = focusedDay;
+              });
+
+              const HeaderStyle(
+                formatButtonVisible: false,
+                titleCentered: true,
+                decoration: BoxDecoration(
+                  color: Colors.white70,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10),
+                  ),
+                ),
+              );
+
+              const CalendarStyle(
+                selectedDecoration: BoxDecoration(
+                    color: Color.fromRGBO(227, 148, 53, 1),
+                    shape: BoxShape.circle),
+                todayDecoration: BoxDecoration(
+                    color: Color.fromRGBO(76, 92, 50, 1),
+                    shape: BoxShape.circle),
+                todayTextStyle: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18.0,
+                    color: Colors.white),
+              );
+
+              CalendarBuilders(
+                headerTitleBuilder: (context, day) {
+                  return Container(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(day.toString()),
+                  );
+                },
+              );
+            },
+          ),
           ..._getEventsForTheDay(_selectedDay).map(
             (event) => EventItem(
                 event: event,

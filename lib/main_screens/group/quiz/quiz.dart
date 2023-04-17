@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:study_up_app/main_screens/group/quiz/quiz_widget.dart';
 import 'package:study_up_app/main_screens/group/quiz/result.dart';
+import '../../../helper/const.dart';
 import 'question_model.dart';
 
 class Quiz extends StatefulWidget {
@@ -69,6 +70,7 @@ class _QuizState extends State<Quiz> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: BGColor,
       appBar: AppBar(
         centerTitle: true,
         elevation: 0,
@@ -141,9 +143,11 @@ class _QuizTileState extends State<QuizTile> {
   Widget build(BuildContext context) {
     return Container(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Text(
-            "Q${widget.index + 1} ${widget.questionModel.question}",
+            "${widget.index + 1}. ${widget.questionModel.question}",
             style: TextStyle(fontSize: 17, color: Colors.black87),
           ),
           SizedBox(

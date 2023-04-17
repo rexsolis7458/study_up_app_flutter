@@ -37,12 +37,6 @@ class _TasksWidgetState extends State<TasksWidget> {
         if (details.appointments == null) return;
 
         final event = details.appointments!.first;
-
-        // Navigator.of(context).push(
-        //   MaterialPageRoute(
-        //     builder: (context) => EventViewingPage(event: event),
-        //   ),
-        // );
       },
     );
   }
@@ -61,8 +55,7 @@ class _TasksWidgetState extends State<TasksWidget> {
           borderRadius: BorderRadius.circular(12),
         ),
         child: Center(
-          child: Text(
-            event.title,
+          child: Text(event.title,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(

@@ -24,8 +24,6 @@ class _RateFileState extends State<RateFile> {
     updateid: '',
   );
 
-
-
   @override
   void initState() {
     super.initState();
@@ -66,8 +64,7 @@ class _RateFileState extends State<RateFile> {
                       fileModel.ratingValue != null
                           ? fileModel.ratingValue.toString()
                           : 'Rate it!',
-                      style:
-                          const TextStyle(color: Colors.black, fontSize: 25),
+                      style: const TextStyle(color: Colors.black, fontSize: 25),
                     ),
                   ),
                 ],
@@ -80,7 +77,7 @@ class _RateFileState extends State<RateFile> {
                     onPressed: () async {
                       Navigator.pop(context);
                     },
-                    child: const Text("Later"),
+                    child: const Text("Later",),
                   ),
                   TextButton(
                     onPressed: () async {
@@ -99,10 +96,10 @@ class _RateFileState extends State<RateFile> {
                               ? fileModel.ratingValue.toString()
                               : 'Rating',
                         });
-                        Navigator.pop(context);
                       } else {
                         print('File name is empty');
                       }
+                      Navigator.pop(context);
                     },
                     child: const Text("Rate"),
                   ),

@@ -22,7 +22,7 @@ class _CreateGroupState extends State<JoinGroup>
   final UserModel _currentUser = UserModel();
   void joinGroup(BuildContext context, String groupName) async
   {
-    String? returnString = await Database().joinGroup(groupName, user!.uid);
+    String? returnString = await Database().joinGroupByName(groupName, user!.uid);
     
     if (returnString == "success") {
       // ignore: use_build_context_synchronously

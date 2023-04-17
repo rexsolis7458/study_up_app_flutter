@@ -9,8 +9,8 @@ import 'package:study_up_app/sign_up.dart';
 
 PyService pyService = new PyService();
 
-Future<APiResponse<Map<String, dynamic>>> extractInformation() async {
-  return await pyService.extractInformation();
+Future<APiResponse<String>> extractInformation(String id) async {
+  return await pyService.flaskTest(id);
 }
 
 // ignore: must_be_immutable
@@ -105,8 +105,6 @@ class LoginPage extends GetWidget<AuthController> {
               ),
               GestureDetector(
                 onTap: () async {
-                  final result = await extractInformation();
-                  print(result.data!['result']);
                   AuthController.instance.login(emailController.text.trim(),
                       passwordController.text.trim());
                 },

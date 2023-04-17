@@ -102,7 +102,26 @@ class ProfileTab extends StatelessWidget {
                 ListTile(
                   title: const Text('About Us'),
                   leading: const Icon(Icons.info_rounded),
-                  onTap: () {},
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text("StudyUp"),
+                          content: const Text(
+                              "StudyUp is a mobile application intended for learners, where the learners will be appropriately placed in a study group according to their similarities, like the topic of interest."),
+                          actions: [
+                            TextButton(
+                              child: Text("OK"),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
                 ),
                 ListTile(
                   title: const Text('Help'),

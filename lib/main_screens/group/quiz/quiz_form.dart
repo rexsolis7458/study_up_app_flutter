@@ -6,7 +6,7 @@ import '../../../helper/const.dart';
 
 class QuizForm extends StatefulWidget {
   final DocumentSnapshot group;
-  const QuizForm(this.group,{super.key});
+  const QuizForm(this.group, {super.key});
 
   @override
   State<QuizForm> createState() => _QuizFormState();
@@ -84,22 +84,12 @@ class _QuizFormState extends State<QuizForm> {
           : Form(
               key: _formKey,
               child: Container(
-                margin: EdgeInsets.only(bottom: 8, top: 10),
+                // margin: EdgeInsets.only(bottom: 8, top: 10),
                 color: BGColor,
                 padding: EdgeInsets.symmetric(horizontal: 24),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // TextFormField(
-                    //   validator: (val) =>
-                    //       val!.isEmpty ? "Quiz Image Url can't be empty" : null,
-                    //   decoration: InputDecoration(
-                    //     hintText: "Quiz Image Url",
-                    //   ),
-                    //   onChanged: (val) {
-                    //     quizImgurl = val;
-                    //   },
-                    // ),
                     const SizedBox(
                       height: 10,
                     ),
@@ -128,25 +118,20 @@ class _QuizFormState extends State<QuizForm> {
                       },
                     ),
                     const SizedBox(
-                      height: 20,
+                      height: 40,
                     ),
                     GestureDetector(
                       onTap: () {
                         createQuiz();
                       },
                       child: Container(
-                        width: 150,
-                        height: 40,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(30),
-                            color: ButtonColor),
                         child: Center(
                           child: Text(
                             "Create Quiz",
                             style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.white),
+                                color: ButtonColor),
                           ),
                         ),
                       ),

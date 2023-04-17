@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import '../../../helper/const.dart';
 import '../../../services/event.dart';
 
 class EditEvent extends StatefulWidget {
@@ -33,10 +34,14 @@ class _EditEventState extends State<EditEvent> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: BGColor,
       appBar: AppBar(title: const Text("Edit Event")),
       body: ListView(
         padding: const EdgeInsets.all(16.0),
         children: [
+          const SizedBox(
+            height: 5,
+          ),
           InputDatePickerFormField(
             firstDate: widget.firstDate,
             lastDate: widget.lastDate,
@@ -48,15 +53,34 @@ class _EditEventState extends State<EditEvent> {
               });
             },
           ),
+          const SizedBox(
+            height: 30,
+          ),
           TextField(
             controller: _titleController,
             maxLines: 1,
-            decoration: const InputDecoration(labelText: 'title'),
+            decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderSide: const BorderSide(width: 3),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                labelText: 'title'),
+          ),
+          const SizedBox(
+            height: 30,
           ),
           TextField(
             controller: _descController,
             maxLines: 5,
-            decoration: const InputDecoration(labelText: 'description'),
+            decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderSide: const BorderSide(width: 3),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                labelText: 'description'),
+          ),
+          const SizedBox(
+            height: 40,
           ),
           ElevatedButton(
             onPressed: () {

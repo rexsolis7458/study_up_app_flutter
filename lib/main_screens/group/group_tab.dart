@@ -56,108 +56,132 @@ class _GroupTabState extends State<GroupTab> {
         ));
   }
 
+  String convertTo12HourFormat(String time) {
+    List<String> parts = time.split(":");
+    int hour = int.parse(parts[0]);
+    int minute = int.parse(parts[1]);
+
+    String suffix = hour >= 12 ? "PM" : "AM";
+
+    if (hour == 0) {
+      hour = 12;
+    } else if (hour > 12) {
+      hour -= 12;
+    }
+
+    return "${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')} $suffix";
+  }
+
   @override
   Widget build(BuildContext context) {
     final User? user = auth.currentUser;
     final uid = user!.uid;
 
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: MainColor,
-          centerTitle: true,
-          elevation: 0,
-          title: const Text(
-            'My Groups',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
+      appBar: AppBar(
+        backgroundColor: MainColor,
+        centerTitle: true,
+        elevation: 0,
+        title: const Text(
+          'My Groups',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
           ),
         ),
-        floatingActionButton: ExpandableFab(
-          distance: 112.0,
-          children: [
-            Container(
-              margin: const EdgeInsets.all(2),
-              child: FloatingActionButton.extended(
-                heroTag: 'create',
-                onPressed: () => _goToCreate(context),
-                label: const Text("Create Group"),
-              ),
+      ),
+      floatingActionButton: ExpandableFab(
+        distance: 112.0,
+        children: [
+          Container(
+            margin: const EdgeInsets.all(2),
+            child: FloatingActionButton.extended(
+              heroTag: 'create',
+              onPressed: () => _goToCreate(context),
+              label: const Text("Create Group"),
             ),
-            Container(
-              margin: const EdgeInsets.all(2),
-              child: FloatingActionButton.extended(
-                heroTag: 'join',
-                onPressed: () => _goToJoin(context),
-                label: const Text("Join Group"),
-              ),
+          ),
+          Container(
+            margin: const EdgeInsets.all(2),
+            child: FloatingActionButton.extended(
+              heroTag: 'join',
+              onPressed: () => _goToJoin(context),
+              label: const Text("Join Group"),
             ),
-          ],
-        ),
-        // floatingActionButton: Wrap(
-        //   direction: Axis.horizontal,
-        //   children: <Widget>[
-        //     Container(
-        //       margin: const EdgeInsets.all(2),
-        //       child: FloatingActionButton.extended(
-        //         heroTag: 'create',
-        //         onPressed: () => _goToCreate(context),
-        //         label: const Text("Create Group"),
-        //       ),
-        //     ),
-        //     Container(
-        //       margin: const EdgeInsets.all(2),
-        //       child: FloatingActionButton.extended(
-        //         heroTag: 'join',
-        //         onPressed: () => _goToJoin(context),
-        //         label: const Text("Join Group"),
-        //       ),
-        //     ),
-        //   ],
-        // ),
-        body: SingleChildScrollView(
-          child: StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collection("groups")
-                  .where('members', arrayContains: uid)
-                  .snapshots(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (snapshot.hasData) {
-                  final snap = snapshot.data!.docs;
-                  return ListView.builder(
-                      shrinkWrap: true,
-                      primary: true,
-                      itemCount: snap.length,
-                      itemBuilder: (context, index) {
-                        final group = snap[index];
-                        return Card(
-                          color: BGColor,
-                          elevation: 2,
-                          child: ListTile(
-                            title: Text(
-                              snap[index]['groupName'],
-                            ),
-                            leading: const Icon(
-                              Icons.diversity_3,
-                              size: 40,
-                            ),
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Group(group)));
-                              // Navigator.pushNamed(context, '/group', arguments: group);
-                            },
-                          ),
-                        );
-                      });
-                } else {
-                  return const SizedBox();
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance
+                .collection("groups")
+                .where('members', arrayContains: uid)
+                .snapshots(),
+            builder:
+                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (snapshot.hasData) {
+                List<String> start = [];
+                List<String> end = [];
+                final snap = snapshot.data!.docs;
+                for (int i = 0; i < snap.length; i++) {
+                  start.add(
+                      convertTo12HourFormat(snap[i]['Time available Start']));
+                  end.add(convertTo12HourFormat(snap[i]['Time available End']));
                 }
-              }),
-        ));
+                return ListView.builder(
+                    shrinkWrap: true,
+                    primary: true,
+                    itemCount: snap.length,
+                    itemBuilder: (context, index) {
+                      final group = snap[index];
+                      return Card(
+                        color: BGColor,
+                        elevation: 2,
+                        child: ListTile(
+                          title: Text(
+                            snap[index]['groupName'],
+                          ),
+                          subtitle: Text(
+                              "Start: ${start[index]}   End: ${end[index]}"),
+                          leading: const Icon(
+                            Icons.diversity_3,
+                            size: 40,
+                          ),
+                          trailing: IconButton(
+                            icon: Icon(Icons.info),
+                            onPressed: () => showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text(snap[index]['groupName']),
+                                    content: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: List<Widget>.generate(
+                                        snap[index]['Subjects'].length,
+                                        (i) => Text(snap[index]['Subjects'][i]),
+                                      ),
+                                    ),
+                                  );
+                                }),
+                          ),
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Group(group)));
+                            // Navigator.pushNamed(context, '/group', arguments: group);
+                          },
+                        ),
+                      );
+                    });
+              } else {
+                return const SizedBox();
+              }
+            }),
+      ),
+    );
   }
 }
 

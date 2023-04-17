@@ -48,7 +48,6 @@ class _OtherDetailsState extends State<OtherDetails> {
     'BSCS',
     'BSEMC',
     'BSIS',
-    'Others',
   ];
   late DateTime _minDate, _maxDate;
 
@@ -395,6 +394,13 @@ class _OtherDetailsState extends State<OtherDetails> {
                     },
                   );
                 } else {
+                  DateTime dob =
+                      DateFormat("MM-dd-yyyy").parse(_bdayController.text);
+                  DateTime now = DateTime.now();
+                  Duration difference = now.difference(dob);
+                  int age = difference.inDays ~/ 365;
+
+                  String ageString = age.toString();
                   // Proceed with the registration process
                   authController.register(
                     _firstName.trim(),
@@ -405,6 +411,7 @@ class _OtherDetailsState extends State<OtherDetails> {
                     genderDropdownValue!,
                     _institutionController.text.trim(),
                     degreeDropdownValue!,
+                    ageString,
                   );
                 }
               },

@@ -17,7 +17,6 @@ class Sched extends StatefulWidget {
 class _SchedState extends State<Sched> {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   Stream? schedStream;
-  
 
   ScheduleService scheduleService = new ScheduleService();
 
@@ -33,8 +32,6 @@ class _SchedState extends State<Sched> {
                   itemBuilder: (context, index) {
                     return SchedTile(
                       title: snapshot.data.docs[index].data()['schedTitle'],
-                      // desc:
-                      //     snapshot.data.docs[index].data()['schedDescription'],
                       schedId: snapshot.data.docs[index].data()['schedId'],
                     );
                   },
@@ -58,50 +55,55 @@ class _SchedState extends State<Sched> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-  stream: firestore.collection('Events/${widget.group['groupName']}/events').snapshots(),
-  builder: (BuildContext context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-    if (snapshot.hasError) {
-      return Center(
-        child: Text('Error: ${snapshot.error}'),
-      );
-    }
+        stream: firestore
+            .collection('Events/${widget.group['groupName']}/events')
+            .snapshots(),
+        builder: (BuildContext context,
+            AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+          if (snapshot.hasError) {
+            return Center(
+              child: Text('Error: ${snapshot.error}'),
+            );
+          }
 
-    if (snapshot.connectionState == ConnectionState.waiting) {
-      return Center(
-        child: CircularProgressIndicator(),
-      );
-    }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
 
-    // Define firstDay and lastDay here
-    DateTime now = DateTime.now();
-    DateTime firstDay = DateTime(now.year, now.month, 1);
-    DateTime lastDay = DateTime(now.year, now.month + 1, 0);
+          // Define firstDay and lastDay here
+          DateTime now = DateTime.now();
+          DateTime firstDay = DateTime(now.year, now.month, 1);
+          DateTime lastDay = DateTime(now.year, now.month + 1, 0);
 
-    final List<Event> events = snapshot.data!.docs.map((document) => Event.fromFirestore(document)).toList();
+          final List<Event> events = snapshot.data!.docs
+              .map((document) => Event.fromFirestore(document))
+              .toList();
 
-    return ListView.builder(
-  itemCount: (events.length / 2).ceil(),
-  itemBuilder: (BuildContext context, int index) {
-    final int eventIndex = index * 2;
-    return Row(
-      children: [
-        Expanded(
-          child: events.length > eventIndex
-              ? _buildEventTile(events[eventIndex])
-              : SizedBox(),
-        ),
-        SizedBox(width: 16),
-        Expanded(
-          child: events.length > eventIndex + 1
-              ? _buildEventTile(events[eventIndex + 1])
-              : SizedBox(),
-        ),
-      ],
-    );
-  },
-);
-  },
-),
+          return ListView.builder(
+            itemCount: (events.length / 2).ceil(),
+            itemBuilder: (BuildContext context, int index) {
+              final int eventIndex = index * 2;
+              return Row(
+                children: [
+                  Expanded(
+                    child: events.length > eventIndex
+                        ? _buildEventTile(events[eventIndex])
+                        : SizedBox(),
+                  ),
+                  SizedBox(width: 16),
+                  Expanded(
+                    child: events.length > eventIndex + 1
+                        ? _buildEventTile(events[eventIndex + 1])
+                        : SizedBox(),
+                  ),
+                ],
+              );
+            },
+          );
+        },
+      ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
@@ -141,12 +143,10 @@ class SchedTile extends StatelessWidget {
             borderRadius: BorderRadius.circular(15),
           ),
           Container(
-            // color: ButtonColor,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
               color: BGColor,
             ),
-            // color: Colors.black26,
             alignment: Alignment.center,
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -160,14 +160,6 @@ class SchedTile extends StatelessWidget {
               const SizedBox(
                 height: 6,
               ),
-
-              // Text(
-              //   desc,
-              //   style: TextStyle(
-              //       color: Colors.black,
-              //       fontSize: 14,
-              //       fontWeight: FontWeight.w400),
-              // )
             ]),
           )
         ],
@@ -178,6 +170,7 @@ class SchedTile extends StatelessWidget {
 
 Widget _buildEventTile(Event event) {
   return Card(
+    color: BGColor,
     margin: EdgeInsets.symmetric(vertical: 8),
     child: Padding(
       padding: EdgeInsets.all(16),

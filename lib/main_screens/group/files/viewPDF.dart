@@ -56,9 +56,11 @@ class ViewPDF extends StatelessWidget {
   PDFDocument document;
   final String fileName;
   // final String average;
-  ViewPDF(this.document, {required this.fileName,
-  //  required this.average
-   });
+  ViewPDF(
+    this.document, {
+    required this.fileName,
+    //  required this.average
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +70,7 @@ class ViewPDF extends StatelessWidget {
           centerTitle: true,
           elevation: 0,
           title: Text(
-            'PDF',
+            fileName,
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,

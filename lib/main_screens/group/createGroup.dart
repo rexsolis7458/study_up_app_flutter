@@ -1,9 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:study_up_app/helper/MultiSelect.dart';
 import 'package:study_up_app/main_screens/group/group_tab.dart';
 import 'package:study_up_app/models/users.dart';
 import 'package:study_up_app/services/database.dart';
 import 'package:intl/intl.dart';
+
+import '../home/home_screen.dart';
 
 class CreateGroup extends StatefulWidget {
   final UserModel? userModel;
@@ -17,23 +21,62 @@ class CreateGroup extends StatefulWidget {
 
 class _CreateGroupState extends State<CreateGroup> {
   TextEditingController groupNameController = TextEditingController();
-  TextEditingController _from = TextEditingController();
-  TextEditingController _to = TextEditingController();
+  final TextEditingController _from = TextEditingController();
+  final TextEditingController _to = TextEditingController();
+
+  List<String> options = [
+    'Prog 1',
+    'Web',
+    'CMP',
+    'Discrete',
+    'Quantitative Methods',
+    'Platform Technologies',
+    'Data Struct',
+    'Net',
+    'OOP',
+    'Operating Systems',
+    'HCI',
+    'Soft Eng',
+    'Apps Dev',
+    'Techno'
+  ];
+  List<String> _selectedValues = [];
 
   final User? user = FirebaseAuth.instance.currentUser;
   final UserModel _currentUser = UserModel();
-  void creatingGroup(BuildContext context, String groupName) async {
-    String? returnString = await Database().createGroup(groupName, user!.uid);
+  void creatingGroup(BuildContext context, String groupName,
+      List<String> selectedValues, String from, String to) async {
+    String? returnString = await Database()
+        .createGroup(groupName, user!.uid, selectedValues, from, to);
 
     if (returnString == "success") {
       // ignore: use_build_context_synchronously
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => GroupTab(),
-          ),
-          (route) => false);
+      // Navigator.pushAndRemoveUntil(
+      //     context,
+      //     MaterialPageRoute(
+      //       builder: (context) => const GroupTab(),
+      //     ),
+      //     (route) => false);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomeScreen()),
+      );
     }
+  }
+
+  String convertToMilitaryTime(String time) {
+    String suffix = time.substring(time.length - 2);
+    List<String> parts = time.substring(0, time.length - 2).split(":");
+    int hour = int.parse(parts[0]);
+    int minute = int.parse(parts[1]);
+
+    if (suffix.toLowerCase() == "pm" && hour != 12) {
+      hour += 12;
+    } else if (suffix.toLowerCase() == "am" && hour == 12) {
+      hour = 0;
+    }
+
+    return "${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}";
   }
 
   @override
@@ -75,10 +118,10 @@ class _CreateGroupState extends State<CreateGroup> {
               ),
               Container(
                 padding: const EdgeInsets.only(left: 30, top: 5, right: 30),
-                child: Text(
+                child: const Text(
                   'Time Available',
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.bold,
                   ),
@@ -87,109 +130,98 @@ class _CreateGroupState extends State<CreateGroup> {
               const SizedBox(
                 height: 20,
               ),
-              Column(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Container(
-                    child: Text(
-                      'From',
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontSize: 15,
-                      ),
+                  Expanded(
+                    child: Column(
+                      children: [
+                        const Text(
+                          'From',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 15,
+                          ),
+                        ),
+                        TextFormField(
+                          controller: _from,
+                          decoration: InputDecoration(
+                            icon: const Icon(Icons.timer),
+                            hintText: "Enter Time",
+                            hintStyle: TextStyle(color: Colors.grey[600]),
+                          ),
+                          readOnly: true,
+                          onTap: () async {
+                            TimeOfDay? pickedTime = await showTimePicker(
+                              initialTime: TimeOfDay.now(),
+                              context: context,
+                            );
+
+                            if (pickedTime != null) {
+                              print(pickedTime.format(context));
+                              DateTime parsedTime = DateFormat.jm()
+                                  .parse(pickedTime.format(context).toString());
+                              print(parsedTime);
+                              String formattedTime =
+                                  DateFormat('hh:mm').format(parsedTime);
+                              String amPm = parsedTime.hour < 12 ? "AM" : "PM";
+                              formattedTime = "$formattedTime $amPm";
+
+                              setState(() {
+                                _from.text = formattedTime;
+                              });
+                            } else {
+                              print("Time is not selected");
+                            }
+                          },
+                        ),
+                      ],
                     ),
                   ),
-                  Container(
-                    padding:
-                        const EdgeInsets.only(left: 120, top: 5, right: 120),
-                    child: TextFormField(
-                      controller: _from,
-                      decoration: InputDecoration(
-                        // labelText: "Date of Birth",
-                        icon: Icon(Icons.timer),
-                        hintText: "Enter Time",
-                        hintStyle: TextStyle(color: Colors.grey[600]),
-                      ),
-                      readOnly:
-                          true, //set it true, so that user will not able to edit text
-                      onTap: () async {
-                        TimeOfDay? pickedTime = await showTimePicker(
-                          initialTime: TimeOfDay.now(),
-                          context: context,
-                        );
+                  const SizedBox(width: 20),
+                  Expanded(
+                    child: Column(
+                      children: [
+                        const Text(
+                          'To',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 15,
+                          ),
+                        ),
+                        TextFormField(
+                          controller: _to,
+                          decoration: InputDecoration(
+                            icon: const Icon(Icons.timer),
+                            hintText: "Enter Time",
+                            hintStyle: TextStyle(color: Colors.grey[600]),
+                          ),
+                          readOnly: true,
+                          onTap: () async {
+                            TimeOfDay? pickedTime = await showTimePicker(
+                              initialTime: TimeOfDay.now(),
+                              context: context,
+                            );
 
-                        if (pickedTime != null) {
-                          print(pickedTime.format(context)); //output 10:51 PM
-                          DateTime parsedTime = DateFormat.jm()
-                              .parse(pickedTime.format(context).toString());
-                          //converting to DateTime so that we can further format on different pattern.
-                          print(parsedTime); //output 1970-01-01 22:53:00.000
-                          String formattedTime =
-                              DateFormat('HH:mm').format(parsedTime);
-                          print(formattedTime); //output 14:59:00
-                          //DateFormat() is from intl package, you can format the time on any pattern you need.
+                            if (pickedTime != null) {
+                              print(pickedTime.format(context));
+                              DateTime parsedTime = DateFormat.jm()
+                                  .parse(pickedTime.format(context).toString());
+                              print(parsedTime);
+                              String formattedTime =
+                                  DateFormat('hh:mm').format(parsedTime);
+                              String amPm = parsedTime.hour < 12 ? "AM" : "PM";
+                              formattedTime = "$formattedTime $amPm";
 
-                          setState(() {
-                            _from.text =
-                                formattedTime; //set the value of text field.
-                          });
-                        } else {
-                          print("Time is not selected");
-                        }
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Column(
-                children: [
-                  Text(
-                    'To',
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 15,
-                    ),
-                  ),
-                  Container(
-                    padding:
-                        const EdgeInsets.only(left: 120, top: 5, right: 120),
-                    child: TextFormField(
-                      controller: _to,
-                      decoration: InputDecoration(
-                        // labelText: "Date of Birth",
-                        icon: Icon(Icons.timer),
-                        hintText: "Enter Time",
-                        hintStyle: TextStyle(color: Colors.grey[600]),
-                      ),
-                      readOnly:
-                          true, //set it true, so that user will not able to edit text
-                      onTap: () async {
-                        TimeOfDay? pickedTime = await showTimePicker(
-                          initialTime: TimeOfDay.now(),
-                          context: context,
-                        );
-
-                        if (pickedTime != null) {
-                          print(pickedTime.format(context)); //output 10:51 PM
-                          DateTime parsedTime = DateFormat.jm()
-                              .parse(pickedTime.format(context).toString());
-                          //converting to DateTime so that we can further format on different pattern.
-                          print(parsedTime); //output 1970-01-01 22:53:00.000
-                          String formattedTime =
-                              DateFormat('HH:mm').format(parsedTime);
-                          print(formattedTime); //output 14:59:00
-                          //DateFormat() is from intl package, you can format the time on any pattern you need.
-
-                          setState(() {
-                            _to.text =
-                                formattedTime; //set the value of text field.
-                          });
-                        } else {
-                          print("Time is not selected");
-                        }
-                      },
+                              setState(() {
+                                _to.text = formattedTime;
+                              });
+                            } else {
+                              print("Time is not selected");
+                            }
+                          },
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -197,6 +229,14 @@ class _CreateGroupState extends State<CreateGroup> {
               const SizedBox(
                 height: 20.0,
               ),
+              MultiSelectDropdown(
+                  options: options,
+                  hintText: 'Select options',
+                  onSelected: (List<String> selectedList) {
+                    setState(() {
+                      _selectedValues = selectedList;
+                    });
+                  }),
               GestureDetector(
                 child: const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 80),
@@ -209,7 +249,73 @@ class _CreateGroupState extends State<CreateGroup> {
                     ),
                   ),
                 ),
-                onTap: () => creatingGroup(context, groupNameController.text),
+                onTap: () async {
+                  // Check if all required fields are filled out
+                  if (groupNameController.text.isEmpty ||
+                      _selectedValues.isEmpty ||
+                      _from.text.isEmpty ||
+                      _to.text.isEmpty) {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text("Missing Information"),
+                          content: const Text(
+                              "Please fill out all required fields."),
+                          actions: [
+                            TextButton(
+                              child: Text("OK"),
+                              onPressed: () {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => HomeScreen()),
+                                );
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  } else {
+                    // Check if the group name already exists
+                    final groupSnapshots = await FirebaseFirestore.instance
+                        .collection('groups')
+                        .where('groupName', isEqualTo: groupNameController.text)
+                        .get();
+                    if (groupSnapshots.docs.isNotEmpty) {
+                      // Group name already exists
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text("Group Name Already Exists"),
+                            content: const Text(
+                                "Please choose a different group name."),
+                            actions: [
+                              TextButton(
+                                child: Text("OK"),
+                                onPressed: () {
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => HomeScreen()),
+                                  );
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    } else {
+                      _from.text = convertToMilitaryTime(_from.text);
+                      _to.text = convertToMilitaryTime(_to.text);
+                      // Group name does not exist, create the group
+                      creatingGroup(context, groupNameController.text,
+                          _selectedValues, _from.text, _to.text);
+                    }
+                  }
+                },
               ),
             ],
           ),

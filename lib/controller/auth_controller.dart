@@ -32,7 +32,6 @@ class AuthController extends GetxController {
   final email = TextEditingController();
   final password = TextEditingController();
 
-
   @override
   // onInit() {
   //   _user.bindStream(auth.onAuthStateChanged);
@@ -65,8 +64,8 @@ class AuthController extends GetxController {
     String birthday,
     String gender,
     String institution,
-     String degree,
-     
+    String degree,
+    String age,
   ) async {
     try {
       UserCredential authResult = await auth.createUserWithEmailAndPassword(
@@ -79,8 +78,9 @@ class AuthController extends GetxController {
         password: password,
         birthday: birthday,
         gender: gender,
-        institution:institution,
-         degree: degree,
+        institution: institution,
+        degree: degree,
+        age: age,
       );
       if (await Database().createNewUser(users)) {
         Get.find<UserController>().user = users;
@@ -120,7 +120,4 @@ class AuthController extends GetxController {
           snackPosition: SnackPosition.BOTTOM);
     }
   }
-
-
-
 }

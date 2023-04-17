@@ -16,6 +16,7 @@ class _ResultsState extends State<Results> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: BGColor,
       body: Container(
         height: MediaQuery.of(context).size.height,
         child: Center(
