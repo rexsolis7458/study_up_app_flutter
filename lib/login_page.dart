@@ -105,8 +105,7 @@ class LoginPage extends GetWidget<AuthController> {
               ),
               GestureDetector(
                 onTap: () async {
-                  final result = await extractInformation();
-                  print(result.data!['result']);
+                 
                   AuthController.instance.login(emailController.text.trim(),
                       passwordController.text.trim());
                 },

@@ -24,6 +24,7 @@ class UserModel {
     this.gender,
     this.institution,
     this.degree,
+    this.age,
   });
 
   UserModel.fromDocumentSnapshot({DocumentSnapshot? doc}) {
