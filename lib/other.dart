@@ -32,11 +32,11 @@ class _OtherDetailsState extends State<OtherDetails> {
   TextEditingController _bdayController = TextEditingController();
   TextEditingController _institutionController = TextEditingController();
 
-  late String genderValue;
-  late String degreeValue;
+  int? genderValue;
+  int? degreeValue;
 
-  String genderDropdownValue = 'Male';
-  String degreeDropdownValue = 'BSIT';
+  String? genderDropdownValue;
+  String? degreeDropdownValue;
   var genderitems = [
     'Male',
     'Female',
@@ -48,6 +48,7 @@ class _OtherDetailsState extends State<OtherDetails> {
     'BSCS',
     'BSEMC',
     'BSIS',
+    'Others',
   ];
   late DateTime _minDate, _maxDate;
 
@@ -61,21 +62,9 @@ class _OtherDetailsState extends State<OtherDetails> {
     _email = widget.email;
     _password = widget.password;
 
-    _bdayController.addListener(_validateFields);
-    _institutionController.addListener(_validateFields);
-
     //   _minDate=DateTime(2020,3,5,9,0,0);
     // _maxDate=DateTime(2020,3,25,9,0,0);
   }
-
-  void _validateFields() {
-    setState(() {
-      _validate = _bdayController.text.trim().isEmpty ||
-          _institutionController.text.trim().isEmpty;
-    });
-  }
-
-  bool _validate = false;
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +122,6 @@ class _OtherDetailsState extends State<OtherDetails> {
                 decoration: InputDecoration(
                   // labelText: "Date of Birth",
                   hintText: "08-18-1998",
-                  errorText: _validate ? 'Date of Birth Can\'t Be Empty' : null,
                   hintStyle: TextStyle(color: Colors.grey[600]),
                   fillColor: Colors.white,
                   filled: true,
@@ -213,13 +201,10 @@ class _OtherDetailsState extends State<OtherDetails> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         DropdownButton(
-                          // Initial Value
-                          value: genderDropdownValue,
-
-                          // Down Arrow Icon
+                          value: genderDropdownValue == ''
+                              ? null
+                              : genderDropdownValue,
                           icon: const Icon(Icons.keyboard_arrow_down),
-
-                          // Array list of items
                           items: genderitems.map((String items) {
                             return DropdownMenuItem(
                               value: items,
@@ -231,21 +216,11 @@ class _OtherDetailsState extends State<OtherDetails> {
                               ),
                             );
                           }).toList(),
-
-                          // After selecting the desired option,it will
-                          // change button value to selected value
                           onChanged: (String? newValue) {
-                            setState(
-                              () {
-                                genderDropdownValue = newValue!;
-                              },
-                            );
-                            validator:
-                            (String value) {
-                              if (value?.isEmpty ?? true) {
-                                return 'Kindly select a gender.';
-                              }
-                            };
+                            setState(() {
+                              genderDropdownValue = newValue!;
+                              genderValue = genderitems.indexOf(newValue!);
+                            });
                           },
                         ),
                       ],
@@ -278,7 +253,6 @@ class _OtherDetailsState extends State<OtherDetails> {
                   ),
                   hintText: "USJR",
                   hintStyle: TextStyle(color: Colors.grey[600]),
-                  errorText: _validate ? 'Institution Can\'t Be Empty' : null,
                 ),
               ),
             ),
@@ -340,17 +314,7 @@ class _OtherDetailsState extends State<OtherDetails> {
                           // After selecting the desired option,it will
                           // change button value to selected value
                           onChanged: (String? newValue) {
-                            setState(
-                              () {
-                                degreeDropdownValue = newValue!;
-                              },
-                            );
-                            validator:
-                            (String value) {
-                              if (value?.isEmpty ?? true) {
-                                return 'Kindly select a degree.';
-                              }
-                            };
+                            degreeDropdownValue = newValue!;
                           },
                         ),
                       ],
@@ -419,9 +383,8 @@ class _OtherDetailsState extends State<OtherDetails> {
                 width: 150,
                 height: 40,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30),
-                  color: _validate ? Colors.grey : ButtonColor,
-                ),
+                    borderRadius: BorderRadius.circular(30),
+                    color: ButtonColor),
                 child: const Center(
                   child: Text(
                     "Sign Up",

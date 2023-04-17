@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:study_up_app/services/response.dart';
 
 class PyService {
-  static const baseURLFlask = 'http://172.29.9.53';
+  static const baseURLFlask = 'http://10.0.2.2:5000/';
   static const headers = {
     'Content-Type': 'application/json',
     'Connection': 'Keep-Alive',

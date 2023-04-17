@@ -64,8 +64,8 @@ class AuthController extends GetxController {
     String birthday,
     String gender,
     String institution,
-    String degree,
-    String age,
+     String degree,
+     
   ) async {
     try {
       UserCredential authResult = await auth.createUserWithEmailAndPassword(
@@ -78,9 +78,8 @@ class AuthController extends GetxController {
         password: password,
         birthday: birthday,
         gender: gender,
-        institution: institution,
-        degree: degree,
-        age: age,
+        institution:institution,
+         degree: degree,
       );
       if (await Database().createNewUser(users)) {
         Get.find<UserController>().user = users;
