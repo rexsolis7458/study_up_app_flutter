@@ -32,6 +32,8 @@ class _SchedState extends State<Sched> {
                   itemBuilder: (context, index) {
                     return SchedTile(
                       title: snapshot.data.docs[index].data()['schedTitle'],
+                      // desc:
+                      //     snapshot.data.docs[index].data()['schedDescription'],
                       schedId: snapshot.data.docs[index].data()['schedId'],
                     );
                   },
@@ -89,13 +91,125 @@ class _SchedState extends State<Sched> {
                 children: [
                   Expanded(
                     child: events.length > eventIndex
-                        ? _buildEventTile(events[eventIndex])
+                        ? GestureDetector(
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    contentPadding: EdgeInsets.only(
+                                      left: 24,
+                                      right: 24,
+                                      top: 16,
+                                    ),
+                                    content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              events[eventIndex].title,
+                                              style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            Text(
+                                              '${events[eventIndex].date.day}/${events[eventIndex].date.month}/${events[eventIndex].date.year}',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.grey[600],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(height: 8),
+                                        Text(
+                                          events[eventIndex].description,
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: Text('OK'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                            child: _buildEventTile(events[eventIndex]),
+                          )
                         : SizedBox(),
                   ),
                   SizedBox(width: 16),
                   Expanded(
                     child: events.length > eventIndex + 1
-                        ? _buildEventTile(events[eventIndex + 1])
+                        ? GestureDetector(
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    contentPadding: EdgeInsets.only(
+                                      left: 24,
+                                      right: 24,
+                                      top: 16,
+                                    ),
+                                    content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              events[eventIndex + 1].title,
+                                              style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            Text(
+                                              '${events[eventIndex + 1].date.day}/${events[eventIndex + 1].date.month}/${events[eventIndex + 1].date.year}',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.grey[600],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(height: 8),
+                                        Text(
+                                          events[eventIndex + 1].description,
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: Text('OK'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                            child: _buildEventTile(events[eventIndex + 1]),
+                          )
                         : SizedBox(),
                   ),
                 ],
@@ -143,10 +257,12 @@ class SchedTile extends StatelessWidget {
             borderRadius: BorderRadius.circular(15),
           ),
           Container(
+            // color: ButtonColor,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
               color: BGColor,
             ),
+            // color: Colors.black26,
             alignment: Alignment.center,
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -170,31 +286,29 @@ class SchedTile extends StatelessWidget {
 
 Widget _buildEventTile(Event event) {
   return Card(
-    color: BGColor,
     margin: EdgeInsets.symmetric(vertical: 8),
     child: Padding(
       padding: EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            event.title,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
+          Center(
+            child: Text(
+              event.title,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
-          SizedBox(height: 8),
-          Text(
-            event.description,
-            style: TextStyle(fontSize: 16),
-          ),
-          SizedBox(height: 8),
-          Text(
-            '${event.date.day}/${event.date.month}/${event.date.year}',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.grey[600],
+          SizedBox(height: 25),
+          Center(
+            child: Text(
+              '${event.date.day}/${event.date.month}/${event.date.year}',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.grey[600],
+              ),
             ),
           ),
         ],

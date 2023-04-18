@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/src/widgets/editable_text.dart';
 import 'package:random_string/random_string.dart';
 import 'package:study_up_app/controller/userController.dart';
 import 'package:study_up_app/models/group.dart';
@@ -19,11 +20,11 @@ class Database {
         "lastname": user.lastname.toString(),
         "email": user.email,
         "profilePicture": user.profilePicture.toString(),
-         "birthday": user.birthday.toString(),
-         "gender": user.gender.toString(),
-         "institution": user.institution.toString(),
-         "degree": user.degree.toString(),
-         "age": user.age.toString(),
+        "birthday": user.birthday.toString(),
+        "gender": user.gender.toString(),
+        "institution": user.institution.toString(),
+        "degree": user.degree.toString(),
+        "age": user.age.toString(),
       });
       return true;
     } catch (e) {
@@ -58,37 +59,9 @@ class Database {
 //       print('Error updating user profile: $error');
 //     }
 //   }
-  Future<String> joinGroupByName(String groupName, String userUid) async {
-  String retVal = "error";
-  List<String> members = [];
 
-  try {
-    // Get the group document reference with the matching group name
-    final groupDocRef = await _firestore.collection("groups").where("groupName", isEqualTo: groupName).limit(1).get();
-    
-    if (groupDocRef.docs.isNotEmpty) {
-      // Add the user to the group members list
-      members.add(userUid);
-      await groupDocRef.docs.first.reference.update({
-        'members': FieldValue.arrayUnion(members),
-      });
-
-      // Update the user's group ID in their user document
-      // Uncomment the following lines if you want to update the user's group ID as well
-      // await _firestore.collection("users").doc(userUid).update({
-      //   'groupId': groupDocRef.docs.first.id,
-      // });
-
-      retVal = "success";
-    } else {
-      print("Group with name $groupName not found.");
-    }
-  } catch (e) {
-    print(e);
-  }
-  return retVal;
-}
- Future<String?> createGroup(String groupName, String userUid, List<String> selectedValues, String from, String to) async {
+  Future<String?> createGroup(String groupName, String userUid,
+      List<String> selectedValues, String from, String to) async {
     String retVal = "error";
     List<String> members = [];
 
@@ -98,7 +71,7 @@ class Database {
         'groupName': groupName,
         'groupLeader': userUid,
         'members': members,
-        'Subjects' : selectedValues,
+        'Subjects': selectedValues,
         'Time available Start': from,
         'Time available End': to,
         'groupCreated': Timestamp.now(),
@@ -126,11 +99,46 @@ class Database {
         'members': FieldValue.arrayUnion(members),
       });
 
-      await _firestore.collection("users").doc(userUid).update({
-        'groupId': groupId,
-      });
+      // await _firestore.collection("users").doc(userUid).update({
+      //   'groupId': groupId,
+      // });
 
       retVal = "success";
+    } catch (e) {
+      print(e);
+    }
+    return retVal;
+  }
+
+  Future<String> joinGroupByName(String groupName, String userUid) async {
+    String retVal = "error";
+    List<String> members = [];
+
+    try {
+      // Get the group document reference with the matching group name
+      final groupDocRef = await _firestore
+          .collection("groups")
+          .where("groupName", isEqualTo: groupName)
+          .limit(1)
+          .get();
+
+      if (groupDocRef.docs.isNotEmpty) {
+        // Add the user to the group members list
+        members.add(userUid);
+        await groupDocRef.docs.first.reference.update({
+          'members': FieldValue.arrayUnion(members),
+        });
+
+        // Update the user's group ID in their user document
+        // Uncomment the following lines if you want to update the user's group ID as well
+        // await _firestore.collection("users").doc(userUid).update({
+        //   'groupId': groupDocRef.docs.first.id,
+        // });
+
+        retVal = "success";
+      } else {
+        print("Group with name $groupName not found.");
+      }
     } catch (e) {
       print(e);
     }
@@ -204,6 +212,39 @@ class DatabaseService {
         .then((_) {
       print("success!");
     });
+  }
+
+  addQuizToFavorites(String quizId, String userId) async {
+    final favoriteCollectionRef =
+        FirebaseFirestore.instance.collection("Favorites").doc(userId);
+
+    final favoriteDoc = await favoriteCollectionRef.get();
+    if (!favoriteDoc.exists) {
+      await favoriteCollectionRef
+          .set({
+            "userId": userId,
+            "quizId": [quizId]
+          })
+          .then((value) => print(
+              "Favorites document created and quiz added to favorites successfully!"))
+          .catchError(
+              (error) => print("Failed to add quiz to favorites: $error"));
+      return;
+    }
+
+    final existingQuizIds = favoriteDoc.data()?["quizId"] ?? [];
+    if (existingQuizIds.contains(quizId)) {
+      print("Quiz is already in favorites");
+      return;
+    }
+
+    final updatedQuizIds = List<String>.from(existingQuizIds)..add(quizId);
+
+    await favoriteCollectionRef
+        .update({"quizId": updatedQuizIds})
+        .then((value) => print("Quiz added to favorites successfully!"))
+        .catchError(
+            (error) => print("Failed to add quiz to favorites: $error"));
   }
 }
 

@@ -85,7 +85,7 @@ class _CommentsPageState extends State<CommentsPage> {
                         .doc(FirebaseAuth.instance.currentUser!.uid)
                         .get();
                     final commenterName =
-                        userDoc['fname'] + ' ' + userDoc['lname'];
+                        userDoc['firstname'] + ' ' + userDoc['lastname'];
                     FirebaseFirestore.instance
                         .collection('posts')
                         .doc(widget.post.id)

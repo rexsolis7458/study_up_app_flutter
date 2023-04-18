@@ -75,7 +75,8 @@ class _QuizFormState extends State<QuizForm> {
           ),
         ),
       ),
-      body: _isLoading
+      body: SingleChildScrollView(
+      child:_isLoading
           ? Container(
               child: Center(
                 child: CircularProgressIndicator(),
@@ -140,6 +141,7 @@ class _QuizFormState extends State<QuizForm> {
                 ),
               ),
             ),
+      ),
     );
   }
 }

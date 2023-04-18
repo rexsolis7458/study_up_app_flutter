@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:study_up_app/models/users.dart';
+
 class EditProfileForm extends StatefulWidget {
   final UserModel user;
   EditProfileForm({required this.user});
