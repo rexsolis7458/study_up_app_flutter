@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:study_up_app/main_screens/group/groupChat/group_video_call.dart';
+import 'package:study_up_app/main_screens/group/groupChat/vidCall.dart';
 import 'package:study_up_app/models/users.dart';
 
 class GroupChat extends StatefulWidget {
@@ -50,7 +51,7 @@ class _GroupChatState extends State<GroupChat> {
         actions: [
           IconButton(
             onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const VideoCallScreen()),
+              MaterialPageRoute(builder: (_) => VideoCall()),
             ),
             icon: const Icon(Icons.video_camera_front),),
         ],

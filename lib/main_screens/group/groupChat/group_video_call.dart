@@ -13,8 +13,8 @@ class _VideoCallScreenState extends State<VideoCallScreen>
 {
   final AgoraClient _client = AgoraClient(agoraConnectionData: AgoraConnectionData(
     appId: '0a8637866ab447e5917d21ab2c681f9c',
-    channelName: 'flutter_study_up',
-    tempToken: '007eJxTYLhscr/8yY2z2VWFN47mn3vn+ILhjRL71Dsze/w1T0zPtbihwGCQaGFmbG5hZpaYZGJinmpqaWieYmSYmGSUbGZhmGaZPCHSMaUhkJGhpaiLlZGBkYEFiEF8JjDJDCZZwKQAQ1pOaUlJalF8cUlpSmV8aQEDAwBQ1CkG',
+    channelName: 'study_up',
+    tempToken: '007eJxTYDjn9SPz5ybOiY36fqWpryT7BWLZvSom5acp/jBTXuFs56/AYJBoYWZsbmFmlphkYmKeamppaJ5iZJiYZJRsZmGYZpmcxeCS0hDIyHD+qzAzIwMjAwsQg/hMYJIZTLKASQ6G4pLSlMr40gIGBgA0NyD1',
   ));
 
   @override
