@@ -91,77 +91,78 @@ class _PostListState extends State<PostList> {
                 List<String> downvotes = post.downvoters;
 
                 return Card(
-                    color: BGColor,
-                    // margin: EdgeInsets.symmetric(vertical: 10.0),
-                    child: Column(
-                        // crossAxisAlignment: CrossAxisAlignment.end,
+                  color: BGColor,
+                  // margin: EdgeInsets.symmetric(vertical: 10.0),
+                  child: Column(
+                    // crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Container(
+                        padding:
+                            const EdgeInsets.only(left: 10, top: 5, right: 30),
+                        width: double.infinity,
+                        child: Text(
+                          post.posterName,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Container(
+                        width: double.infinity,
+                        child: Text(
+                          '     ${post.title}',
+                          textAlign: TextAlign.left,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        width: double.infinity,
+                        child: Text(
+                          post.content,
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Container(
-                            padding: const EdgeInsets.only(
-                                left: 10, top: 5, right: 30),
-                            width: double.infinity,
-                            child: Text(
-                              post.posterName,
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          Container(
-                            width: double.infinity,
-                            child: Text(
-                              '     ${post.title}',
-                              textAlign: TextAlign.left,
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            width: double.infinity,
-                            child: Text(
-                              post.content,
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Row(
-                                children: [
-                                  IconButton(
-                                    onPressed: () => upvotePost(post.id),
-                                    icon: const Icon(Icons.arrow_upward),
+                              IconButton(
+                                onPressed: () => upvotePost(post.id),
+                                icon: const Icon(Icons.arrow_upward),
+                              ),
+                              Text('(${post.upvoters.length})'),
+                              IconButton(
+                                onPressed: () => downvotePost(post.id),
+                                icon: const Icon(Icons.arrow_downward),
+                              ),
+                              Text('(${post.downvoters.length})'),
+                              Padding(
+                                padding: const EdgeInsets.only(right: 10.0),
+                                child: SizedBox(
+                                  width: 180,
+                                  height: 40,
+                                  child: TextButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              CommentsPage(post: post),
+                                        ),
+                                      );
+                                    },
+                                    child: const Text('Comment'),
                                   ),
-                                  Text('(${post.upvoters.length})'),
-                                  IconButton(
-                                    onPressed: () => downvotePost(post.id),
-                                    icon: const Icon(Icons.arrow_downward),
-                                  ),
-                                  Text('(${post.downvoters.length})'),
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 10.0),
-                                    child: SizedBox(
-                                      width: 180,
-                                      height: 40,
-                                      child: TextButton(
-                                        onPressed: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  CommentsPage(post: post),
-                                            ),
-                                          );
-                                        },
-                                        child: const Text('Comment'),
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                                ),
                               ),
                             ],
                           ),
-                        ]));
+                        ],
+                      ),
+                    ],
+                  ),
+                );
               },
             );
           },

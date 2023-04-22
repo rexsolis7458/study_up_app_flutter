@@ -4,6 +4,8 @@ import 'package:study_up_app/helper/const.dart';
 import 'package:study_up_app/main_screens/group/group_tab.dart';
 import 'package:study_up_app/main_screens/profile/profile_tab.dart';
 
+import 'home_tab.dart';
+
 class HomeScreen extends StatefulWidget {
   final String? currentUserId;
 
@@ -21,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: [
-        // HomeTab(),
+        HomeTab(),
         // SearchTab(
         //   currentUserId: widget.currentUserId,
         // ),
@@ -41,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
         activeColor: MainColor,
         currentIndex: _selectedTab,
         items: [
-          // BottomNavigationBarItem(icon: Icon(Icons.home)),
+          BottomNavigationBarItem(icon: Icon(Icons.home)),
           // BottomNavigationBarItem(icon: Icon(Icons.search)),
           BottomNavigationBarItem(icon: Icon(Icons.group)),
           BottomNavigationBarItem(icon: Icon(Icons.person)),
