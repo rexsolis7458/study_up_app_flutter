@@ -78,7 +78,7 @@ class HomeTab extends GetWidget<AuthController> {
                 //   ),
                 // ),
                 Container(
-                  height: size.height * 5 - 2,
+                  height: size.height * 5 - 5,
                   decoration: BoxDecoration(
                     color: MainColor,
                     borderRadius: BorderRadius.only(
