@@ -1,4 +1,4 @@
-const appId = '0a8637866ab447e5917d21ab2c681f9c';
-const channgeId = "capstone";
+const appID = '0a8637866ab447e5917d21ab2c681f9c';
+const channelId = "study_up_app";
 const token =
-    "007eJxTYEgSLbKp71ta9ejQ9Dnpm1KfbFxXE3fwb0v7+a3lj3MX6bsqMBgkWpgZm1uYmSUmmZiYp5paGpqnGBkmJhklm1kYplkmv+RzSWkIZGRQeKrGysjAyMACxCA+E5hkBpMsYJKDITmxoLgkPy+VgQEAyywk9g==";
+    "007eJxTYHj1JX2xQrjgW5Zprw5/Y/ow9fLuLZnxChouz61KnQT16xMUGAwSLcyMzS3MzBKTTEzMU00tDc1TjAwTk4ySzSwM0yyTj4u6pjQEMjKIm2xlYARCFiAG8ZnAJDOYZAGTPAzFJaUplfGlBfGJBQUMDACK7SQx";

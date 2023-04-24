@@ -1,9 +1,7 @@
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:study_up_app/helper/settings.dart';
-import 'package:study_up_app/main_screens/group/groupChat/groupChat.dart';
 import 'package:study_up_app/main_screens/group/group_tab.dart';
 import 'package:wakelock/wakelock.dart';
 
@@ -17,6 +15,7 @@ class CallController extends GetxController {
   RxBool reConnectingRemoteView = false.obs;
   RxBool isFront = false.obs;
   late RtcEngine engine;
+  List<int> remoteUids = [];
 
   @override
   void onInit() {
@@ -53,7 +52,7 @@ class CallController extends GetxController {
       await engine.leaveChannel();
       await engine.joinChannel(
         token: token,
-        channelId: channgeId,
+        channelId: channelId,
         uid: 0,
         options: const ChannelMediaOptions(),
       );
@@ -64,7 +63,7 @@ class CallController extends GetxController {
   Future<void> _initAgoraRtcEngine() async {
     engine = createAgoraRtcEngine();
     await engine.initialize(const RtcEngineContext(
-      appId: appId,
+      appId: appID,
       channelProfile: ChannelProfileType.channelProfileLiveBroadcasting,
     ));
     await engine.enableVideo();
@@ -81,19 +80,17 @@ class CallController extends GetxController {
           },
           onUserJoined: (RtcConnection connection, int remoteUid, int elapsed) {
             localUserJoined.value = true;
-            myremoteUid.value = remoteUid;
+            remoteUids.add(remoteUid);
             update();
           },
           onUserOffline: (RtcConnection connection, int remoteUid,
               UserOfflineReasonType reason) {
             if (reason == UserOfflineReasonType.userOfflineDropped) {
               Wakelock.disable();
-              myremoteUid.value = 0;
-              onCallEnd();
+              remoteUids.remove(remoteUid);
               update();
             } else {
-              myremoteUid.value = 0;
-              onCallEnd();
+              remoteUids.remove(remoteUid);
               update();
             }
           },
