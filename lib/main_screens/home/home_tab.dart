@@ -63,21 +63,22 @@ class HomeTab extends GetWidget<AuthController> {
           ),
         ),
         body: Column(children: <Widget>[
-          const Text(
-            'Study Up',
-            style: const TextStyle(
-              color: SecondaryColor,
-              fontSize: 40,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
           Container(
             margin: EdgeInsets.only(bottom: 10),
             height: size.height * 0.4,
             child: Stack(
               children: <Widget>[
+                // Text(
+                //   'Study Up',
+                //   style: const TextStyle(
+                //     backgroundColor: MainColor,
+                //     color: SecondaryColor,
+                //     fontSize: 40,
+                //     fontWeight: FontWeight.bold,
+                //   ),
+                // ),
                 Container(
-                  height: size.height * 10 - 2,
+                  height: size.height * 5 - 2,
                   decoration: BoxDecoration(
                     color: MainColor,
                     borderRadius: BorderRadius.only(
@@ -86,41 +87,45 @@ class HomeTab extends GetWidget<AuthController> {
                     ),
                   ),
                 ),
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 16.0),
-                    height: 54,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            offset: Offset(0, 1),
-                            blurRadius: 80,
-                            //color: whitewithOpacity(0,23),
-                          )
-                        ]),
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: TextField(
-                            onChanged: (value) {},
-                            decoration: InputDecoration(
-                              hintText: "Search",
-                              hintStyle: TextStyle(
-                                  color: Colors.black.withOpacity(0.3)),
-                              enabledBorder: InputBorder.none,
-                              focusedBorder: InputBorder.none,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                // Positioned(
+                //   bottom: 0,
+                //   left: 0,
+                //   right: 0,
+                //   child: Container(
+                //     margin: EdgeInsets.symmetric(horizontal: 16.0),
+                //     height: 54,
+                //     decoration: BoxDecoration(
+                //         color: Colors.white,
+                //         borderRadius: BorderRadius.circular(20),
+                //         boxShadow: [
+                //           BoxShadow(
+                //             offset: Offset(0, 1),
+                //             blurRadius: 80,
+                //             //color: whitewithOpacity(0,23),
+                //           )
+                //         ]),
+                //     child: Column(
+                //       children: [
+                //         Column(
+                //           children: <Widget>[
+                //             Expanded(
+                //               child: TextField(
+                //                 onChanged: (value) {},
+                //                 decoration: InputDecoration(
+                //                   hintText: "Search",
+                //                   hintStyle: TextStyle(
+                //                       color: Colors.black.withOpacity(0.3)),
+                //                   enabledBorder: InputBorder.none,
+                //                   focusedBorder: InputBorder.none,
+                //                 ),
+                //               ),
+                //             ),
+                //           ],
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),
@@ -274,3 +279,12 @@ class HomeTab extends GetWidget<AuthController> {
 //                         height: 100,
 //                         child: Text('My File'),
 //                       ),
+//  const Text(
+//             'Study Up',
+//             style: const TextStyle(
+//               backgroundColor: MainColor,
+//               color: SecondaryColor,
+//               fontSize: 40,
+//               fontWeight: FontWeight.bold,
+//             ),
+//           ),
