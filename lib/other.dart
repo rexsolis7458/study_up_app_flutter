@@ -219,7 +219,7 @@ class _OtherDetailsState extends State<OtherDetails> {
                           onChanged: (String? newValue) {
                             setState(() {
                               genderDropdownValue = newValue!;
-                              genderValue = genderitems.indexOf(newValue!);
+                              genderValue = genderitems.indexOf(newValue);
                             });
                           },
                         ),

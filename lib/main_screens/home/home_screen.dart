@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:study_up_app/helper/const.dart';
+import 'package:study_up_app/main_screens/group/groupList.dart';
 import 'package:study_up_app/main_screens/group/group_tab.dart';
 import 'package:study_up_app/main_screens/profile/profile_tab.dart';
 
@@ -25,6 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
         // SearchTab(
         //   currentUserId: widget.currentUserId,
         // ),
+        // GroupRecommendationPage(),
         GroupTab(
           // distanceBetween: 0, subChildren: [],
           currentUserId: widget.currentUserId,
