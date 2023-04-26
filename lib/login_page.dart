@@ -27,9 +27,9 @@ class LoginPage extends GetWidget<AuthController> {
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: MainColor,
+        backgroundColor: BGColor,
         appBar: AppBar(
-          backgroundColor: MainColor,
+          backgroundColor: BGColor,
           centerTitle: true,
           elevation: 0,
           title: const Text(

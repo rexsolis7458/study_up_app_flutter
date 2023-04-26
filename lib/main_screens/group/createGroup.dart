@@ -24,22 +24,26 @@ class _CreateGroupState extends State<CreateGroup> {
   final TextEditingController _from = TextEditingController();
   final TextEditingController _to = TextEditingController();
 
-  List<String> options = [
-    'Prog 1',
-    'Web',
-    'CMP',
-    'Discrete',
-    'Quantitative Methods',
-    'Platform Technologies',
-    'Data Struct',
-    'Net',
-    'OOP',
-    'Operating Systems',
-    'HCI',
-    'Soft Eng',
-    'Apps Dev',
-    'Techno'
-  ];
+  List<String> _subjectItems = [];
+  List<String> _selectedSubjects = [];
+
+  // List<String> options = [
+  //   'Prog 1',
+  //   'Web',
+  //   'CMP',
+  //   'Discrete',
+  //   'Quantitative Methods',
+  //   'Platform Technologies',
+  //   'Data Struct',
+  //   'Net',
+  //   'OOP',
+  //   'Operating Systems',
+  //   'HCI',
+  //   'Soft Eng',
+  //   'Apps Dev',
+  //   'Techno'
+  // ];
+
   List<String> _selectedValues = [];
 
   final User? user = FirebaseAuth.instance.currentUser;
@@ -50,13 +54,6 @@ class _CreateGroupState extends State<CreateGroup> {
         .createGroup(groupName, user!.uid, selectedValues, from, to);
 
     if (returnString == "success") {
-      // ignore: use_build_context_synchronously
-      // Navigator.pushAndRemoveUntil(
-      //     context,
-      //     MaterialPageRoute(
-      //       builder: (context) => const GroupTab(),
-      //     ),
-      //     (route) => false);
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => HomeScreen()),
@@ -79,11 +76,30 @@ class _CreateGroupState extends State<CreateGroup> {
     return "${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}";
   }
 
+  Future<void> getSubjectsFromFirestore() async {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('Subjects')
+          .limit(1)
+          .get();
+      if (querySnapshot.docs.isNotEmpty) {
+        setState(() {
+          _subjectItems = List<String>.from(querySnapshot.docs.first['items']);
+        });
+      } else {
+        print('No documents found in the collection');
+      }
+    } catch (error) {
+      print("Error fetching subjects collection: $error");
+    }
+  }
+
   @override
   void initState() {
     _from.text = "";
     _to.text = "";
     super.initState();
+    getSubjectsFromFirestore();
   }
 
   @override
@@ -230,13 +246,14 @@ class _CreateGroupState extends State<CreateGroup> {
                 height: 20.0,
               ),
               MultiSelectDropdown(
-                  options: options,
-                  hintText: 'Select options',
-                  onSelected: (List<String> selectedList) {
-                    setState(() {
-                      _selectedValues = selectedList;
-                    });
-                  }),
+  options: _subjectItems,
+  hintText: 'Select options',
+  onSelected: (List<String> selectedList) {
+    setState(() {
+      _selectedSubjects = selectedList;
+    });
+  },
+),
               GestureDetector(
                 child: const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 80),
@@ -319,7 +336,6 @@ class _CreateGroupState extends State<CreateGroup> {
               ),
             ],
           ),
-          // )
         ),
         const Spacer(),
       ],

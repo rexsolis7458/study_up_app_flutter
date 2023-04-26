@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
@@ -35,7 +36,6 @@ class _SignUpPageState extends State<SignUpPage> {
   UserModel userModel = UserModel();
 
   bool _validate = false;
-
   void initState() {
     super.initState();
     _firstNameController.addListener(_validateFields);
@@ -59,9 +59,9 @@ class _SignUpPageState extends State<SignUpPage> {
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: MainColor,
+        backgroundColor: BGColor,
         appBar: AppBar(
-          backgroundColor: MainColor,
+          backgroundColor: BGColor,
           centerTitle: true,
           elevation: 0,
           title: const Text(
@@ -88,9 +88,9 @@ class _SignUpPageState extends State<SignUpPage> {
                 height: 10,
               ),
 
-              Text(
+              const Text(
                 'PERSONAL INFORMATION',
-                style: const TextStyle(
+                style: TextStyle(
                   color: Colors.white,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -102,7 +102,7 @@ class _SignUpPageState extends State<SignUpPage> {
               Container(
                 padding: const EdgeInsets.only(left: 30, top: 5, right: 30),
                 alignment: Alignment.topLeft,
-                child: Text(
+                child: const Text(
                   'First Name',
                   textAlign: TextAlign.start,
                 ),
@@ -119,7 +119,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       borderSide: const BorderSide(width: 3),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    hintText: "Joshua Angelo",
+                    hintText: "First Name",
                     hintStyle: TextStyle(color: Colors.grey[600]),
                     errorText: _validate ? 'First Name Can\'t Be Empty' : null,
                   ),
@@ -131,7 +131,7 @@ class _SignUpPageState extends State<SignUpPage> {
               Container(
                 padding: const EdgeInsets.only(left: 30, top: 5, right: 30),
                 alignment: Alignment.topLeft,
-                child: Text(
+                child: const Text(
                   'Last Name',
                   textAlign: TextAlign.start,
                 ),
@@ -147,7 +147,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       borderSide: const BorderSide(width: 3),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    hintText: "Alemania",
+                    hintText: "Surname",
                     hintStyle: TextStyle(color: Colors.grey[600]),
                     errorText: _validate ? 'Last Name Can\'t Be Empty' : null,
                   ),
@@ -159,7 +159,7 @@ class _SignUpPageState extends State<SignUpPage> {
               Container(
                 padding: const EdgeInsets.only(left: 30, top: 5, right: 30),
                 alignment: Alignment.topLeft,
-                child: Text(
+                child: const Text(
                   'Email',
                   textAlign: TextAlign.start,
                 ),
@@ -175,7 +175,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       borderSide: const BorderSide(width: 3),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    hintText: "joshuaangelo.alemania.20@usjr.edu.ph",
+                    hintText: "email@gmail.com",
                     hintStyle: TextStyle(color: Colors.grey[600]),
                     errorText: _validate ? 'Email Can\'t Be Empty' : null,
                   ),
@@ -187,7 +187,7 @@ class _SignUpPageState extends State<SignUpPage> {
               Container(
                 padding: const EdgeInsets.only(left: 30, top: 5, right: 30),
                 alignment: Alignment.topLeft,
-                child: Text(
+                child: const Text(
                   'Password',
                   textAlign: TextAlign.start,
                 ),
@@ -218,65 +218,94 @@ class _SignUpPageState extends State<SignUpPage> {
                 child: Container(),
               ),
               GestureDetector(
-                onTap: () async {
-                  bool isEmpty = _firstNameController.text.trim().isEmpty ||
-                      _lastNameController.text.trim().isEmpty ||
-                      _emailController.text.trim().isEmpty ||
-                      _passwordController.text.trim().isEmpty;
+  onTap: () async {
+    bool isEmpty = _firstNameController.text.trim().isEmpty ||
+        _lastNameController.text.trim().isEmpty ||
+        _emailController.text.trim().isEmpty ||
+        _passwordController.text.trim().isEmpty;
 
-                  setState(() {
-                    _validate = isEmpty;
-                  });
-// Show a warning message that some data is missing
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: const Text('Missing Data'),
-                        content: const Text(
-                            'Please fill in all the required fields.'),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () => Navigator.of(context).pop(),
-                            child: const Text('OK'),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                  if (!isEmpty) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => OtherDetails(
-                          _firstNameController.text.trim(),
-                          _lastNameController.text.trim(),
-                          _emailController.text.trim(),
-                          _passwordController.text.trim(),
-                        ),
-                      ),
-                    );
-                  }
-                },
-                child: Container(
-                  width: 150,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    color: _validate ? Colors.grey : ButtonColor,
-                  ),
-                  child: Center(
-                    child: Text(
-                      "Next",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
+    setState(() {
+      _validate = isEmpty;
+    });
+
+    if (!isEmpty) {
+      final userEmail =  _emailController.text.trim();
+
+      if (!userEmail.contains('@')) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("Invalid email address"),
+              content: Text("The email address you entered is invalid. Please enter a valid email address."),
+              actions: [
+                TextButton(
+                  child: Text("OK"),
+                  onPressed: () => Navigator.of(context).pop(),
                 ),
+              ],
+            );
+          },
+        );
+      } else {
+        final userSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .where('email', isEqualTo: userEmail)
+          .get();
+
+        bool emailExists = userSnapshot.docs.isNotEmpty;
+
+        if (emailExists) {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text("Email already exists"),
+                content: Text("The email you entered already exists. Please enter a different email."),
+                actions: [
+                  TextButton(
+                    child: Text("OK"),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                ],
+              );
+            },
+          );
+        } else {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => OtherDetails(
+                _firstNameController.text.trim(),
+                _lastNameController.text.trim(),
+                _emailController.text.trim(),
+                _passwordController.text.trim(),
               ),
+            ),
+          );
+        }
+      }
+    }
+  },
+  child: Container(
+    width: 150,
+    height: 40,
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(30),
+      color: _validate ? Colors.grey : ButtonColor,
+    ),
+    child: const Center(
+      child: Text(
+        "Next",
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+        ),
+      ),
+    ),
+  ),
+),
               const SizedBox(
                 height: 30,
               ),
@@ -284,7 +313,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 text: TextSpan(
                   recognizer: TapGestureRecognizer()..onTap = () => Get.back(),
                   text: "Have an account already?",
-                  style: TextStyle(fontSize: 20, color: Colors.black54),
+                  style: const TextStyle(fontSize: 20, color: Colors.black54),
                 ),
               ),
               const SizedBox(
