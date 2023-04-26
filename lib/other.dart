@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -32,24 +33,22 @@ class _OtherDetailsState extends State<OtherDetails> {
   TextEditingController _bdayController = TextEditingController();
   TextEditingController _institutionController = TextEditingController();
 
-  int? genderValue;
+  // int? genderValue;
   int? degreeValue;
+  int genderValue = -1;
 
-  String? genderDropdownValue;
+  String? genderDropdownValue = '';
   String? degreeDropdownValue;
-  var genderitems = [
-    'Male',
-    'Female',
-    'Others',
-  ];
+  List<String> genderitems = [];
+  List<String> degreeitems = [];
 
-  var degreeitems = [
-    'BSIT',
-    'BSCS',
-    'BSEMC',
-    'BSIS',
-    'Others',
-  ];
+  // var degreeitems = [
+  //   'BSIT',
+  //   'BSCS',
+  //   'BSEMC',
+  //   'BSIS',
+  //   'Others',
+  // ];
   late DateTime _minDate, _maxDate;
 
   DateTime today = DateTime.now();
@@ -61,18 +60,52 @@ class _OtherDetailsState extends State<OtherDetails> {
     _lastName = widget.lastName;
     _email = widget.email;
     _password = widget.password;
-
+    getGendersFromFirestore();
+    getDegreesFromFirestore();
     //   _minDate=DateTime(2020,3,5,9,0,0);
     // _maxDate=DateTime(2020,3,25,9,0,0);
+  }
+
+  Future<void> getGendersFromFirestore() async {
+    FirebaseFirestore.instance
+        .collection('Gender')
+        .limit(1)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      if (querySnapshot.docs.isNotEmpty) {
+        setState(() {
+          genderitems = List<String>.from(querySnapshot.docs.first['Gender']);
+        });
+      } else {
+        print('No documents found in the collection');
+      }
+    }).catchError((error) => print("Error fetching gender collection: $error"));
+  }
+
+  Future<void> getDegreesFromFirestore() async {
+    try {
+      final querySnapshot =
+          await FirebaseFirestore.instance.collection('Degree').limit(1).get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        setState(() {
+          degreeitems = List<String>.from(querySnapshot.docs.first['items']);
+        });
+      } else {
+        print('No documents found in the collection');
+      }
+    } catch (error) {
+      print('Error fetching degrees collection: $error');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: MainColor,
+      backgroundColor: BGColor,
       appBar: AppBar(
-        backgroundColor: MainColor,
+        backgroundColor: BGColor,
         centerTitle: true,
         elevation: 0,
         title: const Text(
@@ -179,10 +212,9 @@ class _OtherDetailsState extends State<OtherDetails> {
               padding: const EdgeInsets.only(left: 30, top: 5, right: 30),
               child: Container(
                 decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(
-                      10,
-                    )),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
                 child: Row(
                   children: [
                     Padding(
@@ -219,7 +251,7 @@ class _OtherDetailsState extends State<OtherDetails> {
                           onChanged: (String? newValue) {
                             setState(() {
                               genderDropdownValue = newValue!;
-                              genderValue = genderitems.indexOf(newValue);
+                              genderValue = genderitems.indexOf(newValue!);
                             });
                           },
                         ),
@@ -300,11 +332,11 @@ class _OtherDetailsState extends State<OtherDetails> {
                           icon: const Icon(Icons.keyboard_arrow_down),
 
                           // Array list of items
-                          items: degreeitems.map((String items) {
+                          items: degreeitems.map((String item) {
                             return DropdownMenuItem(
-                              value: items,
+                              value: item,
                               child: Text(
-                                items,
+                                item,
                                 style: TextStyle(
                                   color: Colors.black54,
                                 ),
@@ -314,7 +346,9 @@ class _OtherDetailsState extends State<OtherDetails> {
                           // After selecting the desired option,it will
                           // change button value to selected value
                           onChanged: (String? newValue) {
-                            degreeDropdownValue = newValue!;
+                            setState(() {
+                              degreeDropdownValue = newValue!;
+                            });
                           },
                         ),
                       ],
