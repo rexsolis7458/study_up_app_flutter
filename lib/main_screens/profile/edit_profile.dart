@@ -29,10 +29,10 @@ class _EditProfileFormState extends State<EditProfileForm> {
 
       final dataToUpdate = <String, dynamic>{};
       if (_fname.isNotEmpty) {
-        dataToUpdate['fname'] = _fname;
+        dataToUpdate['firstname'] = _fname;
       }
       if (_lname.isNotEmpty) {
-        dataToUpdate['lname'] = _lname;
+        dataToUpdate['lastname'] = _lname;
       }
       if (_email.isNotEmpty) {
         dataToUpdate['email'] = _email;
@@ -87,8 +87,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
                     decoration: InputDecoration(
                       labelText: 'First Name',
                     ),
-                    validator: (value) {
-                    },
+                    validator: (value) {},
                     onSaved: (value) {
                       _fname = value!;
                     },
@@ -99,8 +98,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
                     decoration: InputDecoration(
                       labelText: 'Last Name',
                     ),
-                    validator: (value) {
-                    },
+                    validator: (value) {},
                     onSaved: (value) {
                       _lname = value!;
                     },
@@ -111,8 +109,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
                     decoration: InputDecoration(
                       labelText: 'Email',
                     ),
-                    validator: (value) {
-                    },
+                    validator: (value) {},
                     onSaved: (value) {
                       _email = value!;
                     },
