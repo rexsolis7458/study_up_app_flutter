@@ -269,7 +269,7 @@ class _CreateGroupState extends State<CreateGroup> {
                 onTap: () async {
                   // Check if all required fields are filled out
                   if (groupNameController.text.isEmpty ||
-                      _selectedValues.isEmpty ||
+                      _selectedSubjects.isEmpty ||
                       _from.text.isEmpty ||
                       _to.text.isEmpty) {
                     showDialog(
@@ -302,6 +302,7 @@ class _CreateGroupState extends State<CreateGroup> {
                         .get();
                     if (groupSnapshots.docs.isNotEmpty) {
                       // Group name already exists
+                      // ignore: use_build_context_synchronously
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
@@ -311,7 +312,7 @@ class _CreateGroupState extends State<CreateGroup> {
                                 "Please choose a different group name."),
                             actions: [
                               TextButton(
-                                child: Text("OK"),
+                                child: const Text("OK"),
                                 onPressed: () {
                                   Navigator.pushReplacement(
                                     context,
@@ -329,7 +330,7 @@ class _CreateGroupState extends State<CreateGroup> {
                       _to.text = convertToMilitaryTime(_to.text);
                       // Group name does not exist, create the group
                       creatingGroup(context, groupNameController.text,
-                          _selectedValues, _from.text, _to.text);
+                          _selectedSubjects, _from.text, _to.text);
                     }
                   }
                 },
