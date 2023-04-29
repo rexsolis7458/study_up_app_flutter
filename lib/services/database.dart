@@ -157,7 +157,7 @@ Future<String?> createGroup(String groupName, String userUid,
       DocumentSnapshot doc =
           await _firestore.collection('groups').doc(groupId).get();
 
-      return GroupModel.fromDocumentSnapshot(doc: doc);
+      return GroupModel.fromDocumentSnapshot(doc);
     } catch (e) {
       print(e);
       rethrow;

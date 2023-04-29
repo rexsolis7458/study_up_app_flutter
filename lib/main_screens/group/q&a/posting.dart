@@ -26,6 +26,7 @@ class _PostPostState extends State<PostPost> {
         .collection('Post/${widget.group['groupName']}/posts')
         .add({
       'posterName': posterName,
+      'groupId': widget.group.id,
       'title': _titleController.text.trim(),
       'content': _contentController.text.trim(),
       'authorId': FirebaseAuth.instance.currentUser!.uid,
