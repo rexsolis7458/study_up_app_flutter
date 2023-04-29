@@ -4,6 +4,7 @@ import 'package:study_up_app/helper/const.dart';
 import 'package:study_up_app/main_screens/group/groupList.dart';
 import 'package:study_up_app/main_screens/group/group_tab.dart';
 import 'package:study_up_app/main_screens/profile/profile_tab.dart';
+import 'package:study_up_app/main_screens/search_tab.dart';
 
 import 'home_tab.dart';
 
@@ -28,6 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
         // SearchTab(
         //   currentUserId: widget.currentUserId,
         // ),
+        const AllPost(),
         // GroupRecommendationPage(),
         GroupTab(
           // distanceBetween: 0, subChildren: [],
@@ -46,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
         currentIndex: _selectedTab,
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home)),
-          // BottomNavigationBarItem(icon: Icon(Icons.search)),
+          BottomNavigationBarItem(icon: Icon(Icons.search)),
           BottomNavigationBarItem(icon: Icon(Icons.group)),
           BottomNavigationBarItem(icon: Icon(Icons.person)),
         ],

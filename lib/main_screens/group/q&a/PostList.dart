@@ -72,11 +72,11 @@ class _PostListState extends State<PostList> {
               .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             }
 
             if (snapshot.hasError) {
-              return Center(child: Text('Failed to load posts'));
+              return const Center(child: Text('Failed to load posts'));
             }
 
             final posts = snapshot.data!.docs

@@ -329,6 +329,7 @@ class _CreateGroupState extends State<CreateGroup> {
                       _from.text = convertToMilitaryTime(_from.text);
                       _to.text = convertToMilitaryTime(_to.text);
                       // Group name does not exist, create the group
+                      // ignore: use_build_context_synchronously
                       creatingGroup(context, groupNameController.text,
                           _selectedSubjects, _from.text, _to.text);
                     }
