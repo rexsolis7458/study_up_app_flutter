@@ -7,9 +7,7 @@ import 'package:study_up_app/controller/auth_controller.dart';
 import 'package:study_up_app/controller/bindings/authBinding.dart';
 import 'package:study_up_app/controller/userController.dart';
 import 'package:study_up_app/helper/const.dart';
-import 'package:study_up_app/provider/event_provider.dart';
 import 'package:study_up_app/sign_up.dart';
-
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -95,14 +93,13 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
-  Widget build(BuildContext context) => ChangeNotifierProvider(
-      create: (context) => EventProvider(),
-      // Get.lazyPut(() => UserController(), tag: "User Controller");
-      child: GetMaterialApp(
+  Widget build(BuildContext context) => 
+    GetMaterialApp(
         debugShowCheckedModeBanner: false,
         initialBinding: AuthBinding(),
         title: 'Study Up',
         theme: ThemeData(
+          fontFamily: 'GlacialIndifference',
           colorScheme: ColorScheme(
             brightness: Brightness.light,
             primary: MainColor,
@@ -117,9 +114,8 @@ class MyApp extends StatelessWidget {
             onSurface: Colors.black,
           ),
         ),
-        home:  SignUpPage(),
-      ));
-
+        home: SignUpPage(),
+      );
 }
 
 Widget roundedButton(BuildContext context, String label) {

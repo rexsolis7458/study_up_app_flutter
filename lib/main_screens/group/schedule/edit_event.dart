@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../../../helper/const.dart';
-import '../../../services/event.dart';
+import 'event.dart';
 
 class EditEvent extends StatefulWidget {
   final DateTime firstDate;

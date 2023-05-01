@@ -24,6 +24,18 @@ class _UserQuestionState extends State<UserQuestion> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: MainColor,
+        centerTitle: true,
+        elevation: 0,
+        title: const Text(
+          'Register',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream: firestore
             .collectionGroup('posts')
@@ -108,7 +120,6 @@ class _UserQuestionState extends State<UserQuestion> {
               },
             );
           } else {
-            // Handle other ConnectionState values (e.g. waiting, done)
             return Container();
           }
         },

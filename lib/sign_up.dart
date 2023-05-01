@@ -12,7 +12,7 @@ import 'controller/auth_controller.dart';
 import 'helper/const.dart';
 import 'package:intl/intl.dart';
 
-import 'other.dart';
+import 'otherDetails.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -80,18 +80,13 @@ class _SignUpPageState extends State<SignUpPage> {
               const SizedBox(
                 height: 15,
               ),
-              // const CircleAvatar(
-              //   backgroundImage: AssetImage('assets/logo.png'),
-              //   radius: 40,
-              // ),
               const SizedBox(
                 height: 10,
               ),
-
               const Text(
                 'PERSONAL INFORMATION',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: MainColor,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
@@ -107,7 +102,6 @@ class _SignUpPageState extends State<SignUpPage> {
                   textAlign: TextAlign.start,
                 ),
               ),
-
               Padding(
                 padding: const EdgeInsets.only(left: 30, top: 5, right: 30),
                 child: TextField(
@@ -218,94 +212,96 @@ class _SignUpPageState extends State<SignUpPage> {
                 child: Container(),
               ),
               GestureDetector(
-  onTap: () async {
-    bool isEmpty = _firstNameController.text.trim().isEmpty ||
-        _lastNameController.text.trim().isEmpty ||
-        _emailController.text.trim().isEmpty ||
-        _passwordController.text.trim().isEmpty;
+                onTap: () async {
+                  bool isEmpty = _firstNameController.text.trim().isEmpty ||
+                      _lastNameController.text.trim().isEmpty ||
+                      _emailController.text.trim().isEmpty ||
+                      _passwordController.text.trim().isEmpty;
 
-    setState(() {
-      _validate = isEmpty;
-    });
+                  setState(() {
+                    _validate = isEmpty;
+                  });
 
-    if (!isEmpty) {
-      final userEmail =  _emailController.text.trim();
+                  if (!isEmpty) {
+                    final userEmail = _emailController.text.trim();
 
-      if (!userEmail.contains('@')) {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text("Invalid email address"),
-              content: Text("The email address you entered is invalid. Please enter a valid email address."),
-              actions: [
-                TextButton(
-                  child: Text("OK"),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-              ],
-            );
-          },
-        );
-      } else {
-        final userSnapshot = await FirebaseFirestore.instance
-          .collection('users')
-          .where('email', isEqualTo: userEmail)
-          .get();
+                    if (!userEmail.contains('@')) {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text("Invalid email address"),
+                            content: Text(
+                                "The email address you entered is invalid. Please enter a valid email address."),
+                            actions: [
+                              TextButton(
+                                child: Text("OK"),
+                                onPressed: () => Navigator.of(context).pop(),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    } else {
+                      final userSnapshot = await FirebaseFirestore.instance
+                          .collection('users')
+                          .where('email', isEqualTo: userEmail)
+                          .get();
 
-        bool emailExists = userSnapshot.docs.isNotEmpty;
+                      bool emailExists = userSnapshot.docs.isNotEmpty;
 
-        if (emailExists) {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: Text("Email already exists"),
-                content: Text("The email you entered already exists. Please enter a different email."),
-                actions: [
-                  TextButton(
-                    child: Text("OK"),
-                    onPressed: () => Navigator.of(context).pop(),
+                      if (emailExists) {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text("Email already exists"),
+                              content: Text(
+                                  "The email you entered already exists. Please enter a different email."),
+                              actions: [
+                                TextButton(
+                                  child: Text("OK"),
+                                  onPressed: () => Navigator.of(context).pop(),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      } else {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => OtherDetails(
+                              _firstNameController.text.trim(),
+                              _lastNameController.text.trim(),
+                              _emailController.text.trim(),
+                              _passwordController.text.trim(),
+                            ),
+                          ),
+                        );
+                      }
+                    }
+                  }
+                },
+                child: Container(
+                  width: 150,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30),
+                    color: _validate ? Colors.grey : ButtonColor,
                   ),
-                ],
-              );
-            },
-          );
-        } else {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => OtherDetails(
-                _firstNameController.text.trim(),
-                _lastNameController.text.trim(),
-                _emailController.text.trim(),
-                _passwordController.text.trim(),
+                  child: const Center(
+                    child: Text(
+                      "Next",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
               ),
-            ),
-          );
-        }
-      }
-    }
-  },
-  child: Container(
-    width: 150,
-    height: 40,
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(30),
-      color: _validate ? Colors.grey : ButtonColor,
-    ),
-    child: const Center(
-      child: Text(
-        "Next",
-        style: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
-        ),
-      ),
-    ),
-  ),
-),
               const SizedBox(
                 height: 30,
               ),

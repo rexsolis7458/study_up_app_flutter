@@ -1,4 +1,4 @@
 const appID = '0a8637866ab447e5917d21ab2c681f9c';
-const channelId = "study_up_app";
+const channelId = "sample_call";
 const token =
-    "007eJxTYHj1JX2xQrjgW5Zprw5/Y/ow9fLuLZnxChouz61KnQT16xMUGAwSLcyMzS3MzBKTTEzMU00tDc1TjAwTk4ySzSwM0yyTj4u6pjQEMjKIm2xlYARCFiAG8ZnAJDOYZAGTPAzFJaUplfGlBfGJBQUMDACK7SQx";
+    "007eJxTYHjJslFhny7r6s5TF5h1k9mva+RdnfsmedmT1DDprjlJhg8VGAwSLcyMzS3MzBKTTEzMU00tDc1TjAwTk4ySzSwM0yyTH4b5pjQEMjKE8jiwMjIwMrAAMYjPBCaZwSQLmORmKE7MLchJjU9OzMlhYAAAFicjKQ==";

@@ -28,9 +28,5 @@ class GroupModel
       groupCreated: data['groupCreated'] ?? '', 
       members: [],
     );
-    // groupId = doc!.get('groupId');
-    // groupName = doc.data().toString().contains('groupName') ? doc.get('groupName') : '';
-    // groupLeader = doc.data().toString().contains('groupLeader') ? doc.get('groupLeader') : '';
-    // groupCreated = doc.data().toString().contains('groupCreated') ? doc.get('groupCreated') : '';
   }
 }

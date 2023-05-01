@@ -2,11 +2,10 @@ import 'dart:collection';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:study_up_app/main_screens/group/schedule/event.dart';
+import 'package:study_up_app/main_screens/group/schedule/event_item.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import '../../../Widgets/event_item.dart';
-import '../../../helper/const.dart';
-import '../../../services/event.dart';
 import 'add_event.dart';
 import 'edit_event.dart';
 
@@ -77,7 +76,7 @@ class _CalState extends State<Cal> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: BGColor,
+      // backgroundColor: BGColor,
       appBar: AppBar(
         title: Text(
           'StudyUp',
@@ -133,9 +132,8 @@ class _CalState extends State<Cal> {
               );
 
               const CalendarStyle(
-                selectedDecoration: BoxDecoration(
-                    color: Color.fromRGBO(227, 148, 53, 1),
-                    shape: BoxShape.circle),
+                selectedDecoration:
+                    BoxDecoration(color: Colors.white, shape: BoxShape.circle),
                 todayDecoration: BoxDecoration(
                     color: Color.fromRGBO(76, 92, 50, 1),
                     shape: BoxShape.circle),
@@ -157,53 +155,52 @@ class _CalState extends State<Cal> {
           ),
           ..._getEventsForTheDay(_selectedDay).map(
             (event) => EventItem(
-                event: event,
-                onTap: () async {
-                  final res = await Navigator.push<bool>(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => EditEvent(
-                          firstDate: _firstDay,
-                          lastDate: _lastDay,
-                          event: event),
-                    ),
-                  );
-                  if (res ?? false) {
-                    _loadFirestoreEvents();
-                  }
-                },
-                onDelete: () async {
-                  final delete = await showDialog<bool>(
-                    context: context,
-                    builder: (_) => AlertDialog(
-                      title: const Text("Delete Event?"),
-                      content: const Text("Are you sure you want to delete?"),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(context, false),
-                          style: TextButton.styleFrom(
-                            foregroundColor: Colors.black,
-                          ),
-                          child: const Text("No"),
+              event: event,
+              onTap: () async {
+                final res = await Navigator.push<bool>(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => EditEvent(
+                        firstDate: _firstDay, lastDate: _lastDay, event: event),
+                  ),
+                );
+                if (res ?? false) {
+                  _loadFirestoreEvents();
+                }
+              },
+              onDelete: () async {
+                final delete = await showDialog<bool>(
+                  context: context,
+                  builder: (_) => AlertDialog(
+                    title: const Text("Delete Event?"),
+                    content: const Text("Are you sure you want to delete?"),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, false),
+                        style: TextButton.styleFrom(
+                          foregroundColor: Colors.black,
                         ),
-                        TextButton(
-                          onPressed: () => Navigator.pop(context, true),
-                          style: TextButton.styleFrom(
-                            foregroundColor: Colors.red,
-                          ),
-                          child: const Text("Yes"),
+                        child: const Text("No"),
+                      ),
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, true),
+                        style: TextButton.styleFrom(
+                          foregroundColor: Colors.red,
                         ),
-                      ],
-                    ),
-                  );
-                  if (delete ?? false) {
-                    await FirebaseFirestore.instance
-                        .collection('Events')
-                        .doc(event.id)
-                        .delete();
-                    _loadFirestoreEvents();
-                  }
-                }),
+                        child: const Text("Yes"),
+                      ),
+                    ],
+                  ),
+                );
+                if (delete ?? false) {
+                  await FirebaseFirestore.instance
+                      .collection('Events')
+                      .doc(event.id)
+                      .delete();
+                  _loadFirestoreEvents();
+                }
+              },
+            ),
           ),
         ],
       ),

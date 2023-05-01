@@ -119,23 +119,18 @@ class ProfileTab extends StatelessWidget {
               children: [
                 DrawerHeader(
                   decoration: BoxDecoration(
-                    color: MainColor,
+                    color: BGColor,
                   ),
-                  child: CircleAvatar(
-                    backgroundColor: MainColor,
-                    child: SizedBox(
-                        width: 100,
-                        height: 95,
-                        child: ClipOval(
-                          child: Image.network(
-                            _.user.profilePicture ??
-                                "https://example.com/default_profile_picture.png",
-                            fit: BoxFit.cover,
-                            errorBuilder: (_, __, ___) => Image.asset(
-                                "assets/logo.png",
-                                fit: BoxFit.cover),
-                          ),
-                        )),
+                  child: SizedBox(
+                    width: 90,
+                    height: 60,
+                    child: Image.network(
+                      _.user.profilePicture ??
+                          "https://example.com/default_profile_picture.png",
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, __, ___) =>
+                          Image.asset("assets/StudyUp.png", fit: BoxFit.fill),
+                    ),
                   ),
                 ),
                 Container(
@@ -144,12 +139,44 @@ class ProfileTab extends StatelessWidget {
                 ListTile(
                   title: const Text('About Us'),
                   leading: const Icon(Icons.info_rounded),
-                  onTap: () {},
+                  onTap: () async {
+                    showDialog(
+                      context: context,
+                      builder: (_) => AlertDialog(
+                        title: const Text('About Us'),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context, true);
+                            },
+                            child: const Text(
+                                'The Developers of the mobile applications are 4th year BSIT students major in Mobile Development of the University of San Jose Recoletos. '),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
                 ),
                 ListTile(
                   title: const Text('Help'),
                   leading: Icon(Icons.help),
-                  onTap: () {},
+                  onTap: () async {
+                    showDialog(
+                      context: context,
+                      builder: (_) => AlertDialog(
+                        title: const Text('Help'),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context, true);
+                            },
+                            child: const Text(
+                                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam. '),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
                 ),
                 ListTile(
                   title: const Text('Sign out'),
@@ -174,14 +201,14 @@ class ProfileTab extends StatelessWidget {
                     Center(
                       child: CircleAvatar(
                           radius: 75,
-                          backgroundColor: Colors.grey,
+                          backgroundColor: Colors.white,
                           child: ClipOval(
                             child: Image.network(
                               _.user.profilePicture ??
                                   "https://example.com/default_profile_picture.png",
                               fit: BoxFit.cover,
                               errorBuilder: (_, __, ___) => Image.asset(
-                                  "assets/logo.png",
+                                  "assets/Logo.png",
                                   fit: BoxFit.cover),
                             ),
                           )),
@@ -272,10 +299,13 @@ class ProfileTab extends StatelessWidget {
                   ),
                   onPressed: () {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                EditProfilePage(user: UserModel())));
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => EditProfilePage(
+                          user: UserModel(),
+                        ),
+                      ),
+                    );
                   },
                   child: const Text('Edit Profile'),
                 ),
@@ -301,6 +331,7 @@ class ProfileTab extends StatelessWidget {
                     );
                   },
                   child: Card(
+                    color: BGColor,
                     margin: const EdgeInsets.symmetric(
                         vertical: 2.0, horizontal: 10.0),
                     child: SizedBox(
@@ -339,6 +370,7 @@ class ProfileTab extends StatelessWidget {
                   child: SizedBox(
                     height: 70, // set the height of the card
                     child: Card(
+                      color: BGColor,
                       margin: const EdgeInsets.symmetric(
                           vertical: 2.0, horizontal: 10.0),
                       child: Container(
@@ -360,10 +392,6 @@ class ProfileTab extends StatelessWidget {
                             SizedBox(
                               width: 140,
                             ),
-                            Text(
-                              '0',
-                              style: TextStyle(fontSize: 17),
-                            ),
                           ],
                         ),
                       ),
@@ -383,6 +411,7 @@ class ProfileTab extends StatelessWidget {
                   child: SizedBox(
                     height: 70,
                     child: Card(
+                      color: BGColor,
                       margin: const EdgeInsets.symmetric(
                           vertical: 2.0, horizontal: 10.0),
                       child: Row(
@@ -400,10 +429,6 @@ class ProfileTab extends StatelessWidget {
                           ),
                           SizedBox(
                             width: 150,
-                          ),
-                          Text(
-                            '0',
-                            style: TextStyle(fontSize: 17),
                           ),
                         ],
                       ),

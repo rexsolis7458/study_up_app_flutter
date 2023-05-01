@@ -46,23 +46,21 @@ class LoginPage extends GetWidget<AuthController> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              const CircleAvatar(
-                backgroundImage: AssetImage('assets/logo.png'),
-                radius: 40,
-              ),
+              Image.asset('assets/Icon.png', scale: 8),
               const SizedBox(
-                height: 10,
+                height: 20,
               ),
               const Text(
                 'Study Up',
-                style: const TextStyle(
-                  color: SecondaryColor,
+                style: TextStyle(
+                  fontFamily: 'GlacialIndifference',
+                  color: MainColor,
                   fontSize: 40,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(
-                height: 60,
+                height: 40,
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -134,9 +132,9 @@ class LoginPage extends GetWidget<AuthController> {
                     style: TextStyle(color: Colors.black54, fontSize: 20),
                     children: [
                       TextSpan(
-                          text: " Create",
+                          text: "Create",
                           style: const TextStyle(
-                              color: Colors.black,
+                              color: MainColor,
                               fontSize: 20,
                               fontWeight: FontWeight.bold),
                           recognizer: TapGestureRecognizer()

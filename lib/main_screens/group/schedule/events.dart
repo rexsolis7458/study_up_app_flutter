@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../helper/const.dart';
+import '../../../helper/const.dart';
 
 class Event {
   final String title;

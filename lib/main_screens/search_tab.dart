@@ -47,138 +47,138 @@ class _AllPostState extends State<AllPost> {
 
   @override
   Widget build(BuildContext context) {
-  return Scaffold(
-    body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-      stream: firestore
-          .collection('groups')
-          .where('Subjects', arrayContains: _selectedSubject)
-          .snapshots(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
-        if (snapshot.connectionState == ConnectionState.active) {
-          if (snapshot.hasError) {
-            print(snapshot.error);
-            return const Center(child: Text('Failed to load posts'));
+    return Scaffold(
+      body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+        stream: firestore
+            .collection('groups')
+            .where('Subjects', arrayContains: _selectedSubject)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
           }
 
-          final groups = snapshot.data!.docs
-              .map((doc) => GroupModel.fromDocumentSnapshot(doc))
-              .toList();
+          if (snapshot.connectionState == ConnectionState.active) {
+            if (snapshot.hasError) {
+              print(snapshot.error);
+              return const Center(child: Text('Failed to load posts'));
+            }
 
-          return Center(
-            child: Column(
-              children: <Widget>[
-                SizedBox(
-                  height: 50,
-                ),
-                DropdownButton(
-                  value: _selectedSubject == '' ? null : _selectedSubject,
-                  icon: const Icon(Icons.keyboard_arrow_down),
-                  isExpanded: true, // set this to true to remove search box
-                  items: _subjectItems.map((String items) {
-                    return DropdownMenuItem(
-                      value: items,
-                      child: Text(
-                        items,
-                        style: TextStyle(
-                          color: Colors.black54,
+            final groups = snapshot.data!.docs
+                .map((doc) => GroupModel.fromDocumentSnapshot(doc))
+                .toList();
+
+            return Center(
+              child: Column(
+                children: <Widget>[
+                  SizedBox(
+                    height: 50,
+                  ),
+                  DropdownButton(
+                    value: _selectedSubject == '' ? null : _selectedSubject,
+                    icon: const Icon(Icons.keyboard_arrow_down),
+                    isExpanded: true, // set this to true to remove search box
+                    items: _subjectItems.map((String items) {
+                      return DropdownMenuItem(
+                        value: items,
+                        child: Text(
+                          items,
+                          style: TextStyle(
+                            color: Colors.black54,
+                          ),
                         ),
-                      ),
-                    );
-                  }).toList(),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      _selectedSubject = newValue!;
-                      subjectValue = _subjectItems.indexOf(newValue);
-                    });
-                  },
-                ),
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: List.generate(groups.length, (index) {
-                        final group = groups[index];
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _selectedSubject = newValue!;
+                        subjectValue = _subjectItems.indexOf(newValue);
+                      });
+                    },
+                  ),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: List.generate(groups.length, (index) {
+                          final group = groups[index];
 
-                        return StreamBuilder<QuerySnapshot>(
-                            stream: firestore
-                                .collectionGroup('posts')
-                                .where('groupId', isEqualTo: group.groupId)
-                                .orderBy('createdAt')
-                                .snapshots(),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const Center(
-                                    child: CircularProgressIndicator());
-                              }
+                          return StreamBuilder<QuerySnapshot>(
+                              stream: firestore
+                                  .collectionGroup('posts')
+                                  .where('groupId', isEqualTo: group.groupId)
+                                  .orderBy('createdAt')
+                                  .snapshots(),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const Center(
+                                      child: CircularProgressIndicator());
+                                }
 
-                              // if (snapshot.connectionState == ConnectionState.active) {
-                              if (snapshot.hasError) {
-                                print(snapshot.error);
-                                return const Center(
-                                    child: Text('Failed to load posts'));
-                              }
+                                // if (snapshot.connectionState == ConnectionState.active) {
+                                if (snapshot.hasError) {
+                                  print(snapshot.error);
+                                  return const Center(
+                                      child: Text('Failed to load posts'));
+                                }
 
-                              final posts = snapshot.data!.docs
-                                  .map((doc) => PostModel.fromFirestore(doc))
-                                  .toList();
+                                final posts = snapshot.data!.docs
+                                    .map((doc) => PostModel.fromFirestore(doc))
+                                    .toList();
 
-                              return ListView.builder(
-                                shrinkWrap: true,
-                                itemCount: posts.length,
-                                itemBuilder: (context, index) {
-                                  final post = posts[index];
+                                return ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: posts.length,
+                                  itemBuilder: (context, index) {
+                                    final post = posts[index];
 
-                                  return Card(
-                                    color: BGColor,
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                          padding: const EdgeInsets.only(
-                                              left: 10, top: 5, right: 30),
-                                          width: double.infinity,
-                                          child: Text(
-                                            post.posterName,
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.bold),
+                                    return Card(
+                                      color: BGColor,
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                            padding: const EdgeInsets.only(
+                                                left: 10, top: 5, right: 30),
+                                            width: double.infinity,
+                                            child: Text(
+                                              post.posterName,
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
                                           ),
-                                        ),
-                                        Container(
-                                          width: double.infinity,
-                                          child: Text(
-                                            '     ${post.title}',
-                                            textAlign: TextAlign.left,
+                                          Container(
+                                            width: double.infinity,
+                                            child: Text(
+                                              '     ${post.title}',
+                                              textAlign: TextAlign.left,
+                                            ),
                                           ),
-                                        ),
-                                        const SizedBox(height: 10),
-                                        Container(
-                                          width: double.infinity,
-                                          child: Text(
-                                            post.content,
-                                            textAlign: TextAlign.center,
+                                          const SizedBox(height: 10),
+                                          Container(
+                                            width: double.infinity,
+                                            child: Text(
+                                              post.content,
+                                              textAlign: TextAlign.center,
+                                            ),
                                           ),
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 10.0),
-                                              child: SizedBox(
-                                                width: 150,
-                                                height: 40,
-                                                child: TextButton(
-                                                  onPressed: () {
-                                                    Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            CommentsPage(
-                                                                post: post),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 10.0),
+                                                child: SizedBox(
+                                                  width: 150,
+                                                  height: 40,
+                                                  child: TextButton(
+                                                    onPressed: () {
+                                                      Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              CommentsPage(
+                                                                  post: post),
                                                         ),
                                                       );
                                                     },

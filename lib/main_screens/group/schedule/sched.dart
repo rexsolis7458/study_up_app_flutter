@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:study_up_app/services/event.dart';
+import 'package:study_up_app/main_screens/group/schedule/event.dart';
 import '../../../helper/const.dart';
 import '../../../services/database.dart';
-import 'sched_sample.dart';
+import 'calendar.dart';
 
 class Sched extends StatefulWidget {
   final DocumentSnapshot group;
@@ -32,8 +32,6 @@ class _SchedState extends State<Sched> {
                   itemBuilder: (context, index) {
                     return SchedTile(
                       title: snapshot.data.docs[index].data()['schedTitle'],
-                      // desc:
-                      //     snapshot.data.docs[index].data()['schedDescription'],
                       schedId: snapshot.data.docs[index].data()['schedId'],
                     );
                   },
@@ -218,17 +216,22 @@ class _SchedState extends State<Sched> {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => Cal(
-                      group: widget.group,
-                    )),
-          );
-        },
+      floatingActionButton: Container(
+        margin: const EdgeInsets.all(2),
+        width: 56.0,
+        height: 56.0,
+        child: FloatingActionButton(
+          child: Text("Create Schedule"),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => Cal(
+                        group: widget.group,
+                      )),
+            );
+          },
+        ),
       ),
     );
   }
@@ -236,13 +239,11 @@ class _SchedState extends State<Sched> {
 
 class SchedTile extends StatelessWidget {
   final String title;
-  // final String desc;
   final String schedId;
 
   SchedTile({
     required this.title,
     required this.schedId,
-    //required this.desc,
   });
 
   @override

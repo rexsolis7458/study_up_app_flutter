@@ -1,4 +1,4 @@
-import 'package:study_up_app/models/events.dart';
+import 'package:study_up_app/main_screens/group/schedule/events.dart';
 import 'package:get/utils.dart';
 
 import 'package:flutter/material.dart';

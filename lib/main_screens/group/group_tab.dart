@@ -168,10 +168,11 @@ class _GroupTabState extends State<GroupTab> {
                           ),
                           onTap: () {
                             Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Group(group)));
-                            // Navigator.pushNamed(context, '/group', arguments: group);
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Group(group),
+                              ),
+                            );
                           },
                         ),
                       );
@@ -315,9 +316,23 @@ class _ExpandableFabState extends State<ExpandableFab>
           opacity: _open ? 0.0 : 1.0,
           curve: const Interval(0.25, 1.0, curve: Curves.easeInOut),
           duration: const Duration(milliseconds: 250),
-          child: FloatingActionButton(
-            onPressed: _toggle,
-            child: const Icon(Icons.create),
+          child: SizedBox(
+            width: 100,
+            height: 100,
+            child: FloatingActionButton(
+              elevation: 0,
+              backgroundColor: Colors.transparent,
+              foregroundColor: Colors.transparent,
+              onPressed: _toggle,
+              child: Container(
+                width: 95,
+                height: 95,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                      fit: BoxFit.fill, image: AssetImage('assets/Icon.png')),
+                ),
+              ),
+            ),
           ),
         ),
       ),

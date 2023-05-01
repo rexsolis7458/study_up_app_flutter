@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:study_up_app/main_screens/group/groupChat/callVid.dart';
 import 'package:study_up_app/main_screens/group/groupChat/vidCall.dart';
 import 'package:study_up_app/models/users.dart';
 
