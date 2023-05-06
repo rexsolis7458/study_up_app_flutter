@@ -15,6 +15,33 @@ class SubInterest extends StatefulWidget {
 }
 
 class _SubInterestState extends State<SubInterest> {
+
+  List<String> _subjectItems = [];
+  List<String> _selectedSubjects = [];
+
+  Future<void> getSubjectsFromFirestore() async {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('Subjects')
+          .limit(1)
+          .get();
+      if (querySnapshot.docs.isNotEmpty) {
+        setState(() {
+          _subjectItems = List<String>.from(querySnapshot.docs.first['items']);
+        });
+      } else {
+        print('No documents found in the collection');
+      }
+    } catch (error) {
+      print("Error fetching subjects collection: $error");
+    }
+  }
+
+  @override
+  void initState(){
+    getSubjectsFromFirestore();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,11 +81,11 @@ class _SubInterestState extends State<SubInterest> {
                   padding: const EdgeInsets.only(left: 15, top: 5, right: 30),
                   alignment: Alignment.topLeft,
                   child: MultiSelectDropdown(
-                    options: [],
+                    options: _subjectItems,
                     hintText: 'Select options',
                     onSelected: (List<String> selectedList) {
                       setState(() {
-                        // _selectedSubjects = selectedList;
+                        _selectedSubjects = selectedList;
                       });
                     },
                   ),
