@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -36,9 +37,9 @@ class _OtherDetailsState extends State<OtherDetails> {
   TextEditingController _institutionController = TextEditingController();
 
   int? degreeValue;
-  int genderValue = -1;
+  int? genderValue;
 
-  String? genderDropdownValue = '';
+  String? genderDropdownValue;
   String? degreeDropdownValue;
   List<String> genderitems = [];
   List<String> degreeitems = [];
@@ -66,10 +67,12 @@ class _OtherDetailsState extends State<OtherDetails> {
         .then((QuerySnapshot querySnapshot) {
       if (querySnapshot.docs.isNotEmpty) {
         setState(() {
-          genderitems = List<String>.from(querySnapshot.docs.first['Gender']);
+          genderitems = List<String>.from(querySnapshot.docs.first['items']);
         });
       } else {
-        print('No documents found in the collection');
+        if (kDebugMode) {
+          print('No documents found in the collection');
+        }
       }
     }).catchError((error) => print("Error fetching gender collection: $error"));
   }
@@ -222,7 +225,7 @@ class _OtherDetailsState extends State<OtherDetails> {
                               onChanged: (String? newValue) {
                                 setState(
                                   () {
-                                    genderDropdownValue = newValue!;
+                                    genderDropdownValue = newValue;
                                     genderValue =
                                         genderitems.indexOf(newValue!);
                                   },
