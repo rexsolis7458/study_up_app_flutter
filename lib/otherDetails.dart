@@ -5,6 +5,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:study_up_app/subInterest.dart';
 
 import 'controller/auth_controller.dart';
 import 'helper/const.dart';
@@ -207,7 +208,6 @@ class _OtherDetailsState extends State<OtherDetails> {
                               value: genderDropdownValue == ''
                                   ? null
                                   : genderDropdownValue,
-                             
                               items: genderitems.map((String items) {
                                 return DropdownMenuItem(
                                   value: items,
@@ -355,53 +355,55 @@ class _OtherDetailsState extends State<OtherDetails> {
               child: Container(),
             ),
             GestureDetector(
-              onTap: () async {
-                if (_firstName.trim().isEmpty ||
-                    _lastName.trim().isEmpty ||
-                    _email.trim().isEmpty ||
-                    _password.trim().isEmpty ||
-                    _bdayController.text.trim().isEmpty ||
-                    genderDropdownValue == null ||
-                    _institutionController.text.trim().isEmpty ||
-                    degreeDropdownValue == null) {
-                  // Show a warning message that some data is missing
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: const Text('Missing Data'),
-                        content: const Text(
-                            'Please fill in all the required fields.'),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () => Navigator.of(context).pop(),
-                            child: const Text('OK'),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                } else {
-                  DateTime dob =
-                      DateFormat("MM-dd-yyyy").parse(_bdayController.text);
-                  DateTime now = DateTime.now();
-                  Duration difference = now.difference(dob);
-                  int age = difference.inDays ~/ 365;
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => SubInterest()));
+                // if (_firstName.trim().isEmpty ||
+                //     _lastName.trim().isEmpty ||
+                //     _email.trim().isEmpty ||
+                //     _password.trim().isEmpty ||
+                //     _bdayController.text.trim().isEmpty ||
+                //     genderDropdownValue == null ||
+                //     _institutionController.text.trim().isEmpty ||
+                //     degreeDropdownValue == null) {
+                //   // Show a warning message that some data is missing
+                //   showDialog(
+                //     context: context,
+                //     builder: (BuildContext context) {
+                //       return AlertDialog(
+                //         title: const Text('Missing Data'),
+                //         content: const Text(
+                //             'Please fill in all the required fields.'),
+                //         actions: <Widget>[
+                //           TextButton(
+                //             onPressed: () => Navigator.of(context).pop(),
+                //             child: const Text('OK'),
+                //           ),
+                //         ],
+                //       );
+                //     },
+                //   );
+                // } else {
+                //   DateTime dob =
+                //       DateFormat("MM-dd-yyyy").parse(_bdayController.text);
+                //   DateTime now = DateTime.now();
+                //   Duration difference = now.difference(dob);
+                //   int age = difference.inDays ~/ 365;
 
-                  String ageString = age.toString();
-                  // Proceed with the registration process
-                  authController.register(
-                    _firstName.trim(),
-                    _lastName.trim(),
-                    _email.trim(),
-                    _password.trim(),
-                    _bdayController.text.trim(),
-                    genderDropdownValue!,
-                    _institutionController.text.trim(),
-                    degreeDropdownValue!,
-                    ageString,
-                  );
-                }
+                //   String ageString = age.toString();
+                //   // Proceed with the registration process
+                //   authController.register(
+                //     _firstName.trim(),
+                //     _lastName.trim(),
+                //     _email.trim(),
+                //     _password.trim(),
+                //     _bdayController.text.trim(),
+                //     genderDropdownValue!,
+                //     _institutionController.text.trim(),
+                //     degreeDropdownValue!,
+                //     ageString,
+                //   );
+                // }
               },
               child: Container(
                 width: 150,
