@@ -10,14 +10,50 @@ import 'helper/MultiSelect.dart';
 import 'helper/const.dart';
 
 class SubInterest extends StatefulWidget {
+  String firstName;
+  String lastName;
+  String email;
+  String password;
+  String bdayController;
+  String genderDropdownValue;
+  String _institutionController;
+  String degreeDropdownValue;
+
+  SubInterest(
+      this.firstName,
+      this.lastName,
+      this.email,
+      this.password,
+      this.bdayController,
+      this._institutionController,
+      this.degreeDropdownValue,
+      this.genderDropdownValue);
   @override
   _SubInterestState createState() => _SubInterestState();
 }
 
 class _SubInterestState extends State<SubInterest> {
+  final AuthController controller = Get.put(AuthController());
+  AuthController authController = AuthController.instance;
 
   List<String> _subjectItems = [];
   List<String> _selectedSubjects = [];
+
+  late String _firstName;
+  late String _lastName;
+  late String _email;
+  late String _password;
+
+  int? degreeValue;
+  int? genderValue;
+
+  String? genderDropdownValue;
+  String? degreeDropdownValue;
+  List<String> genderitems = [];
+  List<String> degreeitems = [];
+
+  TextEditingController _bdayController = TextEditingController();
+  TextEditingController _institutionController = TextEditingController();
 
   Future<void> getSubjectsFromFirestore() async {
     try {
@@ -38,7 +74,7 @@ class _SubInterestState extends State<SubInterest> {
   }
 
   @override
-  void initState(){
+  void initState() {
     getSubjectsFromFirestore();
   }
 
@@ -99,52 +135,48 @@ class _SubInterestState extends State<SubInterest> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    // if (_firstName.trim().isEmpty ||
-                    //     _lastName.trim().isEmpty ||
-                    //     _email.trim().isEmpty ||
-                    //     _password.trim().isEmpty ||
-                    //     _bdayController.text.trim().isEmpty ||
-                    //     genderDropdownValue == null ||
-                    //     _institutionController.text.trim().isEmpty ||
-                    //     degreeDropdownValue == null) {
-                    //   // Show a warning message that some data is missing
-                    //   showDialog(
-                    //     context: context,
-                    //     builder: (BuildContext context) {
-                    //       return AlertDialog(
-                    //         title: const Text('Missing Data'),
-                    //         content: const Text(
-                    //             'Please fill in all the required fields.'),
-                    //         actions: <Widget>[
-                    //           TextButton(
-                    //             onPressed: () => Navigator.of(context).pop(),
-                    //             child: const Text('OK'),
-                    //           ),
-                    //         ],
-                    //       );
-                    //     },
-                    //   );
-                    // } else {
-                    //   DateTime dob =
-                    //       DateFormat("MM-dd-yyyy").parse(_bdayController.text);
-                    //   DateTime now = DateTime.now();
-                    //   Duration difference = now.difference(dob);
-                    //   int age = difference.inDays ~/ 365;
+                    if (_selectedSubjects == null) {
+                      // Show a warning message that some data is missing
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text('Missing Data'),
+                            content: const Text(
+                                'Please fill in all the required fields.'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () => Navigator.of(context).pop(),
+                                child: const Text('OK'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    } else {
+                      DateTime dob =
+                          DateFormat("MM-dd-yyyy").parse(_bdayController.text);
+                      DateTime now = DateTime.now();
+                      Duration difference = now.difference(dob);
+                      int age = difference.inDays ~/ 365;
 
-                    //   String ageString = age.toString();
-                    //   // Proceed with the registration process
-                    //   authController.register(
-                    //     _firstName.trim(),
-                    //     _lastName.trim(),
-                    //     _email.trim(),
-                    //     _password.trim(),
-                    //     _bdayController.text.trim(),
-                    //     genderDropdownValue!,
-                    //     _institutionController.text.trim(),
-                    //     degreeDropdownValue!,
-                    //     ageString,
-                    //   );
-                    // }
+                      String ageString = age.toString();
+                      String birthday = _bdayController.text;
+
+                      // Proceed with the registration process
+                      authController.register(
+                        _firstName.trim(),
+                        _lastName.trim(),
+                        _email.trim(),
+                        _password.trim(),
+                        _bdayController.text.trim(),
+                        genderDropdownValue!,
+                        _institutionController.text.trim(),
+                        degreeDropdownValue!,
+                        ageString,
+                        _selectedSubjects,
+                      );
+                    }
                   },
                   child: Container(
                     width: 150,

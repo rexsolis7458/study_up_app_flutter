@@ -64,7 +64,10 @@ class AuthController extends GetxController {
     String gender,
     String institution,
     String degree,
-  String age,
+    String age,
+    List <String> subjectInterest,
+
+
      
   ) async {
     try {
@@ -81,6 +84,7 @@ class AuthController extends GetxController {
         institution:institution,
          degree: degree,
          age: age,
+         subjectInterest: subjectInterest,
       );
       if (await Database().createNewUser(users)) {
         Get.find<UserController>().user = users;

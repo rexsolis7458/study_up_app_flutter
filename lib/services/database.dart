@@ -25,6 +25,7 @@ class Database {
         "institution": user.institution.toString(),
         "degree": user.degree.toString(),
         "age": user.age.toString(),
+        "subjectInterest": user.subjectInterest,
       });
       return true;
     } catch (e) {
@@ -44,41 +45,40 @@ class Database {
     }
   }
 
-Future<String?> createGroup(String groupName, String userUid,
-  List<String> selectedValues, String from, String to) async {
-  String retVal = "error";
-  List<String> members = [];
-  DocumentReference _docRef;
+  Future<String?> createGroup(String groupName, String userUid,
+      List<String> selectedValues, String from, String to) async {
+    String retVal = "error";
+    List<String> members = [];
+    DocumentReference _docRef;
 
-  try {
-    members.add(userUid);
-    _docRef = await _firestore.collection("groups").add({
-      'groupName': groupName,
-      'groupLeader': userUid,
-      'members': members,
-      'Subjects': selectedValues,
-      'Time available Start': from,
-      'Time available End': to,
-      'groupCreated': Timestamp.now(),
-      'groupId': '',
-    });
+    try {
+      members.add(userUid);
+      _docRef = await _firestore.collection("groups").add({
+        'groupName': groupName,
+        'groupLeader': userUid,
+        'members': members,
+        'Subjects': selectedValues,
+        'Time available Start': from,
+        'Time available End': to,
+        'groupCreated': Timestamp.now(),
+        'groupId': '',
+      });
 
-    // Update the 'groupId' field with the ID of the newly created document
-    await _docRef.update({'groupId': _docRef.id});
+      // Update the 'groupId' field with the ID of the newly created document
+      await _docRef.update({'groupId': _docRef.id});
 
-    // // Update the user document with the ID of the newly created group
-    // await _firestore.collection("users").doc(userUid).update({
-    //   'groupId': _docRef.id,
-    // });
+      // // Update the user document with the ID of the newly created group
+      // await _firestore.collection("users").doc(userUid).update({
+      //   'groupId': _docRef.id,
+      // });
 
-    retVal = "success";
-  } catch (e) {
-    print(e);
+      retVal = "success";
+    } catch (e) {
+      print(e);
+    }
+
+    return retVal;
   }
-
-  return retVal;
-}
-
 
   Future<String> joinGroup(String groupId, String userUid) async {
     String retVal = "error";

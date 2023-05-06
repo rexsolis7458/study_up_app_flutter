@@ -12,6 +12,7 @@ class UserModel {
   late String? institution;
   late String? degree;
   late String? age;
+  List <String>? subjectInterest;
 
   UserModel({
     this.id,
@@ -25,6 +26,7 @@ class UserModel {
     this.institution,
     this.degree,
     this.age,
+    this.subjectInterest,
   });
 
   UserModel.fromDocumentSnapshot({DocumentSnapshot? doc}) {
@@ -47,6 +49,7 @@ class UserModel {
         : '';
     degree = doc.data().toString().contains('degree') ? doc.get('degree') : '';
     age = doc.data().toString().contains('age') ? doc.get('age') : '';
+    subjectInterest = doc.data().toString().contains('subjectInterest') ? doc.get('subjectInterest') : '';
   }
 
   Map<String, dynamic> toMap() {
@@ -62,6 +65,7 @@ class UserModel {
       'institution': institution,
       'degree': degree,
       'age': age,
+      'subjectInterest': subjectInterest,
     };
   }
 }

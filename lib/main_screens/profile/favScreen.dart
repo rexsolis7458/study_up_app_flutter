@@ -16,30 +16,30 @@ class _FavoriteQuizzesState extends State<FavoriteQuizzes> {
   Future<List<Map<String, dynamic>>>? favoriteQuizzes;
 
   Future<List<Map<String, dynamic>>> getFavoriteQuizzes(String userId) async {
-  DocumentSnapshot favoritesSnapshot = await FirebaseFirestore.instance
-    .collection('Favorites')
-    .doc(userId)
-    .get();
-
-  Map<String, dynamic> data = favoritesSnapshot.data() as Map<String, dynamic>;
-List<dynamic> quizIds = data['quizId'];
-
-  List<Map<String, dynamic>> quizzes = [];
-
-  for (String quizId in quizIds) {
-    DocumentSnapshot quizSnapshot = await FirebaseFirestore.instance
-        .collection('Quiz')
-        .doc(quizId)
+    DocumentSnapshot favoritesSnapshot = await FirebaseFirestore.instance
+        .collection('Favorites')
+        .doc(userId)
         .get();
-    if (quizSnapshot.exists) {
-      Map<String, dynamic> quizData = quizSnapshot.data() as Map<String, dynamic>;
-      quizData['quizId'] = quizId;
-      quizzes.add(quizData);
-    }
-  }
 
-  return quizzes;
-}
+    Map<String, dynamic> data =
+        favoritesSnapshot.data() as Map<String, dynamic>;
+    List<dynamic> quizIds = data['quizId'];
+
+    List<Map<String, dynamic>> quizzes = [];
+
+    for (String quizId in quizIds) {
+      DocumentSnapshot quizSnapshot =
+          await FirebaseFirestore.instance.collection('Quiz').doc(quizId).get();
+      if (quizSnapshot.exists) {
+        Map<String, dynamic> quizData =
+            quizSnapshot.data() as Map<String, dynamic>;
+        quizData['quizId'] = quizId;
+        quizzes.add(quizData);
+      }
+    }
+
+    return quizzes;
+  }
 
   Widget quizList() {
     return Container(
