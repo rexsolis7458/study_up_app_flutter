@@ -5,7 +5,7 @@ import 'package:study_up_app/helper/const.dart';
 import 'package:study_up_app/main_screens/group/q&a/CommentPage.dart';
 import 'package:study_up_app/main_screens/group/q&a/PostCommentModel.dart';
 import 'package:study_up_app/models/group.dart';
-import 'package:dropdown_search/dropdown_search.dart';
+
 
 class AllPost extends StatefulWidget {
   const AllPost({super.key});
