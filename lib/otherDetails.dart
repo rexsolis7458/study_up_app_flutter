@@ -162,7 +162,6 @@ class _OtherDetailsState extends State<OtherDetails> {
                   );
 
                   if (date != null) {
-                    print(date);
                     String formattedDate =
                         DateFormat('MM-dd-yyyy').format(date);
                     print(formattedDate);
@@ -208,7 +207,7 @@ class _OtherDetailsState extends State<OtherDetails> {
                               value: genderDropdownValue == ''
                                   ? null
                                   : genderDropdownValue,
-                              // icon: const Icon(Icons.keyboard_arrow_down),
+                             
                               items: genderitems.map((String items) {
                                 return DropdownMenuItem(
                                   value: items,

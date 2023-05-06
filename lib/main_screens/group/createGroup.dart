@@ -27,23 +27,6 @@ class _CreateGroupState extends State<CreateGroup> {
   List<String> _subjectItems = [];
   List<String> _selectedSubjects = [];
 
-  // List<String> options = [
-  //   'Prog 1',
-  //   'Web',
-  //   'CMP',
-  //   'Discrete',
-  //   'Quantitative Methods',
-  //   'Platform Technologies',
-  //   'Data Struct',
-  //   'Net',
-  //   'OOP',
-  //   'Operating Systems',
-  //   'HCI',
-  //   'Soft Eng',
-  //   'Apps Dev',
-  //   'Techno'
-  // ];
-
   List<String> _selectedValues = [];
 
   final User? user = FirebaseAuth.instance.currentUser;

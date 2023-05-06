@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:study_up_app/helper/const.dart';
 import 'package:study_up_app/main_screens/group/groupChat/vidCall.dart';
 import 'package:study_up_app/models/users.dart';
 
@@ -16,7 +17,6 @@ class GroupChat extends StatefulWidget {
 
 class _GroupChatState extends State<GroupChat> {
   final TextEditingController _textController = TextEditingController();
-  
 
   Future<List<Map<String, dynamic>>> _getMessageDataList(
       List<QueryDocumentSnapshot<Object?>> messageDocs) async {
@@ -46,17 +46,17 @@ class _GroupChatState extends State<GroupChat> {
   @override
   Widget build(BuildContext context) {
     final User? user = FirebaseAuth.instance.currentUser;
-final uid = user?.uid;
+    final uid = user?.uid;
     return Scaffold(
       appBar: AppBar(
         title: Text('Group Chat'),
         actions: [
           IconButton(
-  onPressed: () => Navigator.of(context).push(
-    MaterialPageRoute(builder: (_) => VideoCall()),
-  ),
-  icon: const Icon(Icons.video_camera_front),
-),
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => VideoCall()),
+            ),
+            icon: const Icon(Icons.video_camera_front),
+          ),
         ],
       ),
       body: Column(
@@ -108,7 +108,7 @@ final uid = user?.uid;
                               horizontal: 12.0,
                             ),
                             decoration: BoxDecoration(
-                              color: isMe ? Colors.blue[100] : Colors.grey[300],
+                              color: isMe ? BGColor : Colors.grey[300],
                               borderRadius: BorderRadius.circular(16.0),
                             ),
                             child: ConstrainedBox(

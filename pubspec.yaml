@@ -49,6 +49,7 @@ dependencies:
 
 #UI
   dropdown_button2: ^2.1.0
+  dropdown_search: ^5.0.6
 
 
   hexcolor: ^3.0.1

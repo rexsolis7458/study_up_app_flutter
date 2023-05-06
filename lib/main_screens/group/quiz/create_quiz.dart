@@ -35,7 +35,6 @@ class _CreateQuizState extends State<CreateQuiz> {
                   itemCount: snapshot.data.docs.length,
                   itemBuilder: (context, index) {
                     return QuizTile(
-                      // imgUrl: snapshot.data.doc[index].data['quizImgurl'],
                       groupId: widget.group.id,
                       title: snapshot.data.docs[index].data()['quizTitle'],
                       desc: snapshot.data.docs[index].data()['quizDescription'],
@@ -75,7 +74,6 @@ class _CreateQuizState extends State<CreateQuiz> {
 }
 
 class QuizTile extends StatelessWidget {
-  // final String imgUrl;
   final String title;
   final String desc;
   final String quizId;
@@ -83,7 +81,6 @@ class QuizTile extends StatelessWidget {
 
   DatabaseService databaseService = new DatabaseService();
 
-  // QuizTile({required this.imgUrl, required this.title, required this.desc});
   QuizTile(
       {required this.title,
       required this.desc,
@@ -162,9 +159,6 @@ class QuizTile extends StatelessWidget {
                       }
                     },
                   ),
-                  // Add "Add to Favorites" button
-                  // Only show button if user is signed in
-
                   if (userId != null)
                     IconButton(
                       icon: Icon(

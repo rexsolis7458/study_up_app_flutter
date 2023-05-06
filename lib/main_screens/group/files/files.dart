@@ -59,102 +59,114 @@ class _HomeFileState extends State<HomeFile> {
   }
 
   Widget build(BuildContext context) => Scaffold(
-        body: FutureBuilder<ListResult>(
-          future: futureFiles,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              final files = snapshot.data!.items;
+        body: NestedScrollView(
+          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+            return <Widget>[
+              SliverToBoxAdapter(
+                child: SizedBox(
+                  height: 10,
+                ),
+              ),
+            ];
+          },
+          body: FutureBuilder<ListResult>(
+            future: futureFiles,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                final files = snapshot.data!.items;
 
-              return ListView.builder(
-                itemCount: files.length,
-                itemBuilder: (context, index) {
-                  final file = files[index];
-                  return Card(
-                    color: BGColor,
-                    child: ListTile(
-                      title: Text(file.name),
-                      leading: const Icon(
-                        Icons.picture_as_pdf,
-                        size: 40,
-                      ),
-                      subtitle: FutureBuilder<double>(
-                        future: getAverageRating(file.name),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const Text('Calculating rating...');
-                          } else if (snapshot.hasError) {
-                            return Text('Error: ${snapshot.error}');
-                          } else {
-                            final rating = snapshot.data!;
-                            return Text(
-                                // rating > 0.0
-                                // ?
-                                'Average rating: ${rating.toStringAsFixed(2)}'
-                                // :
-                                // 'Rate it!',
-                                );
-                          }
-                        },
-                      ),
-                      trailing: IconButton(
-                        icon: const Icon(Icons.delete),
-                        color: Colors.red,
-                        onPressed: () async {
-                          final delete = await showDialog<bool>(
-                            context: context,
-                            builder: (_) => AlertDialog(
-                              title: const Text("Delete Event?"),
-                              content: const Text(
-                                  "Are you sure you want to delete?"),
-                              actions: [
-                                TextButton(
-                                  onPressed: () =>
-                                      Navigator.pop(context, false),
-                                  style: TextButton.styleFrom(
-                                    foregroundColor: Colors.black,
+                return ListView.builder(
+                  itemCount: files.length,
+                  itemBuilder: (context, index) {
+                    final file = files[index];
+                    return Card(
+                      color: BGColor,
+                      child: ListTile(
+                        title: Text(file.name),
+                        leading: const Icon(
+                          Icons.picture_as_pdf,
+                          size: 40,
+                        ),
+                        subtitle: FutureBuilder<double>(
+                          future: getAverageRating(file.name),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Text('Calculating rating...');
+                            } else if (snapshot.hasError) {
+                              return Text('Error: ${snapshot.error}');
+                            } else {
+                              final rating = snapshot.data!;
+                              return Text(
+                                  // rating > 0.0
+                                  // ?
+                                  'Average rating: ${rating.toStringAsFixed(2)}'
+                                  // :
+                                  // 'Rate it!',
+                                  );
+                            }
+                          },
+                        ),
+                        trailing: IconButton(
+                          icon: const Icon(Icons.delete),
+                          color: Colors.red,
+                          onPressed: () async {
+                            final delete = await showDialog<bool>(
+                              context: context,
+                              builder: (_) => AlertDialog(
+                                title: const Text("Delete Event?"),
+                                content: const Text(
+                                    "Are you sure you want to delete?"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () =>
+                                        Navigator.pop(context, false),
+                                    style: TextButton.styleFrom(
+                                      foregroundColor: Colors.black,
+                                    ),
+                                    child: const Text("No"),
                                   ),
-                                  child: const Text("No"),
-                                ),
-                                TextButton(
-                                  onPressed: () => Navigator.pop(context, true),
-                                  style: TextButton.styleFrom(
-                                    foregroundColor: Colors.red,
+                                  TextButton(
+                                    onPressed: () =>
+                                        Navigator.pop(context, true),
+                                    style: TextButton.styleFrom(
+                                      foregroundColor: Colors.red,
+                                    ),
+                                    child: const Text("Yes"),
                                   ),
-                                  child: const Text("Yes"),
-                                ),
-                              ],
+                                ],
+                              ),
+                            );
+                            if (delete ?? false) {
+                              _delete(file.fullPath);
+                            }
+                          },
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return loadPdf(file);
+                              },
                             ),
                           );
-                          if (delete ?? false) {
-                            _delete(file.fullPath);
-                          }
                         },
                       ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return loadPdf(file);
-                            },
-                          ),
-                        );
-                      },
-                    ),
-                  );
-                },
-              );
-            } else if (snapshot.hasError) {
-              return const Center(
-                child: Text('Error occured'),
-              );
-            } else {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-          },
+                    );
+                  },
+                );
+              } else if (snapshot.hasError) {
+                return const Center(
+                  child: Text('Error occured'),
+                );
+              } else {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            },
+          ),
         ),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),

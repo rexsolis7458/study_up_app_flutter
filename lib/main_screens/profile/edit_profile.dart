@@ -80,7 +80,8 @@ class _EditProfileFormState extends State<EditProfileForm> {
             child: Form(
               key: _formKey,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   TextFormField(
                     initialValue: widget.user.firstname,
@@ -116,8 +117,11 @@ class _EditProfileFormState extends State<EditProfileForm> {
                   ),
                   SizedBox(height: 16.0),
                   ElevatedButton(
-                    onPressed: _submitForm,
-                    child: Text('Save'),
+                    onPressed: () {
+                      _submitForm;
+                      Navigator.pop(context);
+                    },
+                    child: const Text("Save"),
                   ),
                 ],
               ),

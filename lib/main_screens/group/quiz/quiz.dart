@@ -19,7 +19,7 @@ int _incorrect = 0;
 int _notAttempted = 0;
 
 class _QuizState extends State<Quiz> {
-  // DatabaseService databaseService = new DatabaseService();
+
   QuerySnapshot? questionSnapshot;
 
   getQuizData(String quizId) async {

@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:study_up_app/helper/const.dart';
 import 'package:study_up_app/main_screens/group/schedule/event.dart';
 import 'package:study_up_app/main_screens/group/schedule/event_item.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -76,7 +77,7 @@ class _CalState extends State<Cal> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: BGColor,
+      backgroundColor: BGColor,
       appBar: AppBar(
         title: Text(
           'StudyUp',
@@ -97,6 +98,7 @@ class _CalState extends State<Cal> {
             rowHeight: 43,
             eventLoader: _getEventsForTheDay,
             calendarFormat: _calendarFormat,
+            weekendDays: const [DateTime.sunday, 6],
             onFormatChanged: (format) {
               setState(() {
                 _calendarFormat = format;
@@ -131,23 +133,26 @@ class _CalState extends State<Cal> {
                 ),
               );
 
-              const CalendarStyle(
-                selectedDecoration:
-                    BoxDecoration(color: Colors.white, shape: BoxShape.circle),
-                todayDecoration: BoxDecoration(
-                    color: Color.fromRGBO(76, 92, 50, 1),
-                    shape: BoxShape.circle),
-                todayTextStyle: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18.0,
-                    color: Colors.white),
-              );
+              // const CalendarStyle(
+              //   weekendTextStyle: TextStyle(color: Colors.redAccent),
+              //   selectedDecoration:
+              //       BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+              //   todayDecoration: BoxDecoration(
+              //       color: Color.fromRGBO(76, 92, 50, 1),
+              //       shape: BoxShape.circle),
+              //   todayTextStyle: TextStyle(
+              //       fontWeight: FontWeight.bold,
+              //       fontSize: 18.0,
+              //       color: Colors.white),
+              // );
 
               CalendarBuilders(
                 headerTitleBuilder: (context, day) {
                   return Container(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text(day.toString()),
+                    child: Text(
+                      day.toString(),
+                    ),
                   );
                 },
               );

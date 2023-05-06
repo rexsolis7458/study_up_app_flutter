@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:study_up_app/helper/const.dart';
 import 'package:study_up_app/main_screens/group/quiz/create_quiz.dart';
 import 'package:study_up_app/main_screens/group/quiz/quiz.dart';
-import 'package:study_up_app/main_screens/profile/myFavoriteQuizzes.dart';
 import 'package:study_up_app/services/database.dart';
 
 class FavoriteQuizzes extends StatefulWidget {

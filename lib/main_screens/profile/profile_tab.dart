@@ -10,7 +10,6 @@ import 'package:study_up_app/controller/auth_controller.dart';
 import 'package:study_up_app/controller/userController.dart';
 import 'package:study_up_app/helper/const.dart';
 import 'package:study_up_app/main_screens/profile/favScreen.dart';
-import 'package:study_up_app/main_screens/profile/myFavoriteQuizzes.dart';
 import 'package:study_up_app/main_screens/profile/myQuestions.dart';
 import 'package:study_up_app/main_screens/profile/userFiles.dart';
 import 'package:study_up_app/models/users.dart';

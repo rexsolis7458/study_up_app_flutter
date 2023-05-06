@@ -54,183 +54,192 @@ class _SchedState extends State<Sched> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-        stream: firestore
-            .collection('Events/${widget.group['groupName']}/events')
-            .snapshots(),
-        builder: (BuildContext context,
-            AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-          if (snapshot.hasError) {
-            return Center(
-              child: Text('Error: ${snapshot.error}'),
-            );
-          }
-
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-
-          // Define firstDay and lastDay here
-          DateTime now = DateTime.now();
-          DateTime firstDay = DateTime(now.year, now.month, 1);
-          DateTime lastDay = DateTime(now.year, now.month + 1, 0);
-
-          final List<Event> events = snapshot.data!.docs
-              .map((document) => Event.fromFirestore(document))
-              .toList();
-
-          return ListView.builder(
-            itemCount: (events.length / 2).ceil(),
-            itemBuilder: (BuildContext context, int index) {
-              final int eventIndex = index * 2;
-              return Row(
-                children: [
-                  Expanded(
-                    child: events.length > eventIndex
-                        ? GestureDetector(
-                            onTap: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    contentPadding: EdgeInsets.only(
-                                      left: 24,
-                                      right: 24,
-                                      top: 16,
-                                    ),
-                                    content: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              events[eventIndex].title,
-                                              style: TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                            Text(
-                                              '${events[eventIndex].date.day}/${events[eventIndex].date.month}/${events[eventIndex].date.year}',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.grey[600],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(height: 8),
-                                        Text(
-                                          events[eventIndex].description,
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: Text('OK'),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                            },
-                            child: _buildEventTile(events[eventIndex]),
-                          )
-                        : SizedBox(),
-                  ),
-                  SizedBox(width: 16),
-                  Expanded(
-                    child: events.length > eventIndex + 1
-                        ? GestureDetector(
-                            onTap: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    contentPadding: EdgeInsets.only(
-                                      left: 24,
-                                      right: 24,
-                                      top: 16,
-                                    ),
-                                    content: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              events[eventIndex + 1].title,
-                                              style: TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                            Text(
-                                              '${events[eventIndex + 1].date.day}/${events[eventIndex + 1].date.month}/${events[eventIndex + 1].date.year}',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.grey[600],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(height: 8),
-                                        Text(
-                                          events[eventIndex + 1].description,
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: Text('OK'),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                            },
-                            child: _buildEventTile(events[eventIndex + 1]),
-                          )
-                        : SizedBox(),
-                  ),
-                ],
-              );
-            },
-          );
+      body: NestedScrollView(
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return <Widget>[
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: 10,
+              ),
+            ),
+          ];
         },
+        body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+          stream: firestore
+              .collection('Events/${widget.group['groupName']}/events')
+              .snapshots(),
+          builder: (BuildContext context,
+              AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+            if (snapshot.hasError) {
+              return Center(
+                child: Text('Error: ${snapshot.error}'),
+              );
+            }
+
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+
+            // Define firstDay and lastDay here
+            DateTime now = DateTime.now();
+            DateTime firstDay = DateTime(now.year, now.month, 1);
+            DateTime lastDay = DateTime(now.year, now.month + 1, 0);
+
+            final List<Event> events = snapshot.data!.docs
+                .map((document) => Event.fromFirestore(document))
+                .toList();
+
+            return ListView.builder(
+              itemCount: (events.length / 2).ceil(),
+              itemBuilder: (BuildContext context, int index) {
+                final int eventIndex = index * 2;
+                return Row(
+                  children: [
+                    Expanded(
+                      child: events.length > eventIndex
+                          ? GestureDetector(
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      contentPadding: EdgeInsets.only(
+                                        left: 24,
+                                        right: 24,
+                                        top: 16,
+                                      ),
+                                      content: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                events[eventIndex].title,
+                                                style: TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              Text(
+                                                '${events[eventIndex].date.day}/${events[eventIndex].date.month}/${events[eventIndex].date.year}',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.grey[600],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(height: 8),
+                                          Text(
+                                            events[eventIndex].description,
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text('OK'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                              child: _buildEventTile(events[eventIndex]),
+                            )
+                          : SizedBox(),
+                    ),
+                    SizedBox(width: 16),
+                    Expanded(
+                      child: events.length > eventIndex + 1
+                          ? GestureDetector(
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      contentPadding: EdgeInsets.only(
+                                        left: 24,
+                                        right: 24,
+                                        top: 16,
+                                      ),
+                                      content: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                events[eventIndex + 1].title,
+                                                style: TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              Text(
+                                                '${events[eventIndex + 1].date.day}/${events[eventIndex + 1].date.month}/${events[eventIndex + 1].date.year}',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.grey[600],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(height: 8),
+                                          Text(
+                                            events[eventIndex + 1].description,
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text('OK'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                              child: _buildEventTile(events[eventIndex + 1]),
+                            )
+                          : SizedBox(),
+                    ),
+                  ],
+                );
+              },
+            );
+          },
+        ),
       ),
       floatingActionButton: Container(
-        margin: const EdgeInsets.all(2),
-        width: 56.0,
-        height: 56.0,
-        child: FloatingActionButton(
-          child: Text("Create Schedule"),
+        child: FloatingActionButton.extended(
           onPressed: () {
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => Cal(
-                        group: widget.group,
-                      )),
+                builder: (context) => Cal(
+                  group: widget.group,
+                ),
+              ),
             );
           },
+          label: Text('Create Schedule'),
         ),
       ),
     );
@@ -254,16 +263,10 @@ class SchedTile extends StatelessWidget {
       width: 190,
       child: Stack(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(15),
-          ),
           Container(
-            // color: ButtonColor,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
-              color: BGColor,
             ),
-            // color: Colors.black26,
             alignment: Alignment.center,
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -287,6 +290,7 @@ class SchedTile extends StatelessWidget {
 
 Widget _buildEventTile(Event event) {
   return Card(
+    color: BGColor,
     margin: EdgeInsets.symmetric(vertical: 8),
     child: Padding(
       padding: EdgeInsets.all(16),

@@ -46,7 +46,6 @@ class AuthController extends GetxController {
 
   _initialScreen(User? user) {
     if (user == null) {
-      print("login page");
       Get.offAll(() => LoginPage());
     } else {
       reference = FirebaseFirestore.instance

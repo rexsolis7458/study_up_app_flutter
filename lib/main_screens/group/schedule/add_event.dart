@@ -46,7 +46,6 @@ class _AddEventState extends State<AddEvent> {
             lastDate: widget.lastDate,
             initialDate: _selectedDate,
             onDateSubmitted: (date) {
-              print(date);
               setState(() {
                 _selectedDate = date;
               });

@@ -44,22 +44,6 @@ class Database {
     }
   }
 
-// Future<void> updateUserProfile(UserModel userModel, User user) async {
-//     try {
-//       await _firestore.collecton('users').doc(user.uid).update({
-//         'firstName': userModel?.firstname,
-//         'lastName': userModel.firstname,
-//         'email': userModel.email,
-//         'password': userModel.password,
-//       });
-//       await user.updateEmail(userModel.email);
-//       await user.updateProfile(displayName: userModel.firstname);
-//       print('User profile updated successfully!');
-//     } catch (error) {
-//       print('Error updating user profile: $error');
-//     }
-//   }
-
 Future<String?> createGroup(String groupName, String userUid,
   List<String> selectedValues, String from, String to) async {
   String retVal = "error";
@@ -201,16 +185,6 @@ class DatabaseService {
         .get();
   }
 
-  // deleteQuizData(String quizId) async {
-  //   return await FirebaseFirestore.instance
-  //       .collection("Quiz")
-  //       .get()
-  //       .then((snapshot) {
-  //     for (DocumentSnapshot ds in snapshot.docs) {
-  //       ds.reference.delete();
-  //     }
-  //   });
-  // }
   deleteQuizData(String quizId) async {
     return await FirebaseFirestore.instance
         .collection("Quiz")
