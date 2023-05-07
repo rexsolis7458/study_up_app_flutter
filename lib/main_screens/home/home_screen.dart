@@ -4,6 +4,7 @@ import 'package:study_up_app/helper/const.dart';
 import 'package:study_up_app/main_screens/group/groupList.dart';
 import 'package:study_up_app/main_screens/group/group_tab.dart';
 import 'package:study_up_app/main_screens/profile/profile_tab.dart';
+import 'package:study_up_app/main_screens/recommend.dart';
 import 'package:study_up_app/main_screens/search_tab.dart';
 
 import 'home_tab.dart';
@@ -35,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
           // distanceBetween: 0, subChildren: [],
           currentUserId: widget.currentUserId,
         ),
-
+        RecommendScreen(),
         ProfileTab(),
       ].elementAt(_selectedTab),
       bottomNavigationBar: CupertinoTabBar(
@@ -50,6 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
           BottomNavigationBarItem(icon: Icon(Icons.home)),
           BottomNavigationBarItem(icon: Icon(Icons.search)),
           BottomNavigationBarItem(icon: Icon(Icons.group)),
+          BottomNavigationBarItem(icon: Icon(Icons.abc)),
           BottomNavigationBarItem(icon: Icon(Icons.person)),
         ],
       ),
