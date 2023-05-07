@@ -68,9 +68,6 @@ class Database {
       await _docRef.update({'groupId': _docRef.id});
 
       // // Update the user document with the ID of the newly created group
-      // await _firestore.collection("users").doc(userUid).update({
-      //   'groupId': _docRef.id,
-      // });
 
       retVal = "success";
     } catch (e) {
@@ -89,10 +86,6 @@ class Database {
       await _firestore.collection("groups").doc(groupId).update({
         'members': FieldValue.arrayUnion(members),
       });
-
-      // await _firestore.collection("users").doc(userUid).update({
-      //   'groupId': groupId,
-      // });
 
       retVal = "success";
     } catch (e) {

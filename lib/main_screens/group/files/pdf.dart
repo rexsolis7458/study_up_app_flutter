@@ -70,12 +70,7 @@ class _UploadPdfState extends State<UploadPdf> {
         'id': randomAlphaNumeric(16)
       },
     );
-    print(fileModel.fileName);
-    // results.id;
-    // await addMultipleCollection(result.id);
-
-    print("Uploading..!");
-
+    
     uploadTask = ref.putData(await file.readAsBytes(), metadata);
     print("Uploaded");
     Fluttertoast.showToast(

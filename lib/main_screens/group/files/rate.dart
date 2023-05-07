@@ -77,7 +77,9 @@ class _RateFileState extends State<RateFile> {
                     onPressed: () async {
                       Navigator.pop(context);
                     },
-                    child: const Text("Later",),
+                    child: const Text(
+                      "Later",
+                    ),
                   ),
                   TextButton(
                     onPressed: () async {

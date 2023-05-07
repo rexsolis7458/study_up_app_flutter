@@ -98,12 +98,7 @@ class _HomeFileState extends State<HomeFile> {
                             } else {
                               final rating = snapshot.data!;
                               return Text(
-                                  // rating > 0.0
-                                  // ?
-                                  'Average rating: ${rating.toStringAsFixed(2)}'
-                                  // :
-                                  // 'Rate it!',
-                                  );
+                                  'Average rating: ${rating.toStringAsFixed(2)}');
                             }
                           },
                         ),

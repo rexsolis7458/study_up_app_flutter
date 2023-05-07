@@ -123,13 +123,13 @@ class ProfileTab extends StatelessWidget {
                   child: SizedBox(
                     width: 90,
                     height: 60,
-                    child: Image.network(
-                      _.user.profilePicture ??
-                          "https://example.com/default_profile_picture.png",
-                      fit: BoxFit.cover,
-                      errorBuilder: (_, __, ___) =>
-                          Image.asset("assets/StudyUp.png", fit: BoxFit.fill),
-                    ),
+                    // child: Image.network(
+                    //   _.user.profilePicture ??
+                    //       "https://example.com/default_profile_picture.png",
+                    //   fit: BoxFit.cover,
+                    //   errorBuilder: (_, __, ___) =>
+                    //       Image.asset("assets/StudyUp.png", fit: BoxFit.fill),
+                    // ),
                   ),
                 ),
                 Container(
@@ -202,15 +202,15 @@ class ProfileTab extends StatelessWidget {
                           radius: 75,
                           backgroundColor: Colors.white,
                           child: ClipOval(
-                            child: Image.network(
-                              _.user.profilePicture ??
-                                  "https://example.com/default_profile_picture.png",
-                              fit: BoxFit.cover,
-                              errorBuilder: (_, __, ___) => Image.asset(
-                                  "assets/Logo.png",
-                                  fit: BoxFit.cover),
-                            ),
-                          )),
+                              // child: Image.network(
+                              //   _.user.profilePicture ??
+                              //       "https://example.com/default_profile_picture.png",
+                              //   fit: BoxFit.cover,
+                              //   errorBuilder: (_, __, ___) => Image.asset(
+                              //       "assets/Logo.png",
+                              //       fit: BoxFit.cover),
+                              // ),
+                              )),
                     ),
                     Positioned(
                       top: 0.1,

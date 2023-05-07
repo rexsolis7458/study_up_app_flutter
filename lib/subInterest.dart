@@ -112,8 +112,16 @@ class _SubInterestState extends State<SubInterest> {
                 const SizedBox(
                   height: 10,
                 ),
+                Text(
+                  'SUBJECT INTEREST',
+                  style: const TextStyle(
+                    color: MainColor,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 Container(
-                  padding: const EdgeInsets.only(left: 30, top: 5, right: 30),
+                  padding: const EdgeInsets.only(left: 30, top: 50, right: 30),
                   alignment: Alignment.topLeft,
                   child: Text(
                     'Subject Interest',
@@ -121,7 +129,7 @@ class _SubInterestState extends State<SubInterest> {
                   ),
                 ),
                 const SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
                 Container(
                   padding: const EdgeInsets.only(left: 15, top: 5, right: 30),

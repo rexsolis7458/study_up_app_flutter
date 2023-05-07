@@ -34,7 +34,6 @@ class _loadPdfState extends State<loadPdf> {
           builder: (context) => ViewPDF(
                 doc,
                 fileName: widget.files.name,
-                // average: widget.files.average,
               )),
     );
   }
