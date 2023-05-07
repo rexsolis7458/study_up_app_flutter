@@ -383,7 +383,7 @@ class _OtherDetailsState extends State<OtherDetails> {
                     color: ButtonColor),
                 child: const Center(
                   child: Text(
-                    "Sign Up",
+                    "Next",
                     style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
