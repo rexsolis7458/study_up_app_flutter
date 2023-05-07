@@ -14,20 +14,23 @@ class SubInterest extends StatefulWidget {
   String lastName;
   String email;
   String password;
-  String bdayController;
   String genderDropdownValue;
+  String bdayController;
+
   String _institutionController;
   String degreeDropdownValue;
 
   SubInterest(
-      this.firstName,
-      this.lastName,
-      this.email,
-      this.password,
-      this.bdayController,
-      this._institutionController,
-      this.degreeDropdownValue,
-      this.genderDropdownValue);
+    this.firstName,
+    this.lastName,
+    this.email,
+    this.password,
+    this.genderDropdownValue,
+    this.bdayController,
+    this._institutionController,
+    this.degreeDropdownValue,
+  );
+
   @override
   _SubInterestState createState() => _SubInterestState();
 }
@@ -43,6 +46,8 @@ class _SubInterestState extends State<SubInterest> {
   late String _lastName;
   late String _email;
   late String _password;
+  late String _bday;
+  late String _institution;
 
   int? degreeValue;
   int? genderValue;
@@ -51,9 +56,6 @@ class _SubInterestState extends State<SubInterest> {
   String? degreeDropdownValue;
   List<String> genderitems = [];
   List<String> degreeitems = [];
-
-  TextEditingController _bdayController = TextEditingController();
-  TextEditingController _institutionController = TextEditingController();
 
   Future<void> getSubjectsFromFirestore() async {
     try {
@@ -75,6 +77,14 @@ class _SubInterestState extends State<SubInterest> {
 
   @override
   void initState() {
+    _firstName = widget.firstName;
+    _lastName = widget.lastName;
+    _email = widget.email;
+    _password = widget.password;
+    genderDropdownValue = widget.genderDropdownValue;
+    _bday = widget.bdayController;
+    _institution = widget._institutionController;
+    degreeDropdownValue = widget.degreeDropdownValue;
     getSubjectsFromFirestore();
   }
 
@@ -154,14 +164,12 @@ class _SubInterestState extends State<SubInterest> {
                         },
                       );
                     } else {
-                      DateTime dob =
-                          DateFormat("MM-dd-yyyy").parse(_bdayController.text);
+                      DateTime dob = DateFormat("MM-dd-yyyy").parse(_bday);
                       DateTime now = DateTime.now();
                       Duration difference = now.difference(dob);
                       int age = difference.inDays ~/ 365;
 
                       String ageString = age.toString();
-                      String birthday = _bdayController.text;
 
                       // Proceed with the registration process
                       authController.register(
@@ -169,9 +177,9 @@ class _SubInterestState extends State<SubInterest> {
                         _lastName.trim(),
                         _email.trim(),
                         _password.trim(),
-                        _bdayController.text.trim(),
+                        _bday.trim(),
                         genderDropdownValue!,
-                        _institutionController.text.trim(),
+                        _institution.trim(),
                         degreeDropdownValue!,
                         ageString,
                         _selectedSubjects,
