@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'rateUser.dart';
 import 'PostCommentModel.dart';
+import 'package:intl/src/intl/date_format.dart';
+import 'dart:math' as math;
 
 class CommentsPage extends StatefulWidget {
   final PostModel post;
@@ -15,6 +18,7 @@ class CommentsPage extends StatefulWidget {
 class _CommentsPageState extends State<CommentsPage> {
   final TextEditingController _commentController = TextEditingController();
 
+  DateTime dateTime = DateTime.now();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,9 +56,30 @@ class _CommentsPageState extends State<CommentsPage> {
                     itemCount: comments.length,
                     itemBuilder: (context, index) {
                       final comment = comments[index];
+
+                      DateTime created = comment.createdAt.toDate();
+
+                      String createdTime =
+                          "${dateTime.month}-${dateTime.day}-${dateTime.year} ${dateTime.hour}:${dateTime.minute}";
                       return ListTile(
                         title: Text(comment.content),
-                        subtitle: Text(comment.commenterName),
+                        subtitle: Text(
+                          comment.commenterName,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        trailing: Text(createdTime),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return RateUser();
+                              },
+                            ),
+                          );
+                        },
                       );
                     },
                   );
@@ -94,13 +119,14 @@ class _CommentsPageState extends State<CommentsPage> {
                           content: _commentController.text.trim(),
                           authorId: FirebaseAuth.instance.currentUser!.uid,
                           commenterName: commenterName,
-                          createdAt: Timestamp.now(), postId: '',
+                          createdAt: Timestamp.now(),
+                          postId: '',
                         ).toFirestore())
                         .then((value) {
                       _commentController.clear();
                     }).catchError((error) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text('Failed to add comment')));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Failed to add comment')));
                     });
                   },
                   icon: const Icon(Icons.send),

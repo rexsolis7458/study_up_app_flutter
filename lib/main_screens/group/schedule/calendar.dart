@@ -78,15 +78,6 @@ class _CalState extends State<Cal> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: BGColor,
-      appBar: AppBar(
-        title: Text(
-          'StudyUp',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
       body: ListView(
         children: [
           TableCalendar(
