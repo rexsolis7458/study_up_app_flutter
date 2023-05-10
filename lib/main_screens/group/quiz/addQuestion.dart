@@ -9,7 +9,6 @@ import '../../../helper/const.dart';
 class AddQuestion extends StatefulWidget {
   final String quizId;
   AddQuestion(this.quizId);
-  
 
   @override
   State<AddQuestion> createState() => _AddQuestionState();
@@ -73,7 +72,7 @@ class _AddQuestionState extends State<AddQuestion> {
             ),
           )
         : Form(
-            key: _formKey,
+            // key: _formKey,
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 24),
               child: Column(

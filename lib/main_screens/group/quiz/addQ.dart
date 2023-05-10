@@ -23,7 +23,8 @@
 
 //   int numForms = 1;
 
-//   Future<void> addQuestionData(String quizId, Map<String, dynamic> questionData,
+//   Future<void> addQuestionData(
+//     String quizId, Map<String, dynamic> questionData,
 //       Function() callback) async {
 //     await FirebaseFirestore.instance
 //         .collection("Quiz")
