@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:random_string/random_string.dart';
@@ -14,15 +15,23 @@ class RateFile extends StatefulWidget {
 }
 
 class _RateFileState extends State<RateFile> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
   FileModel fileModel = FileModel(
     fileName: '',
     rateID: randomAlphaNumeric(16),
     ratingValue: 0,
     fileID: '',
+    uploader: '',
     value: '',
     average: 0,
     updateid: '',
   );
+
+  String getUserId() {
+    User? user = _auth.currentUser;
+    return user?.uid ?? '';
+  }
 
   @override
   void initState() {
@@ -86,6 +95,15 @@ class _RateFileState extends State<RateFile> {
                       CollectionReference fLists =
                           FirebaseFirestore.instance.collection('File Info');
 
+                      final QuerySnapshot snapshot = await FirebaseFirestore
+                          .instance
+                          .collection('File Lists')
+                          .where('fileName', isEqualTo: fileModel.fileName)
+                          .limit(1)
+                          .get();
+
+                      final String uploader = snapshot.docs[0]['uploader'];
+
                       if (fileModel.fileName.isNotEmpty) {
                         fLists
                             .doc(fileModel.fileName)
@@ -97,6 +115,7 @@ class _RateFileState extends State<RateFile> {
                           'rating': fileModel.ratingValue != null
                               ? fileModel.ratingValue.toString()
                               : 'Rating',
+                          'uploader': uploader,
                         });
                       } else {
                         print('File name is empty');

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'event.dart';
 
-
 class EventItem extends StatelessWidget {
   final Event event;
   final Function() onDelete;
@@ -24,7 +23,7 @@ class EventItem extends StatelessWidget {
         event.description,
       ),
       subtitle: Text(
-        event.date.toString(),
+        event.time.toString(),
       ),
       onTap: onTap,
       trailing: IconButton(

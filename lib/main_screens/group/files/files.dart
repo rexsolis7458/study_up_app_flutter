@@ -9,8 +9,9 @@ import 'viewPDF.dart';
 
 class HomeFile extends StatefulWidget {
   final DocumentSnapshot group;
+final String? currentUserId;
 
-  HomeFile(this.group, {Key? key}) : super(key: key);
+  HomeFile(this.group,this.currentUserId, {Key? key}) : super(key: key);
 
   @override
   State<HomeFile> createState() => _HomeFileState();
@@ -169,7 +170,7 @@ class _HomeFileState extends State<HomeFile> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => UploadPdf(widget.group),
+                builder: (context) => UploadPdf(widget.group,widget.currentUserId),
               ),
             );
           },

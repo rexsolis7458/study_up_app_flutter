@@ -78,120 +78,124 @@ class _GroupTabState extends State<GroupTab> {
     final uid = user!.uid;
 
     return Scaffold(
-  appBar: AppBar(
-    backgroundColor: MainColor,
-    centerTitle: true,
-    elevation: 0,
-    title: const Text(
-      'My Groups',
-      style: TextStyle(
-        fontSize: 20,
-        fontWeight: FontWeight.bold,
-      ),
-    ),
-  ),
-  floatingActionButton: ExpandableFab(
-    distance: 112.0,
-    children: [
-      Container(
-        margin: const EdgeInsets.all(2),
-        child: FloatingActionButton.extended(
-          heroTag: 'create',
-          onPressed: () => _goToCreate(context),
-          label: const Text("Create Group"),
+      appBar: AppBar(
+        backgroundColor: MainColor,
+        centerTitle: true,
+        elevation: 0,
+        title: const Text(
+          'My Groups',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
-      Container(
-        margin: const EdgeInsets.all(2),
-        child: FloatingActionButton.extended(
-          heroTag: 'join',
-          onPressed: () => _goToJoin(context),
-          label: const Text("Join Group"),
-        ),
+      floatingActionButton: ExpandableFab(
+        distance: 112.0,
+        children: [
+          Container(
+            margin: const EdgeInsets.all(2),
+            child: FloatingActionButton.extended(
+              heroTag: 'create',
+              onPressed: () => _goToCreate(context),
+              label: const Text("Create Group"),
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.all(2),
+            child: FloatingActionButton.extended(
+              heroTag: 'join',
+              onPressed: () => _goToJoin(context),
+              label: const Text("Join Group"),
+            ),
+          ),
+        ],
       ),
-    ],
-  ),
-  body: NestedScrollView(
-    headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-      return <Widget>[
-        SliverToBoxAdapter(
-          child: SizedBox(height: 10,),
-        ),
-      ];
-    },
-    body: StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance
-        .collection("groups")
-        .where('members', arrayContains: uid)
-        .snapshots(),
-      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (snapshot.hasData) {
-          List<String> start = [];
-          List<String> end = [];
-          final snap = snapshot.data!.docs;
-          for (int i = 0; i < snap.length; i++) {
-            start.add(convertTo12HourFormat(snap[i]['Time available Start']));
-            end.add(convertTo12HourFormat(snap[i]['Time available End']));
-          }
-          return ListView.builder(
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            itemCount: snap.length,
-            itemBuilder: (context, index) {
-              final group = snap[index];
-              return Card(
-                color: BGColor,
-                elevation: 2,
-                child: ListTile(
-                  title: Text(
-                    snap[index]['groupName'],
-                  ),
-                  subtitle: Text(
-                    "Start: ${start[index]}   End: ${end[index]}",
-                  ),
-                  leading: const Icon(
-                    Icons.diversity_3,
-                    size: 40,
-                  ),
-                  trailing: IconButton(
-                    icon: Icon(Icons.info),
-                    onPressed: () => showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: Text(snap[index]['groupName']),
-                          content: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: List<Widget>.generate(
-                              snap[index]['Subjects'].length,
-                              (i) =>
-                                Text(snap[index]['Subjects'][i]),
-                            ),
+      body: NestedScrollView(
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return <Widget>[
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: 10,
+              ),
+            ),
+          ];
+        },
+        body: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection("groups")
+              .where('members', arrayContains: uid)
+              .snapshots(),
+          builder:
+              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.hasData) {
+              List<String> start = [];
+              List<String> end = [];
+              final snap = snapshot.data!.docs;
+              for (int i = 0; i < snap.length; i++) {
+                start.add(
+                    convertTo12HourFormat(snap[i]['Time available Start']));
+                end.add(convertTo12HourFormat(snap[i]['Time available End']));
+              }
+              return ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: snap.length,
+                itemBuilder: (context, index) {
+                  final group = snap[index];
+                  return Card(
+                    color: BGColor,
+                    elevation: 2,
+                    child: ListTile(
+                      title: Text(
+                        snap[index]['groupName'],
+                      ),
+                      subtitle: Text(
+                        "Start: ${start[index]}   End: ${end[index]}",
+                      ),
+                      leading: const Icon(
+                        Icons.diversity_3,
+                        size: 40,
+                      ),
+                      trailing: IconButton(
+                        icon: Icon(Icons.info),
+                        onPressed: () => showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text(snap[index]['groupName']),
+                              content: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: List<Widget>.generate(
+                                  snap[index]['Subjects'].length,
+                                  (i) => Text(snap[index]['Subjects'][i]),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                Group(group, widget.currentUserId),
                           ),
                         );
                       },
                     ),
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Group(group),
-                      ),
-                    );
-                  },
-                ),
+                  );
+                },
               );
-            },
-          );
-        } else {
-          return SizedBox();
-        }
-      },
-    ),
-  ),
-);
+            } else {
+              return SizedBox();
+            }
+          },
+        ),
+      ),
+    );
   }
 }
 
