@@ -62,12 +62,9 @@ class _AddQuestionState extends State<AddQuestion> {
 
             // Navigator.of(context, rootNavigator: true).pop();
           });
+          Navigator.pop(context);
         },
       );
-     
-      }
-       if (_isLoading = false) {
-        Navigator.pop(context);
     }
   }
 
