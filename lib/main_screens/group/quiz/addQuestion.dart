@@ -64,9 +64,10 @@ class _AddQuestionState extends State<AddQuestion> {
           });
         },
       );
-      if (_isLoading = false) {
-        Navigator.pop(context);
+     
       }
+       if (_isLoading = false) {
+        Navigator.pop(context);
     }
   }
 
