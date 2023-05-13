@@ -76,71 +76,70 @@ class _QuizFormState extends State<QuizForm> {
         ),
       ),
       body: SingleChildScrollView(
-      child:_isLoading
-          ? Container(
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
-            )
-          : Form(
-              key: _formKey,
-              child: Container(
-                // margin: EdgeInsets.only(bottom: 8, top: 10),
-                color: BGColor,
-                padding: EdgeInsets.symmetric(horizontal: 24),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    TextFormField(
-                      validator: (val) =>
-                          val!.isEmpty ? "Quiz Title can't be empty" : null,
-                      decoration: InputDecoration(
-                        hintText: "Quiz Title",
+        child: _isLoading
+            ? Container(
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              )
+            : Form(
+                key: _formKey,
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 24),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const SizedBox(
+                        height: 10,
                       ),
-                      onChanged: (val) {
-                        quizTitle = val;
-                      },
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    TextFormField(
-                      validator: (val) => val!.isEmpty
-                          ? "Quiz Description can't be empty"
-                          : null,
-                      decoration: InputDecoration(
-                        hintText: "Quiz Description",
+                      TextFormField(
+                        validator: (val) =>
+                            val!.isEmpty ? "Quiz Title can't be empty" : null,
+                        decoration: InputDecoration(
+                          hintText: "Quiz Title",
+                        ),
+                        onChanged: (val) {
+                          quizTitle = val;
+                        },
                       ),
-                      onChanged: (val) {
-                        quizDescription = val;
-                      },
-                    ),
-                    const SizedBox(
-                      height: 40,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        createQuiz();
-                      },
-                      child: Container(
-                        child: Center(
-                          child: Text(
-                            "Create Quiz",
-                            style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: ButtonColor),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      TextFormField(
+                        validator: (val) => val!.isEmpty
+                            ? "Quiz Description can't be empty"
+                            : null,
+                        decoration: InputDecoration(
+                          hintText: "Quiz Description",
+                        ),
+                        onChanged: (val) {
+                          quizDescription = val;
+                        },
+                      ),
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          createQuiz();
+                        },
+                        child: Container(
+                          child: Center(
+                            child: Text(
+                              "Create Quiz",
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: ButtonColor),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
       ),
     );
   }

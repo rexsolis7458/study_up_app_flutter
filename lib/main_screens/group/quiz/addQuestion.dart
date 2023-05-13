@@ -59,16 +59,11 @@ class _AddQuestionState extends State<AddQuestion> {
         (value) {
           setState(() {
             _isLoading = false;
-
-            // Navigator.of(context, rootNavigator: true).pop();
           });
         },
       );
-     
-      }
-       if (_isLoading = false) {
-        Navigator.pop(context);
     }
+    Navigator.pop(context);
   }
 
   int counter = 0;
@@ -97,9 +92,9 @@ class _AddQuestionState extends State<AddQuestion> {
             ),
           )
         : Form(
-            // key: _formKey,
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 24),
+              padding: const EdgeInsets.only(
+                  left: 30, top: 5, right: 30, bottom: 25),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
