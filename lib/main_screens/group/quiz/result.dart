@@ -15,40 +15,43 @@ class Results extends StatefulWidget {
 class _ResultsState extends State<Results> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: BGColor,
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                '${widget.correct}/${widget.total}',
-                style: TextStyle(fontSize: 25),
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              Text(
-                "You answered ${widget.correct} answers correctly and"
-                "${widget.incorrect} answers incorrectly",
-                style: TextStyle(fontSize: 15, color: Colors.grey),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(
-                height: 14,
-              ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  foregroundColor: ButtonColor,
+    return Container(
+      child: Scaffold(
+        backgroundColor: BGColor,
+        body:
+         Container(
+          height: MediaQuery.of(context).size.height,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  '${widget.correct}/${widget.total}',
+                  style: TextStyle(fontSize: 25),
                 ),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text('Go Back'),
-              ),
-            ],
+                SizedBox(
+                  height: 8,
+                ),
+                Text(
+                  "You answered ${widget.correct} answers correctly and"
+                  "${widget.incorrect} answers incorrectly",
+                  style: TextStyle(fontSize: 15, color: Colors.grey),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(
+                  height: 14,
+                ),
+                TextButton(
+                  style: TextButton.styleFrom(
+                    foregroundColor: ButtonColor,
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text('Go Back'),
+                ),
+              ],
+            ),
           ),
         ),
       ),

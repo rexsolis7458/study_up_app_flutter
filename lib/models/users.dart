@@ -12,7 +12,7 @@ class UserModel {
   late String? institution;
   late String? degree;
   late String? age;
-  List <String>? subjectInterest;
+  List <dynamic>? subjectInterest;
 
   UserModel({
     this.id,

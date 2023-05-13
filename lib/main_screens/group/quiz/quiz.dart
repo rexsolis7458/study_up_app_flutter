@@ -19,7 +19,6 @@ int _incorrect = 0;
 int _notAttempted = 0;
 
 class _QuizState extends State<Quiz> {
-
   QuerySnapshot? questionSnapshot;
 
   getQuizData(String quizId) async {
@@ -30,9 +29,27 @@ class _QuizState extends State<Quiz> {
         .get();
   }
 
+  uploadQuizTaken(String quizId, Map<String, dynamic> quizData) async {
+    await FirebaseFirestore.instance
+        .collection("Quiz Taken")
+        .doc(quizId)
+        .collection('Quizzes')
+        .add(quizData)
+        .catchError((e) {
+      print(e.toString());
+    });
+  }
+
   QuestionModel getQuestionModelFromDatasnapshot(
       DocumentSnapshot questionSnapshot) {
-    QuestionModel questionModel = new QuestionModel();
+    QuestionModel questionModel = QuestionModel(
+        question: '',
+        option4: '',
+        option3: '',
+        option2: '',
+        option1: '',
+        correctOption: '',
+        answered: false);
 
     questionModel.question = questionSnapshot['question'];
 
@@ -116,6 +133,15 @@ class _QuizState extends State<Quiz> {
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.check),
           onPressed: () {
+            // uploadQuizTaken(
+            //     widget.quizId,QuestionModel(
+            //       question: '',
+            //      option4: '', 
+            //      option3: '', 
+            //      option2: '', 
+            //      option1: '', 
+            //      correctOption: '', 
+            //      answered: true) as Map<String, dynamic>);
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(

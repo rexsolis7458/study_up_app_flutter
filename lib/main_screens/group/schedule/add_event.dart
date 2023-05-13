@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:study_up_app/main_screens/group/schedule/calendar.dart';
 
 import '../../../helper/const.dart';
 
@@ -24,6 +26,8 @@ class _AddEventState extends State<AddEvent> {
   late DateTime _selectedDate;
   final _titleController = TextEditingController();
   final _descController = TextEditingController();
+  final _timeController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -65,6 +69,53 @@ class _AddEventState extends State<AddEvent> {
               labelText: 'title',
             ),
           ),
+          const SizedBox(width: 20),
+          const SizedBox(
+            height: 30,
+          ),
+          Expanded(
+            child: Column(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black45),
+                      borderRadius: BorderRadius.circular(12)),
+                  child: TextFormField(
+                    controller: _timeController,
+                    decoration: InputDecoration(
+                      icon: const Icon(Icons.timer),
+                      hintText: "Enter Time",
+                      hintStyle: TextStyle(color: Colors.grey[600]),
+                    ),
+                    readOnly: true,
+                    onTap: () async {
+                      TimeOfDay? pickedTime = await showTimePicker(
+                        initialTime: TimeOfDay.now(),
+                        context: context,
+                      );
+
+                      if (pickedTime != null) {
+                        print(pickedTime.format(context));
+                        DateTime parsedTime = DateFormat.jm()
+                            .parse(pickedTime.format(context).toString());
+                        print(parsedTime);
+                        String formattedTime =
+                            DateFormat('hh:mm').format(parsedTime);
+                        String amPm = parsedTime.hour < 12 ? "AM" : "PM";
+                        formattedTime = "$formattedTime $amPm";
+
+                        setState(() {
+                          _timeController.text = formattedTime;
+                        });
+                      } else {
+                        print("Time is not selected");
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
           const SizedBox(
             height: 30,
           ),
@@ -97,8 +148,31 @@ class _AddEventState extends State<AddEvent> {
   void _addEvent() async {
     final title = _titleController.text;
     final description = _descController.text;
-    if (title.isEmpty) {
+    final time = _timeController.text;
+    if (title.isEmpty && description.isEmpty && time.isEmpty) {
       print('title cannot be empty');
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Missing Information"),
+            content: const Text("Please fill out all required fields."),
+            actions: [
+              TextButton(
+                child: Text("OK"),
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Cal(group: widget.group),
+                    ),
+                  );
+                },
+              ),
+            ],
+          );
+        },
+      );
       return;
     }
     await FirebaseFirestore.instance
@@ -107,6 +181,7 @@ class _AddEventState extends State<AddEvent> {
       "id": widget.group.id,
       "title": title,
       "description": description,
+      "time": time,
       "date": Timestamp.fromDate(_selectedDate),
     });
     if (mounted) {

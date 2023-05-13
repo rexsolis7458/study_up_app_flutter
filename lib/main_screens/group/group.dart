@@ -4,13 +4,14 @@ import 'package:study_up_app/main_screens/group/groupChat/groupChat.dart';
 import 'package:study_up_app/main_screens/group/q&a/PostList.dart';
 import 'files/files.dart';
 import 'quiz/create_quiz.dart';
+import 'schedule/calendar.dart';
 import 'schedule/sched.dart';
 
 class Group extends StatefulWidget {
+  Group(this.group, this.currentUserId, {Key? key}) : super(key: key);
 
-  Group(this.group,{Key? key}) : super(key: key);
-  
   final DocumentSnapshot group;
+  final String? currentUserId;
 
   @override
   State<Group> createState() => _GroupState();
@@ -31,8 +32,7 @@ class _GroupState extends State<Group> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => GroupChat(widget.group
-                      ),
+                      builder: (_) => GroupChat(widget.group),
                     ));
               },
             ),
@@ -69,7 +69,7 @@ class _GroupState extends State<Group> {
               child: CreateQuiz(widget.group),
             ),
             Center(
-              child: Sched(widget.group),
+              child: Cal(group: widget.group),
             ),
           ],
         ),

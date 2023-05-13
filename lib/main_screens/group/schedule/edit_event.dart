@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../../helper/const.dart';
 import 'event.dart';
@@ -23,12 +24,15 @@ class _EditEventState extends State<EditEvent> {
   late DateTime _selectedDate;
   late TextEditingController _titleController;
   late TextEditingController _descController;
+  late TextEditingController _timeController;
+
   @override
   void initState() {
     super.initState();
     _selectedDate = widget.event.date;
     _titleController = TextEditingController(text: widget.event.title);
     _descController = TextEditingController(text: widget.event.description);
+    _timeController = TextEditingController(text: widget.event.time);
   }
 
   @override
@@ -69,6 +73,52 @@ class _EditEventState extends State<EditEvent> {
           const SizedBox(
             height: 30,
           ),
+          Expanded(
+            child: Column(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black45),
+                      borderRadius: BorderRadius.circular(12)),
+                  child: TextFormField(
+                    controller: _timeController,
+                    decoration: InputDecoration(
+                      icon: const Icon(Icons.timer),
+                      hintText: "Enter Time",
+                      hintStyle: TextStyle(color: Colors.grey[600]),
+                    ),
+                    readOnly: true,
+                    onTap: () async {
+                      TimeOfDay? pickedTime = await showTimePicker(
+                        initialTime: TimeOfDay.now(),
+                        context: context,
+                      );
+
+                      if (pickedTime != null) {
+                        print(pickedTime.format(context));
+                        DateTime parsedTime = DateFormat.jm()
+                            .parse(pickedTime.format(context).toString());
+                        print(parsedTime);
+                        String formattedTime =
+                            DateFormat('hh:mm').format(parsedTime);
+                        String amPm = parsedTime.hour < 12 ? "AM" : "PM";
+                        formattedTime = "$formattedTime $amPm";
+
+                        setState(() {
+                          _timeController.text = formattedTime;
+                        });
+                      } else {
+                        print("Time is not selected");
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 30,
+          ),
           TextField(
             controller: _descController,
             maxLines: 5,
@@ -97,6 +147,7 @@ class _EditEventState extends State<EditEvent> {
   void _addEvent() async {
     final title = _titleController.text;
     final description = _descController.text;
+    final time = _timeController.text;
     if (title.isEmpty) {
       print('title cannot be empty');
       return;
@@ -107,6 +158,7 @@ class _EditEventState extends State<EditEvent> {
         .update({
       "title": title,
       "description": description,
+      "time": time,
       "date": Timestamp.fromDate(_selectedDate),
     });
     if (mounted) {

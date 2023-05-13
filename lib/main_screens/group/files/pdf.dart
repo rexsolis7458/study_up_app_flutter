@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_document_picker/flutter_document_picker.dart';
 import 'dart:io';
@@ -7,7 +8,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:random_string/random_string.dart';
 import 'package:study_up_app/main_screens/group/files/file_model.dart';
 import '../../../helper/const.dart';
-
 
 class UploadPdf extends StatefulWidget {
   final DocumentSnapshot group;
@@ -18,11 +18,14 @@ class UploadPdf extends StatefulWidget {
 }
 
 class _UploadPdfState extends State<UploadPdf> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
   FileModel fileModel = FileModel(
       fileName: '',
       rateID: randomAlphaNumeric(16),
       ratingValue: 0,
       fileID: randomAlphaNumeric(16),
+      uploader: '',
       value: '',
       average: 0,
       updateid: '');
@@ -35,8 +38,14 @@ class _UploadPdfState extends State<UploadPdf> {
   firebase_storage.FirebaseStorage storage =
       firebase_storage.FirebaseStorage.instance;
 
+  String getUserId() {
+    User? user = _auth.currentUser;
+    return user?.uid ?? '';
+  }
+
   //Uploading of Files
   Future<firebase_storage.UploadTask?> uploadFile(File file) async {
+    String userId = getUserId();
     if (file == null) {
       print("No File was Picked!");
       Fluttertoast.showToast(
@@ -67,10 +76,11 @@ class _UploadPdfState extends State<UploadPdf> {
       {
         "date": Timestamp.fromDate(DateTime.now()),
         'fileName': fileModel.fileName,
-        'id': randomAlphaNumeric(16)
+        'id': randomAlphaNumeric(16),
+        'uploader': userId,
       },
     );
-    
+
     uploadTask = ref.putData(await file.readAsBytes(), metadata);
     print("Uploaded");
     Fluttertoast.showToast(
@@ -120,6 +130,7 @@ class _UploadPdfState extends State<UploadPdf> {
                     rateID: fileModel.rateID,
                     ratingValue: fileModel.ratingValue,
                     fileID: fileModel.fileID,
+                    uploader: fileModel.uploader,
                     value: fileModel.value,
                     average: fileModel.average,
                     updateid: fileModel.updateid,

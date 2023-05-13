@@ -3,11 +3,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Event {
   final String title;
   final String description;
+  final String time;
   final DateTime date;
   final String id;
   Event({
     required this.title,
     required this.description,
+    required this.time,
     required this.date,
     required this.id,
   });
@@ -19,6 +21,7 @@ class Event {
       date: data['date'].toDate(),
       title: data['title'],
       description: data['description'],
+      time: data['time'],
       id: snapshot.id,
     );
   }
@@ -27,7 +30,8 @@ class Event {
     return {
       "date": Timestamp.fromDate(date),
       "title": title,
-      "description": description
+      "description": description,
+      "time": time
     };
   }
 }

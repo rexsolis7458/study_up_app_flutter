@@ -89,7 +89,7 @@ class QuizTile extends StatelessWidget {
 
   Widget build(BuildContext context) {
     final currentUser = FirebaseAuth.instance.currentUser;
-    final userId = currentUser?.uid;
+    final userId = currentUser!.uid;
 
     return GestureDetector(
       onTap: () {
@@ -126,37 +126,62 @@ class QuizTile extends StatelessWidget {
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  IconButton(
-                    icon: const Icon(Icons.delete),
-                    color: Color.fromARGB(255, 223, 58, 46),
-                    onPressed: () async {
-                      final delete = await showDialog<bool>(
-                        context: context,
-                        builder: (_) => AlertDialog(
-                          title: const Text("Delete Event?"),
-                          content:
-                              const Text("Are you sure you want to delete?"),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.pop(context, false),
-                              style: TextButton.styleFrom(
-                                foregroundColor: Colors.black,
-                              ),
-                              child: const Text("No"),
-                            ),
-                            TextButton(
-                              onPressed: () => Navigator.pop(context, true),
-                              style: TextButton.styleFrom(
-                                foregroundColor: Colors.red,
-                              ),
-                              child: const Text("Yes"),
-                            ),
-                          ],
-                        ),
-                      );
-                      if (delete ?? false) {
-                        databaseService.deleteQuizData(quizId);
+                  FutureBuilder<QuerySnapshot>(
+                    future: FirebaseFirestore.instance
+                        .collection('Quiz')
+                        .where('quizId', isEqualTo: groupId)
+                        .get(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<QuerySnapshot> snapshot) {
+                      if (snapshot.hasError) {
+                        return Text('Something went wrong');
                       }
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        var groupDocs = snapshot.data!.docs;
+                        if (groupDocs.isNotEmpty &&
+                            groupDocs.first.get('groupLeader') == userId) {
+                          // Show the delete button only if the current user is the group leader
+                          return IconButton(
+                            icon: const Icon(Icons.delete),
+                            color: Color.fromARGB(255, 223, 58, 46),
+                            onPressed: () async {
+                              final delete = await showDialog<bool>(
+                                context: context,
+                                builder: (_) => AlertDialog(
+                                  title: const Text("Delete Event?"),
+                                  content: const Text(
+                                      "Are you sure you want to delete?"),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.pop(context, false),
+                                      style: TextButton.styleFrom(
+                                        foregroundColor: Colors.black,
+                                      ),
+                                      child: const Text("No"),
+                                    ),
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.pop(context, true),
+                                      style: TextButton.styleFrom(
+                                        foregroundColor: Colors.red,
+                                      ),
+                                      child: const Text("Yes"),
+                                    ),
+                                  ],
+                                ),
+                              );
+                              if (delete ?? false) {
+                                databaseService.deleteQuizData(quizId);
+                              }
+                            },
+                          );
+                        } else {
+                          // Show nothing if the current user is not the group leader
+                          return SizedBox.shrink();
+                        }
+                      }
+                      return CircularProgressIndicator(); // while waiting for data to load
                     },
                   ),
                   if (userId != null)
