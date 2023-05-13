@@ -60,7 +60,7 @@ class _GroupState extends State<Group> {
         body: TabBarView(
           children: [
             Center(
-              child: HomeFile(widget.group,widget.currentUserId),
+              child: HomeFile(widget.group),
             ),
             Center(
               child: PostList(widget.group),

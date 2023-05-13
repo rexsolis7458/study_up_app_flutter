@@ -32,6 +32,7 @@ class _EditEventState extends State<EditEvent> {
     _selectedDate = widget.event.date;
     _titleController = TextEditingController(text: widget.event.title);
     _descController = TextEditingController(text: widget.event.description);
+    _timeController = TextEditingController(text: widget.event.time);
   }
 
   @override
@@ -114,6 +115,9 @@ class _EditEventState extends State<EditEvent> {
                 ),
               ],
             ),
+          ),
+          const SizedBox(
+            height: 30,
           ),
           TextField(
             controller: _descController,

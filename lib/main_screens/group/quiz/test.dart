@@ -3,6 +3,7 @@
 // import 'package:study_up_app/main_screens/group/quiz/create_quiz.dart';
 // import 'package:study_up_app/main_screens/group/quiz/quiz.dart';
 // import 'package:study_up_app/services/database.dart';
+// import 'package:thesis_eul/screens/student_Screens/student_dashboard/file_upload/questions_model.dart';
 
 // import '../../../helper/const.dart';
 
@@ -40,32 +41,62 @@
 
 //   uploadQuestionData() async {
 //     // if (_formKey.currentState!.validate()) {
-//       setState(() {
-//         _isLoading = true;
-//       });
-
-//     Map<String, String> questionMap = {
-//       'question': question,
-//       'option1': option1,
-//       'option2': option2,
-//       'option3': option3,
-//       'option4': option4,
-//     };
-//     await addQuestionData(widget.quizId, questionMap).then((value) {
-//       setState(() {
-//         _isLoading = false;
-//       });
+//     setState(() {
+//       _isLoading = true;
 //     });
-//   }
-  
 
+//     for (int i = 0; i < questionModel.length; i++) {
+//       Map<String, String> questionMap = {
+//         'question': questionModel[i].question,
+//         'option1': questionModel[i].option1,
+//         'option2': questionModel[i].option2,
+//         'option3': questionModel[i].option3,
+//         'option4': questionModel[i].option4,
+//       };
+//       await addQuestionData(widget.quizId, questionMap).then((value) {
+//         setState(() {
+//           _isLoading = false;
+//         });
+//       });   
+//     }
+//   }
+//   // uploadQuestionData() async {
+//   //   // if (_formKey.currentState!.validate()) {
+//   //   // setState(() {
+//   //   //   _isLoading = true;
+//   //   // });
+
+//   //   // Map<String, String> questionMap = {
+//   //   //   'question': question,
+//   //   //   'option1': option1,
+//   //   //   'option2': option2,
+//   //   //   'option3': option3,
+//   //   //   'option4': option4,
+//   //   // };
+//   //   // await addQuestionData(widget.quizId, questionMap).then((value) {
+//   //   //   setState(() {
+//   //   //     _isLoading = false;
+//   //   //   });
+//   //   // });
+//   // }
+//   List<QuestionModel> questionModel = [];
+//   int counter = 0;
+//   String onchangeval = "";
 //   void addQuestion() {
 //     setState(() {
-//       test.add(addQuestionTile());
+//       final payload = QuestionModel(
+//           question: " ",
+//           option1: " ",
+//           option2: " ",
+//           option3: " ",
+//           option4: " ");
+//       questionModel.add(payload);
+//       test.add(addQuestionTile(counter));
+//       counter += 1;
 //     });
 //   }
 
-//   Widget addQuestionTile() {
+//   Widget addQuestionTile(int counter) {
 //     return _isLoading
 //         ? Container(
 //             child: Center(
@@ -93,8 +124,11 @@
 //                       ),
 //                       hintText: "Question",
 //                     ),
-//                     onChanged: (val) {
-//                       question = val;
+//                     onChanged: (value) {
+//                       setState(() {
+//                         onchangeval = value;
+//                       });
+//                       questionModel[counter].question = onchangeval;
 //                     },
 //                   ),
 //                   const SizedBox(
@@ -106,8 +140,11 @@
 //                     decoration: InputDecoration(
 //                       hintText: "Option 1 (Correct Answer)",
 //                     ),
-//                     onChanged: (val) {
-//                       option1 = val;
+//                      onChanged: (value) {
+//                       setState(() {
+//                         onchangeval = value;
+//                       });
+//                       questionModel[counter].option1 = onchangeval;
 //                     },
 //                   ),
 //                   const SizedBox(
@@ -119,8 +156,11 @@
 //                     decoration: InputDecoration(
 //                       hintText: "Option 2 ",
 //                     ),
-//                     onChanged: (val) {
-//                       option2 = val;
+//                     onChanged: (value) {
+//                       setState(() {
+//                         onchangeval = value;
+//                       });
+//                       questionModel[counter].option2 = onchangeval;
 //                     },
 //                   ),
 //                   const SizedBox(
@@ -132,8 +172,11 @@
 //                     decoration: InputDecoration(
 //                       hintText: "Option 3",
 //                     ),
-//                     onChanged: (val) {
-//                       option3 = val;
+//                      onChanged: (value) {
+//                       setState(() {
+//                         onchangeval = value;
+//                       });
+//                       questionModel[counter].option3 = onchangeval;
 //                     },
 //                   ),
 //                   const SizedBox(
@@ -145,8 +188,11 @@
 //                     decoration: InputDecoration(
 //                       hintText: "Option 4 ",
 //                     ),
-//                     onChanged: (val) {
-//                       option4 = val;
+//                     onChanged: (value) {
+//                       setState(() {
+//                         onchangeval = value;
+//                       });
+//                       questionModel[counter].option4 = onchangeval;
 //                     },
 //                   ),
 //                   const SizedBox(

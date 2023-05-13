@@ -11,8 +11,7 @@ import '../../../helper/const.dart';
 
 class UploadPdf extends StatefulWidget {
   final DocumentSnapshot group;
-  UploadPdf(this.group, this.currentUserId);
-  final String? currentUserId;
+  UploadPdf(this.group);
 
   @override
   _UploadPdfState createState() => _UploadPdfState();

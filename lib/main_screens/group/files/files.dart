@@ -1,23 +1,35 @@
 import 'package:advance_pdf_viewer_fork/advance_pdf_viewer_fork.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:random_string/random_string.dart';
 import 'package:study_up_app/helper/const.dart';
+import 'package:study_up_app/main_screens/group/files/file_model.dart';
+import 'package:study_up_app/models/group.dart';
 import 'pdf.dart';
 import 'viewPDF.dart';
 
 class HomeFile extends StatefulWidget {
   final DocumentSnapshot group;
-final String? currentUserId;
 
-  HomeFile(this.group,this.currentUserId, {Key? key}) : super(key: key);
+  HomeFile(this.group, {Key? key}) : super(key: key);
 
   @override
   State<HomeFile> createState() => _HomeFileState();
 }
 
 class _HomeFileState extends State<HomeFile> {
+  FileModel fileModel = FileModel(
+      fileName: '',
+      rateID: randomAlphaNumeric(16),
+      ratingValue: 0,
+      fileID: randomAlphaNumeric(16),
+      uploader: '',
+      value: '',
+      average: 0,
+      updateid: '');
   PDFDocument document = PDFDocument();
 
   late Future<ListResult> futureFiles;
@@ -38,6 +50,17 @@ class _HomeFileState extends State<HomeFile> {
     await storage.ref(ref).delete();
     // Rebuild the UI
     setState(() {});
+  }
+
+  Future<void> _deleteButton(String ref) async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+
+    final User? user = auth.currentUser;
+    final currentUserId = user!.uid;
+    QuerySnapshot button = await FirebaseFirestore.instance
+        .collection('groups')
+        .where('groupLeader', isEqualTo: currentUserId)
+        .get();
   }
 
   Future<double> getAverageRating(String id) async {
@@ -79,6 +102,10 @@ class _HomeFileState extends State<HomeFile> {
                 return ListView.builder(
                   itemCount: files.length,
                   itemBuilder: (context, index) {
+                    final FirebaseAuth auth = FirebaseAuth.instance;
+
+                    final User? user = auth.currentUser;
+                    final currentUserId = user!.uid;
                     final file = files[index];
                     return Card(
                       color: BGColor,
@@ -103,39 +130,64 @@ class _HomeFileState extends State<HomeFile> {
                             }
                           },
                         ),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.delete),
-                          color: Colors.red,
-                          onPressed: () async {
-                            final delete = await showDialog<bool>(
-                              context: context,
-                              builder: (_) => AlertDialog(
-                                title: const Text("Delete Event?"),
-                                content: const Text(
-                                    "Are you sure you want to delete?"),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () =>
-                                        Navigator.pop(context, false),
-                                    style: TextButton.styleFrom(
-                                      foregroundColor: Colors.black,
-                                    ),
-                                    child: const Text("No"),
-                                  ),
-                                  TextButton(
-                                    onPressed: () =>
-                                        Navigator.pop(context, true),
-                                    style: TextButton.styleFrom(
-                                      foregroundColor: Colors.red,
-                                    ),
-                                    child: const Text("Yes"),
-                                  ),
-                                ],
-                              ),
-                            );
-                            if (delete ?? false) {
-                              _delete(file.fullPath);
+                        trailing: FutureBuilder<QuerySnapshot>(
+                          future: FirebaseFirestore.instance
+                              .collection('groups')
+                              .where('groupId', isEqualTo: widget.group.id)
+                              .get(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<QuerySnapshot> snapshot) {
+                            if (snapshot.hasError) {
+                              return Text('Something went wrong');
                             }
+                            if (snapshot.connectionState ==
+                                ConnectionState.done) {
+                              var groupDocs = snapshot.data!.docs;
+                              if (groupDocs.isNotEmpty &&
+                                  groupDocs.first.get('groupLeader') ==
+                                      currentUserId) {
+                                // Show the delete button only if the current user is the group leader
+                                return IconButton(
+                                  icon: const Icon(Icons.delete),
+                                  color: Colors.red,
+                                  onPressed: () async {
+                                    final delete = await showDialog<bool>(
+                                      context: context,
+                                      builder: (_) => AlertDialog(
+                                        title: const Text("Delete Event?"),
+                                        content: const Text(
+                                            "Are you sure you want to delete?"),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () =>
+                                                Navigator.pop(context, false),
+                                            style: TextButton.styleFrom(
+                                              foregroundColor: Colors.black,
+                                            ),
+                                            child: const Text("No"),
+                                          ),
+                                          TextButton(
+                                            onPressed: () =>
+                                                Navigator.pop(context, true),
+                                            style: TextButton.styleFrom(
+                                              foregroundColor: Colors.red,
+                                            ),
+                                            child: const Text("Yes"),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                    if (delete ?? false) {
+                                      _delete(file.fullPath);
+                                    }
+                                  },
+                                );
+                              } else {
+                                // Show nothing if the current user is not the group leader
+                                return SizedBox.shrink();
+                              }
+                            }
+                            return CircularProgressIndicator(); // while waiting for data to load
                           },
                         ),
                         onTap: () {
@@ -170,7 +222,7 @@ class _HomeFileState extends State<HomeFile> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => UploadPdf(widget.group,widget.currentUserId),
+                builder: (context) => UploadPdf(widget.group),
               ),
             );
           },
