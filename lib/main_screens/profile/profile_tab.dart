@@ -12,6 +12,7 @@ import 'package:study_up_app/controller/auth_controller.dart';
 import 'package:study_up_app/controller/userController.dart';
 import 'package:study_up_app/helper/const.dart';
 import 'package:study_up_app/main_screens/profile/favScreen.dart';
+import 'package:study_up_app/main_screens/profile/group_request.dart';
 import 'package:study_up_app/main_screens/profile/myQuestions.dart';
 import 'package:study_up_app/main_screens/profile/profileModel.dart';
 import 'package:study_up_app/main_screens/profile/userFiles.dart';
@@ -266,7 +267,7 @@ class _ProfileTabState extends State<ProfileTab> {
               child: Column(
                 children: [
                   const SizedBox(
-                    height: 50,
+                    height: 20,
                   ),
                   Stack(
                     children: [
@@ -364,7 +365,7 @@ class _ProfileTabState extends State<ProfileTab> {
                     ],
                   ),
                   const SizedBox(
-                    height: 15,
+                    height: 5,
                   ),
                   TextButton(
                     style: TextButton.styleFrom(
@@ -383,7 +384,7 @@ class _ProfileTabState extends State<ProfileTab> {
                     child: const Text('Edit Profile'),
                   ),
                   const SizedBox(
-                    height: 15,
+                    height: 5,
                   ),
                   Text('${_.user.firstname} ${_.user.lastname}'),
                   const SizedBox(
@@ -393,9 +394,9 @@ class _ProfileTabState extends State<ProfileTab> {
                   const SizedBox(
                     height: 30,
                   ),
-                  const SizedBox(
-                    height: 30,
-                  ),
+                  // const SizedBox(
+                  //   height: 30,
+                  // ),
                   Card(
                       color: BGColor,
                       margin: const EdgeInsets.symmetric(
@@ -531,6 +532,43 @@ class _ProfileTabState extends State<ProfileTab> {
                             ),
                             Text(
                               'My Questions',
+                              style: TextStyle(fontSize: 17),
+                            ),
+                            SizedBox(
+                              width: 150,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      // Navigate to another page
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => GroupRequestsPage(),
+                        ),
+                      );
+                    },
+                    child: SizedBox(
+                      height: 70,
+                      child: Card(
+                        color: BGColor,
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 2.0, horizontal: 10.0),
+                        child: Row(
+                          children: const [
+                            SizedBox(
+                              width: 15,
+                            ),
+                            Icon(Icons.message),
+                            SizedBox(
+                              width: 32,
+                            ),
+                            Text(
+                              'Group Request',
                               style: TextStyle(fontSize: 17),
                             ),
                             SizedBox(

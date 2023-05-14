@@ -62,6 +62,7 @@ class Database {
         'Time available End': to,
         'groupCreated': Timestamp.now(),
         'groupId': '',
+        'requiresApproval': true,
       });
 
       // Update the 'groupId' field with the ID of the newly created document
@@ -94,7 +95,8 @@ class Database {
     return retVal;
   }
 
-  Future<String> joinGroupByName(String groupName, String userUid) async {
+  Future<String> joinGroupByName(
+      String groupName, String userUid, String fullname) async {
     String retVal = "error";
     List<String> members = [];
 
@@ -107,19 +109,46 @@ class Database {
           .get();
 
       if (groupDocRef.docs.isNotEmpty) {
-        // Add the user to the group members list
-        members.add(userUid);
-        await groupDocRef.docs.first.reference.update({
-          'members': FieldValue.arrayUnion(members),
-        });
+        // Check if the group requires approval for new members
+        bool requiresApproval =
+            groupDocRef.docs.first.data()["requiresApproval"] ?? false;
 
-        // Update the user's group ID in their user document
-        // Uncomment the following lines if you want to update the user's group ID as well
-        // await _firestore.collection("users").doc(userUid).update({
-        //   'groupId': groupDocRef.docs.first.id,
-        // });
+        // If approval is required, add the user to the group requests collection
+        if (requiresApproval) {
+          final groupRequestsCollectionRef =
+              _firestore.collection("group_requests");
 
-        retVal = "success";
+          // Check if the user has already requested to join the group
+          final querySnapshot = await groupRequestsCollectionRef
+              .where("groupId", isEqualTo: groupDocRef.docs.first.id)
+              .where("userId", isEqualTo: userUid)
+              .get();
+
+          if (querySnapshot.docs.isEmpty) {
+            // Add a new request document to the group requests collection
+            await groupRequestsCollectionRef.add({
+              'groupId': groupDocRef.docs.first.id,
+              'userId': userUid,
+              'groupLeader': groupDocRef.docs.first.data()['groupLeader'],
+              'timestamp': FieldValue.serverTimestamp(),
+              'groupName': groupDocRef.docs.first.data()['groupName'],
+              'usersName': fullname,
+            });
+
+            retVal = "pending";
+          } else {
+            retVal = "already_pending";
+          }
+        }
+        // Otherwise, add the user to the group members list
+        else {
+          members.add(userUid);
+          await groupDocRef.docs.first.reference.update({
+            'members': FieldValue.arrayUnion(members),
+          });
+
+          retVal = "success";
+        }
       } else {
         print("Group with name $groupName not found.");
       }
