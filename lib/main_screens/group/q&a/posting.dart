@@ -12,8 +12,29 @@ class PostPost extends StatefulWidget {
 }
 
 class _PostPostState extends State<PostPost> {
+  List<String> _subjectItems = [];
+  String? _selectedSubject;
+
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _contentController = TextEditingController();
+
+  Future<void> getSubjectsFromFirestore() async {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('Subjects')
+          .limit(1)
+          .get();
+      if (querySnapshot.docs.isNotEmpty) {
+        setState(() {
+          _subjectItems = List<String>.from(querySnapshot.docs.first['items']);
+        });
+      } else {
+        print('No documents found in the collection');
+      }
+    } catch (error) {
+      print("Error fetching subjects collection: $error");
+    }
+  }
 
   void _addPost() async {
     final userDoc = await FirebaseFirestore.instance
@@ -31,6 +52,7 @@ class _PostPostState extends State<PostPost> {
       'content': _contentController.text.trim(),
       'authorId': FirebaseAuth.instance.currentUser!.uid,
       'createdAt': Timestamp.now(),
+      'subject': _selectedSubject,
     }).then((value) {
       _titleController.clear();
       _contentController.clear();
@@ -53,6 +75,25 @@ class _PostPostState extends State<PostPost> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            Container(
+              padding: const EdgeInsets.only(left: 15, top: 5, right: 30),
+              alignment: Alignment.topLeft,
+              child: DropdownButton<String>(
+                value: _selectedSubject,
+                hint: Text('Select an option'),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _selectedSubject = newValue;
+                  });
+                },
+                items: _subjectItems.map((String subject) {
+                  return DropdownMenuItem<String>(
+                    value: subject,
+                    child: Text(subject),
+                  );
+                }).toList(),
+              ),
+            ),
             TextField(
               controller: _titleController,
               decoration: InputDecoration(hintText: 'Title'),
