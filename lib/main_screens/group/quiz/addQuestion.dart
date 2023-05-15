@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:study_up_app/main_screens/group/quiz/create_quiz.dart';
 import 'package:study_up_app/main_screens/group/quiz/quiz.dart';
+import 'package:study_up_app/main_screens/group/quiz/review.dart';
 import 'package:study_up_app/services/database.dart';
 
 import '../../../helper/const.dart';
@@ -25,6 +27,8 @@ class _AddQuestionState extends State<AddQuestion> {
       option4 = "";
 
   final _formKey = GlobalKey<FormState>();
+
+  User currentUser = FirebaseAuth.instance.currentUser!;
 
   bool _isLoading = false;
   List<Widget> test = [];
@@ -77,7 +81,7 @@ class _AddQuestionState extends State<AddQuestion> {
           option3: " ",
           option4: " ",
           answered: true,
-          correctOption: '');
+          correctOption: '',);
       questionModel.add(payload);
       test.add(addQuestionTile(counter));
       counter += 1;
@@ -194,6 +198,7 @@ class _AddQuestionState extends State<AddQuestion> {
 
   @override
   Widget build(BuildContext context) {
+    String questionMap;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       floatingActionButton:

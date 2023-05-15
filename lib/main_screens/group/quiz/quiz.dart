@@ -17,6 +17,7 @@ int total = 0;
 int _correct = 0;
 int _incorrect = 0;
 int _notAttempted = 0;
+int _questionSnapshot = 0;
 
 class _QuizState extends State<Quiz> {
   QuerySnapshot? questionSnapshot;
@@ -81,6 +82,7 @@ class _QuizState extends State<Quiz> {
       total = questionSnapshot!.docs.length;
       setState(() {});
     });
+
     super.initState();
   }
 
@@ -136,17 +138,20 @@ class _QuizState extends State<Quiz> {
             // uploadQuizTaken(
             //     widget.quizId,QuestionModel(
             //       question: '',
-            //      option4: '', 
-            //      option3: '', 
-            //      option2: '', 
-            //      option1: '', 
-            //      correctOption: '', 
+            //      option4: '',
+            //      option3: '',
+            //      option2: '',
+            //      option1: '',
+            //      correctOption: '',
             //      answered: true) as Map<String, dynamic>);
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                 builder: (context) => Results(
-                    correct: _correct, incorrect: _incorrect, total: total),
+                    questionSnapshot: _questionSnapshot,
+                    correct: _correct,
+                    incorrect: _incorrect,
+                    total: total),
               ),
             );
           }),
