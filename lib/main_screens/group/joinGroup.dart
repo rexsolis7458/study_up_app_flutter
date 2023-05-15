@@ -26,7 +26,7 @@ class _CreateGroupState extends State<JoinGroup> {
     String firstName = userDoc.get('firstname');
     String lastName = userDoc.get('lastname');
 
-    String fullname = firstName + lastName;
+    String fullname = firstName + " " + lastName;
 
     String? returnString =
         await Database().joinGroupByName(groupName, user.uid, fullname);
