@@ -9,6 +9,7 @@ class PostModel {
   Timestamp createdAt;
   List<String> upvoters;
   List<String> downvoters;
+  String subject;
 
   PostModel({
     required this.id,
@@ -19,6 +20,7 @@ class PostModel {
     required this.createdAt,
     required this.upvoters,
     required this.downvoters,
+    required this.subject
   });
 
   factory PostModel.fromFirestore(DocumentSnapshot doc) {
@@ -33,6 +35,7 @@ class PostModel {
       createdAt: data['createdAt'] ?? Timestamp.now(),
       upvoters: List<String>.from(data['upvoters'] ?? []),
       downvoters: List<String>.from(data['downvoters'] ?? []),
+      subject: data['subject'] ?? '',
     );
   }
 
@@ -44,6 +47,7 @@ class PostModel {
         'createdAt': createdAt,
         'upvoters': upvoters,
         'downvoters': downvoters,
+        'subject': subject,
       };
 
   bool didUpvote(String userId) {

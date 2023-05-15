@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:study_up_app/main_screens/group/quiz/quiz_widget.dart';
 import 'package:study_up_app/main_screens/group/quiz/result.dart';
+import 'package:study_up_app/main_screens/group/quiz/results.dart';
 import '../../../helper/const.dart';
 import 'question_model.dart';
 
@@ -145,8 +146,8 @@ class _QuizState extends State<Quiz> {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => Results(
-                    correct: _correct, incorrect: _incorrect, total: total),
+                builder: (context) => Resultss(
+                    correct: _correct, incorrect: _incorrect, total: total, questionSnapshot: questionSnapshot!.docs,),
               ),
             );
           }),

@@ -18,23 +18,29 @@ class _PostPostState extends State<PostPost> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _contentController = TextEditingController();
 
-  Future<void> getSubjectsFromFirestore() async {
-    try {
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-          .collection('Subjects')
-          .limit(1)
-          .get();
-      if (querySnapshot.docs.isNotEmpty) {
-        setState(() {
-          _subjectItems = List<String>.from(querySnapshot.docs.first['items']);
-        });
-      } else {
-        print('No documents found in the collection');
-      }
-    } catch (error) {
-      print("Error fetching subjects collection: $error");
-    }
+  @override
+  void initState() {
+    super.initState();
+    getSubjectsFromFirestore();
   }
+
+  Future<void> getSubjectsFromFirestore() async {
+  try {
+    QuerySnapshot<Map<String, dynamic>> groupDocs = await FirebaseFirestore.instance
+        .collection('groups')
+        .where('groupId', isEqualTo: widget.group.id)
+        .get();
+    if (groupDocs.docs.isNotEmpty) {
+      setState(() {
+        _subjectItems = List<String>.from(groupDocs.docs.first['Subjects']);
+      });
+    } else {
+      print('No group found with id ${widget.group.id}');
+    }
+  } catch (error) {
+    print("Error fetching subjects collection: $error");
+  }
+}
 
   void _addPost() async {
     final userDoc = await FirebaseFirestore.instance
@@ -76,24 +82,36 @@ class _PostPostState extends State<PostPost> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Container(
-              padding: const EdgeInsets.only(left: 15, top: 5, right: 30),
-              alignment: Alignment.topLeft,
-              child: DropdownButton<String>(
-                value: _selectedSubject,
-                hint: Text('Select an option'),
-                onChanged: (String? newValue) {
-                  setState(() {
-                    _selectedSubject = newValue;
-                  });
-                },
-                items: _subjectItems.map((String subject) {
-                  return DropdownMenuItem<String>(
-                    value: subject,
-                    child: Text(subject),
-                  );
-                }).toList(),
+  padding: const EdgeInsets.only(left: 15, top: 5, right: 30),
+  alignment: Alignment.topLeft,
+  child: Row(
+    children: <Widget>[
+      SizedBox(
+        width: 300, // adjust the width as needed
+        child: DropdownButton<String>(
+          value: _selectedSubject,
+          hint: Text('Select a subject'),
+          isExpanded: true, // ensures that the dropdown button fills its parent's width
+          onChanged: (String? newValue) {
+            setState(() {
+              _selectedSubject = newValue;
+            });
+          },
+          items: _subjectItems.map((String subject) {
+            return DropdownMenuItem<String>(
+              value: subject,
+              child: Text(
+                subject,
+                overflow: TextOverflow.ellipsis, // add ellipsis when text overflows
+                maxLines: 1, // restrict text to a single line
               ),
-            ),
+            );
+          }).toList(),
+        ),
+      ),
+    ],
+  ),
+),
             TextField(
               controller: _titleController,
               decoration: InputDecoration(hintText: 'Title'),

@@ -98,9 +98,7 @@ class _PostListState extends State<PostList> {
 
                   return Card(
                     color: BGColor,
-                    // margin: EdgeInsets.symmetric(vertical: 10.0),
                     child: Column(
-                      // crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Container(
                           padding: const EdgeInsets.only(
@@ -111,6 +109,16 @@ class _PostListState extends State<PostList> {
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          width: double.infinity,
+                          child: Text(
+                            '     ${post.subject}',
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
                         Container(
                           width: double.infinity,
                           child: Text(
@@ -118,6 +126,7 @@ class _PostListState extends State<PostList> {
                             textAlign: TextAlign.left,
                           ),
                         ),
+                        
                         const SizedBox(
                           height: 10,
                         ),

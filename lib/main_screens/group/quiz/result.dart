@@ -34,7 +34,7 @@ class _ResultsState extends State<Results> {
                 ),
                 Text(
                   "You answered ${widget.correct} answers correctly and"
-                  "${widget.incorrect} answers incorrectly",
+                  " ${ widget.incorrect} answers incorrectly",
                   style: TextStyle(fontSize: 15, color: Colors.grey),
                   textAlign: TextAlign.center,
                 ),
