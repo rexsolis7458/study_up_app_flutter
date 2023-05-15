@@ -1,58 +1,79 @@
 import 'package:flutter/material.dart';
-import '../../../helper/const.dart';
+import 'package:study_up_app/main_screens/group/quiz/question_model.dart';
+import 'package:study_up_app/main_screens/group/quiz/results.dart';
 
-class Results extends StatefulWidget {
-  final int correct, incorrect, total;
-  Results({
-    required this.correct,
-    required this.incorrect,
-    required this.total,
-  });
-  @override
-  State<Results> createState() => _ResultsState();
-}
+class Results extends StatelessWidget {
+  final int correct;
+  final int incorrect;
+  final int total;
+  final List<QuestionModel> questionList;
 
-class _ResultsState extends State<Results> {
+  Results(
+      {required this.correct,
+      required this.incorrect,
+      required this.total,
+      required this.questionList});
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Scaffold(
-        backgroundColor: BGColor,
-        body:
-         Container(
-          height: MediaQuery.of(context).size.height,
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  '${widget.correct}/${widget.total}',
-                  style: TextStyle(fontSize: 25),
-                ),
-                SizedBox(
-                  height: 8,
-                ),
-                Text(
-                  "You answered ${widget.correct} answers correctly and"
-                  " ${ widget.incorrect} answers incorrectly",
-                  style: TextStyle(fontSize: 15, color: Colors.grey),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(
-                  height: 14,
-                ),
-                TextButton(
-                  style: TextButton.styleFrom(
-                    foregroundColor: ButtonColor,
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text('Go Back'),
-                ),
-              ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Quiz Result'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Result',
+              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
             ),
-          ),
+            SizedBox(
+              height: 20,
+            ),
+            Text(
+              'Total Questions: $total',
+              style: TextStyle(fontSize: 20),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Text(
+              'Correct Answers: $correct',
+              style: TextStyle(fontSize: 20, color: Colors.green),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Text(
+              'Incorrect Answers: $incorrect',
+              style: TextStyle(fontSize: 20, color: Colors.red),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            // ElevatedButton(
+            //   onPressed: () {
+            //     Navigator.of(context).popUntil((route) => route.isFirst);
+            //   },
+            //   child: Text('Back to Home'),
+            // ),
+            SizedBox(
+              height: 20,
+            ),
+            Expanded(
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: questionList.length,
+                itemBuilder: (context, index) {
+                  return ResultTile(
+                    questionModel: questionList[index],
+                    index: index,
+                  );
+                },
+              ),
+            )
+          ],
         ),
       ),
     );

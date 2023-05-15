@@ -6,6 +6,8 @@ class QuestionModel {
   String option4;
   String correctOption;
   bool answered;
+  String? answeredOption; // added this
+  bool get isCorrect => answeredOption == correctOption; // added this
 
   QuestionModel({
     required this.question,
@@ -14,7 +16,8 @@ class QuestionModel {
     required this.option3,
     required this.option4,
     required this.correctOption,
-    required this.answered,
+    this.answered = false,
+    this.answeredOption, // added this
   });
 
   factory QuestionModel.fromMap(Map<String, dynamic> map) {

@@ -88,70 +88,71 @@ class _QuizState extends State<Quiz> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: BGColor,
-      appBar: AppBar(
-        centerTitle: true,
-        elevation: 0,
-        iconTheme: IconThemeData(
-          color: Colors.black54,
-        ),
-        title: Text(
-          'StudyUp',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
+        backgroundColor: BGColor,
+        appBar: AppBar(
+          centerTitle: true,
+          elevation: 0,
+          iconTheme: IconThemeData(
+            color: Colors.black54,
+          ),
+          title: Text(
+            'StudyUp',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-          margin: EdgeInsets.only(bottom: 8, top: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              questionSnapshot == null
-                  ? Container(
-                      child: Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    )
-                  : ListView.builder(
-                      padding: EdgeInsets.symmetric(horizontal: 24),
-                      shrinkWrap: true,
-                      physics: ClampingScrollPhysics(),
-                      itemCount: questionSnapshot!.docs.length,
-                      itemBuilder: (context, index) {
-                        return QuizTile(
-                          questionModel: getQuestionModelFromDatasnapshot(
-                              questionSnapshot!.docs[index]),
-                          index: index,
-                        );
-                      })
-            ],
+        body: SingleChildScrollView(
+          child: Container(
+            margin: EdgeInsets.only(bottom: 8, top: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                questionSnapshot == null
+                    ? Container(
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      )
+                    : ListView.builder(
+                        padding: EdgeInsets.symmetric(horizontal: 24),
+                        shrinkWrap: true,
+                        physics: ClampingScrollPhysics(),
+                        itemCount: questionSnapshot!.docs.length,
+                        itemBuilder: (context, index) {
+                          return QuizTile(
+                            questionModel: getQuestionModelFromDatasnapshot(
+                                questionSnapshot!.docs[index]),
+                            index: index,
+                          );
+                        })
+              ],
+            ),
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
+        floatingActionButton: FloatingActionButton(
           child: Icon(Icons.check),
-          onPressed: () {
-            // uploadQuizTaken(
-            //     widget.quizId,QuestionModel(
-            //       question: '',
-            //      option4: '', 
-            //      option3: '', 
-            //      option2: '', 
-            //      option1: '', 
-            //      correctOption: '', 
-            //      answered: true) as Map<String, dynamic>);
+          onPressed: () async {
+            List<QuestionModel> questionList = [];
+            for (var i = 0; i < questionSnapshot!.docs.length; i++) {
+              var question =
+                  getQuestionModelFromDatasnapshot(questionSnapshot!.docs[i]);
+              questionList.add(question);
+            }
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => Resultss(
-                    correct: _correct, incorrect: _incorrect, total: total, questionSnapshot: questionSnapshot!.docs,),
+                builder: (context) => Results(
+                  correct: _correct,
+                  incorrect: _incorrect,
+                  total: total,
+                  questionList: questionList,
+                ),
               ),
             );
-          }),
-    );
+          },
+        ));
   }
 }
 
