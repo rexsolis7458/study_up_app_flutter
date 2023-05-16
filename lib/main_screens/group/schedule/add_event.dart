@@ -95,15 +95,12 @@ class _AddEventState extends State<AddEvent> {
                       );
 
                       if (pickedTime != null) {
-                        print(pickedTime.format(context));
-                        DateTime parsedTime = DateFormat.jm()
-                            .parse(pickedTime.format(context).toString());
-                        print(parsedTime);
-                        String formattedTime =
-                            DateFormat('hh:mm').format(parsedTime);
-                        String amPm = parsedTime.hour < 12 ? "AM" : "PM";
-                        formattedTime = "$formattedTime $amPm";
+                        DateTime now = DateTime.now();
+                        DateTime pickedDateTime = DateTime(now.year, now.month,
+                            now.day, pickedTime.hour, pickedTime.minute);
 
+                        String formattedTime =
+                            DateFormat('hh:mm a').format(pickedDateTime);
                         setState(() {
                           _timeController.text = formattedTime;
                         });

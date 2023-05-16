@@ -157,15 +157,16 @@ class _CreateGroupState extends State<CreateGroup> {
                             );
 
                             if (pickedTime != null) {
-                              print(pickedTime.format(context));
-                              DateTime parsedTime = DateFormat.jm()
-                                  .parse(pickedTime.format(context).toString());
-                              print(parsedTime);
-                              String formattedTime =
-                                  DateFormat('hh:mm').format(parsedTime);
-                              String amPm = parsedTime.hour < 12 ? "AM" : "PM";
-                              formattedTime = "$formattedTime $amPm";
+                              DateTime now = DateTime.now();
+                              DateTime pickedDateTime = DateTime(
+                                  now.year,
+                                  now.month,
+                                  now.day,
+                                  pickedTime.hour,
+                                  pickedTime.minute);
 
+                              String formattedTime =
+                                  DateFormat('hh:mm a').format(pickedDateTime);
                               setState(() {
                                 _from.text = formattedTime;
                               });
@@ -203,15 +204,16 @@ class _CreateGroupState extends State<CreateGroup> {
                             );
 
                             if (pickedTime != null) {
-                              print(pickedTime.format(context));
-                              DateTime parsedTime = DateFormat.jm()
-                                  .parse(pickedTime.format(context).toString());
-                              print(parsedTime);
-                              String formattedTime =
-                                  DateFormat('hh:mm').format(parsedTime);
-                              String amPm = parsedTime.hour < 12 ? "AM" : "PM";
-                              formattedTime = "$formattedTime $amPm";
+                              DateTime now = DateTime.now();
+                              DateTime pickedDateTime = DateTime(
+                                  now.year,
+                                  now.month,
+                                  now.day,
+                                  pickedTime.hour,
+                                  pickedTime.minute);
 
+                              String formattedTime =
+                                  DateFormat('hh:mm a').format(pickedDateTime);
                               setState(() {
                                 _to.text = formattedTime;
                               });
@@ -229,14 +231,14 @@ class _CreateGroupState extends State<CreateGroup> {
                 height: 20.0,
               ),
               MultiSelectDropdown(
-  options: _subjectItems,
-  hintText: 'Select options',
-  onSelected: (List<String> selectedList) {
-    setState(() {
-      _selectedSubjects = selectedList;
-    });
-  },
-),
+                options: _subjectItems,
+                hintText: 'Select options',
+                onSelected: (List<String> selectedList) {
+                  setState(() {
+                    _selectedSubjects = selectedList;
+                  });
+                },
+              ),
               GestureDetector(
                 child: const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 80),
